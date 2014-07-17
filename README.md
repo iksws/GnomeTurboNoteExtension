@@ -58,6 +58,13 @@ sudo chmod 777 /home/YOURPROFILENAME/.local/share/gnome-shell/extensions/turbono
 
 IF not show icon on tray or up server check all confs links are corrects!
 
+
+***[TIPS]***
+if you use fedora 
+You need install EOG package for show images
+You need have a last version  libre office the app use office-converter in image files
+
+
 ### IMPLEMENTS LIST ###
 
 **OK** = Implemented
@@ -89,3 +96,9 @@ Developer mail: ikswss@gmail.com
 In the box press CTRL + ENTER to show contact list, double click for send or CTRL + ENTER for send,  you can select multiple contacts and using the button send for send to multiples contacts.
 
 You can reply message to the contact who sent only CTRL+R in the box.
+
+***MENU***
+You can manage your contacts, for add you need only the enter host name and press ENTER or click ADD button and  the app will check if name existe in network.
+
+You can manager messages in history[R], you can sent again message in history[S] double click in message for sent.
+You can manager your images and attacheds 
