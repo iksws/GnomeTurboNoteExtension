@@ -37,27 +37,24 @@ sudo apt-get install libgnome2-bin
 
 * copy files to folder */home/***yourprofile***/.local/share/gnome-shell/extensions/turbonote@iksws.com.br* **if not exist make it!**
 
-* make dir **attacheds**, **tmp** and **tmp_send** in */home/***yourprofile***/.local/share/gnome-shell/extensions/turbonote@iksws.com.br*
+* Set permissions for your user like this
 
-* Set permissions for your user
+```
+#!shell
+sudo chmod 777 /home/YOURPROFILENAME/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/
+```
+
+* copy file *turbonote.desktop* to  dir /usr/share/applications and Set permissions too this file
 
 
-
-
-
-* Configure files *extension.js* and *turbonote-adds/config_note.py* put your profile name in woner
-and check config_not ip/name/icon color use *_b* to white themes
+* Configure file *turbonote-adds/config_note.py* (only if you use white themes) check variable icon color use *_b* to white themes 
 
 
 **Check permissions in gnome extensions folder**
 
-**For Gnome-shell => 3.10**
-
-copy turbonote.desktop to your /usr/share/applications/
-
 * Enjoy! enable in Tweak Toll 
+* Start the server 
 
-* If stop sochet server for any bug use Restart Sever Option in menu!
 
 IF not show icon on tray or up server check all confs links are corrects!
 
@@ -77,7 +74,18 @@ IF not show icon on tray or up server check all confs links are corrects!
 * [**OK**] Receive Images
 * [**OK**] Receive Attacheds
 * [**1/2**] Send Images (Only to linux2linux working at now)
+
+For send images (only linux to linux) use the icon take a picture and save in dir TMP_SEND the app get image in this dir and send with the  message.
+For windows you need take a picture and save anywhere use attached button chouse a picture and attach it.
+
 * [**OK**] Send Attacheds
 * [**1/2**] ShortCut Commands
 
 Developer mail: ikswss@gmail.com
+
+
+***SHORT CUTs COMMANDs***
+
+In the box press CTRL + ENTER to show contact list, double click for send or CTRL + ENTER for send,  you can select multiple contacts and using the button send for send to multiples contacts.
+
+You can reply message to the contact who sent only CTRL+R in the box.
