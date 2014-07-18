@@ -68,7 +68,7 @@ sudo chmod 777 /home/YOURPROFILENAME/.local/share/gnome-shell/extensions/turbono
 IF not show icon on tray or up server check all confs links are corrects!
 
 
-***[TIPS]***t
+***[TIPS]***
 
 if you use fedora 
 You need install EOG package for show images
