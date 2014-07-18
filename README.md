@@ -1,5 +1,14 @@
 GnomeTurboNoteExtension
 =======================
+<table border='0' style='width:100%;'>
+<tr>
+  <td><img width='200px' heigth='300px' src="http://www.exedesignsolutions.com/githubimg/gnome-turbo-note/a.png"/></td>
+  <td><img width='200px' heigth='300px' src="http://www.exedesignsolutions.com/githubimg/gnome-turbo-note/b.png"/></td>
+</tr>
+<tr>
+  <td colspan='2'><img width='600px' heigth='250px' src="http://www.exedesignsolutions.com/githubimg/gnome-turbo-note/e.png"/></td>
+</tr>
+</table>
 
 # **[Instalation]** #
 
@@ -60,6 +69,7 @@ IF not show icon on tray or up server check all confs links are corrects!
 
 
 ***[TIPS]***
+
 if you use fedora 
 You need install EOG package for show images
 You need have a last version  libre office the app use office-converter in image files
@@ -98,6 +108,7 @@ In the box press CTRL + ENTER to show contact list, double click for send or CTR
 You can reply message to the contact who sent only CTRL+R in the box.
 
 ***MENU***
+
 You can manage your contacts, for add you need only the enter host name and press ENTER or click ADD button and  the app will check if name existe in network.
 
 You can manager messages in history[R], you can sent again message in history[S] double click in message for sent.
