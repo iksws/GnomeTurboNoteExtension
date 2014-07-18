@@ -61,17 +61,21 @@ sudo chmod 777 /home/YOURPROFILENAME/.local/share/gnome-shell/extensions/turbono
 
 **Check permissions in gnome extensions folder**
 
-* Enjoy! enable in Tweak Toll 
+* Enjoy! enable in Tweak Tool 
 * Start the server 
 
 
 IF not show icon on tray or up server check all confs links are corrects!
 
 
-***[TIPS]***
+***[TIPS]***t
 
 if you use fedora 
 You need install EOG package for show images
+```
+#!shell
+sudo apt-get install eog-plugins
+```
 You need have a last version  libre office the app use office-converter in image files
 
 
