@@ -88,7 +88,8 @@ You need have a last version  libre office the app use office-converter in image
 * [**OK**] Send Note
 * [**OK**] Receive Note
 * [**OK**] Contact List and Manager
-* [**OK**] History List and Manager
+* [**OK**] History List[Receive] and Manager
+* [**OK**] History List[Send] and Manager
 * [**OK**] List all Attacheds
 * [**OK**] Note Options (Stay on top and Title)
 * [**NO**] Note Style Confs (All colors)
@@ -101,6 +102,7 @@ For windows you need take a picture and save anywhere use attached button chouse
 
 * [**OK**] Send Attacheds
 * [**1/2**] ShortCut Commands
+* [**OK**] Re-Send Note
 
 Developer mail: ikswss@gmail.com
 
