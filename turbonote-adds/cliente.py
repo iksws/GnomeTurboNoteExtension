@@ -230,10 +230,16 @@ def richTextMaker(imagesrc):
 def saveMsg(nome,ip,titulo,message):
       data = unicode(datetime.now().strftime("%d/%m/%Y %H:%M:%S"))
       savesend = sqlite3.connect(path + 'turbo.db')
-      c = savesend.cursor()
-      c.execute("INSERT INTO history_send (nome,ip,texto,titulo,data) VALUES (?,?,?,?,?)",(nome,ip,message,titulo,data))
-      savesend.commit()
-      savesend.close()
+      try:
+            c = savesend.cursor()
+            c.execute("INSERT INTO history_send (nome,ip,texto,titulo,data) VALUES (?,?,?,?,?)",(nome,ip,message,titulo,data))
+            savesend.commit()
+            savesend.close()
+      except:
+            c = savesend.cursor()
+            c.execute("INSERT INTO history_send (nome,ip,texto,titulo,data) VALUES (?,?,?,?,?)",(nome,ip,message.decode('iso-8859-1'),titulo,data))
+            savesend.commit()
+            savesend.close()
 
 def DoesServiceExist(host):
       try:

@@ -58,8 +58,8 @@ def treeview_clicked(widget, event,data):
 
     if event.type == Gdk.EventType._2BUTTON_PRESS and event.button == 1:        
         for i in range(len(lista_histfull)):
-            if lista_histfull[i][0] == model[iter][0]:               
-                call(["python", path + "cliente.py",""+ (model[iter][2]) +"","" + (model[iter][5]) + "","" + (model[iter][1]) + "","" + 'TRUE' + "","" + (model[iter][4]) + "","" + '' + ""])            
+            if lista_histfull[i][0] == model[iter][0]:  
+                call(["python", path + "cliente.py",""+ (model[iter][2]).decode('utf-8').encode('iso-8859-1') +"","" + (model[iter][5]) + "","" + (model[iter][1]) + "","" + 'TRUE' + "","" + (model[iter][4]) + "","" + '' + ""])            
         return True
     
 
@@ -180,8 +180,8 @@ class MyWindow(Gtk.Window):
                 iters.append(self.model.get_iter(row))              
                 
             if len(iters) != 0:
-                for i in range(len(iters)):                                     
-                   call(["python", path + "cliente.py",""+ (self.model[iters[i]][2]) +"","" + (self.model[iters[i]][5]) + "","" + (self.model[iters[i]][1]) + "","" + 'TRUE' + "","" + (self.model[iters[i]][4]) + "","" + '' + ""])            
+                for i in range(len(iters)):                                             
+                  call(["python", path + "cliente.py",""+ (self.model[iters[i]][2]) +"","" + (self.model[iters[i]][5]) + "","" + (self.model[iters[i]][1]) + "","" + 'TRUE' + "","" + (self.model[iters[i]][4]) + "","" + '' + ""])            
             else:
                 msgerror = "No select Note!\\nPlease select one Note to remove!";                      
                 command = "notify-send --hint=int:transient:1 \"TurboNote Gnome3\" \"" + (msgerror).decode('iso-8859-1').encode('utf8') + "\" -i " + path_icon + "turbo.png"                  
