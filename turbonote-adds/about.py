@@ -3,7 +3,7 @@ from gi.repository import Gtk,Gdk
 import re
 import time
 import cStringIO
-import sys
+import sys,os
 from subprocess import call
 import threading
 from config_note import Config
@@ -15,7 +15,7 @@ pathIcon = "/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extens
 class TextViewWindow(Gtk.Window):
 	def __init__(self):
 		Gtk.Window.__init__(self, title = "About TurboNote Gnome3")
-		self.set_default_size(100, 200)
+		self.set_default_size(100, 250)
 		self.set_border_width(15)     
 		self.set_position(Gtk.WindowPosition.CENTER)
 		self.grid = Gtk.Grid()
@@ -31,9 +31,7 @@ class TextViewWindow(Gtk.Window):
 		scrolledwindow.set_hexpand(True)
 		scrolledwindow.set_vexpand(True)
 		scrolledwindow.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
-		self.grid.attach(scrolledwindow, 0, 1, 4, 1)
-
-		
+		self.grid.attach(scrolledwindow, 0, 1, 4, 1)	
 
 		self.label = Gtk.Label()
 		self.label.set_text("Thank you for using this extension, reporting bugs in  \nhttps://github.com/iksws/GnomeTurboNoteExtension\n\nDeveloper mail: ikswss@gmail.com\n\n") 
@@ -41,11 +39,17 @@ class TextViewWindow(Gtk.Window):
 
 		responderbt = Gtk.Button("Close")
 		self.grid.attach(responderbt, 0, 3, 4, 1)
+		donatebt = Gtk.Button("Make a Donate! :)")		
+		self.grid.attach(donatebt, 0, 4, 4, 1)
 
 		responderbt.connect("clicked", self.on_button_clicked)
+		donatebt.connect("clicked", self.on_button_clickedDonate)
 
 	def on_button_clicked(self, widget):		
 		Gtk.main_quit() 
+
+	def on_button_clickedDonate(self, widget):		
+		os.system("firefox -new-tab https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick'&'hosted_button_id=ZVJ95XE3FKM3E");
 
 def on_button_clicked2(self, event):
 	keyval = event.keyval
