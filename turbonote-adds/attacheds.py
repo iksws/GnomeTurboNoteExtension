@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+#by ikswss@gmail.com
+
 from gi.repository import Gtk,Gdk
 import sys,os
 import sqlite3
@@ -76,6 +78,15 @@ class MyWindow(Gtk.Window):
         Gtk.Window.__init__(self, title="Attacheds List")
         self.set_default_size(800, 100)
         self.set_border_width(15)      
+        hb = Gtk.HeaderBar()
+        hb.props.show_close_button = True
+        hb.props.title = "Attacheds List"
+
+        box2 = Gtk.VBox(orientation=Gtk.Orientation.HORIZONTAL)
+        Gtk.StyleContext.add_class(box2.get_style_context(), "linked")
+
+        self.set_titlebar(hb)        
+
         self.set_position(Gtk.WindowPosition.CENTER)
         self.set_icon_from_file("/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/turbo.png")  
         self.set_wmclass ("TurboNote Gnome", "TurboNote Gnome")
@@ -85,6 +96,8 @@ class MyWindow(Gtk.Window):
         scroller.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
         scroller.set_min_content_height(300)
         scroller.set_min_content_width(150)
+        scroller.set_shadow_type(2)
+        scroller.set_border_width(border_width=1)
         grid.attach(scroller, 0, 0, 2, 1) 
          
         view = Gtk.TreeView()
@@ -141,8 +154,14 @@ class MyWindow(Gtk.Window):
         self.button_remove_all.add(self.removeallimg)
 
         self.add(grid)
-     	grid.attach(self.label, 0, 2, 1, 1)
-        grid.attach(self.button_remove, 0, 3, 1, 1)
+
+        box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+        Gtk.StyleContext.add_class(box.get_style_context(), "linked")           
+        
+        box.add(self.button_remove)
+        box.add(self.button_remove_all)
+     	hb.pack_start(box)
+        
         grid.attach(self.button_remove_all, 1, 3, 1, 1)
 
         

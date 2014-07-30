@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+#by ikswss@gmail.com
+
 from gi.repository import Gtk,Gdk
 from gi.repository import Pango
 import sys,os
@@ -9,7 +11,7 @@ import socket
 
 config_note = Config()
 path = "/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/turbonote-adds/"
-path_icon = "/  home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/"
+path_icon = "/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/"
 path_attached = "/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/attacheds/"
 
 lista_contatos = []
@@ -60,7 +62,7 @@ def on_button_clicked2(self, event,column,treesortable):
         name = Gdk.keyval_name(keyval)
         mod = Gtk.accelerator_get_label(keyval,event.state)        
 
-        if mod == "Mod2+Enter":  
+        if mod == "Mod2+Enter":             
             nome = self.nometxt.get_text()    
             connb = sqlite3.connect(path + 'turbo.db')
             a = connb.cursor()
@@ -68,7 +70,7 @@ def on_button_clicked2(self, event,column,treesortable):
             contactsName =  a.fetchone()
             connb.close()
             if not contactsName:
-                try:                   
+                try:                          
                     IP = socket.gethostbyname(nome)
                     addcontacts(nome,IP)
                     self.listmodel.append([nome.upper(),IP])
@@ -76,7 +78,7 @@ def on_button_clicked2(self, event,column,treesortable):
                 except socket.gaierror, err:    
                         msgerror = "I can't ping this host name!\\nPlease chech the host name and try again!";                      
                         command = "notify-send --hint=int:transient:1 \"TurboNote Gnome3\" \"" + (msgerror).decode('iso-8859-1').encode('utf8') + "\" -i " + path_icon + "turbo.png"                  
-                        os.system(command)  
+                        os.system(command)                          
             else:     
                 msgerror = "This contact already exists!\\nPlease chech the host name and try again!";                    
                 command = "notify-send --hint=int:transient:1 \"TurboNote Gnome3\" \"" + (msgerror).decode('iso-8859-1').encode('utf8') + "\" -i " + path_icon + "turbo.png"                  
@@ -87,6 +89,14 @@ class MyWindow(Gtk.Window):
         Gtk.Window.__init__(self, title="Contact List")
         self.set_default_size(250, 100)
         self.set_border_width(15)      
+        hb = Gtk.HeaderBar()
+        hb.props.show_close_button = True
+        hb.props.title = "Contact List"
+
+        box2 = Gtk.VBox(orientation=Gtk.Orientation.HORIZONTAL)
+        Gtk.StyleContext.add_class(box2.get_style_context(), "linked")
+
+        self.set_titlebar(hb)
         self.set_position(Gtk.WindowPosition.CENTER)
         self.set_icon_from_file("/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/turbo.png") 
         self.set_wmclass ("TurboNote Gnome", "TurboNote Gnome")
@@ -95,6 +105,8 @@ class MyWindow(Gtk.Window):
         scroller = Gtk.ScrolledWindow(hexpand=True, vexpand=True)
         scroller.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
         scroller.set_min_content_height(300)
+        scroller.set_shadow_type(2)
+        scroller.set_border_width(border_width=1)
         scroller.set_min_content_width(150)
         grid.attach(scroller, 0, 0, 3, 1) 
          
@@ -164,13 +176,18 @@ class MyWindow(Gtk.Window):
         self.rmvall.set_from_file("/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_rmv_group" + config_note.getColor() + ".png")      
         self.button_remove_all.add(self.rmvall) 
 
-        #grid.attach(view, 0, 0, 3, 1)        
+        box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+        Gtk.StyleContext.add_class(box.get_style_context(), "linked")           
+        
+        box.add(self.button_add)
+        box.add(self.button_remove)
+        box.add(self.button_remove_all)    
+
+        hb.pack_start(box)
+
         grid.attach(self.label, 0, 2, 3, 1)        
         grid.attach(self.nometxt, 0, 3, 3, 1)
-        grid.attach(self.label2, 0, 4, 1, 1)  
-        grid.attach(self.button_add, 0, 5, 1, 1)
-        grid.attach(self.button_remove, 1, 5, 1, 1)
-        grid.attach(self.button_remove_all, 2, 5, 1, 1)
+        #grid.attach(self.label2, 0, 4, 1, 1)  
 
         
     def on_changed(self, selection):
@@ -200,7 +217,6 @@ class MyWindow(Gtk.Window):
 
     def add_cb(self, button,column,treesortable):
         nome = self.nometxt.get_text()
-        
         connb = sqlite3.connect(path + 'turbo.db')
         a = connb.cursor()
         a.execute("SELECT nome FROM contacts WHERE upper(nome) = upper('" + nome + "')")

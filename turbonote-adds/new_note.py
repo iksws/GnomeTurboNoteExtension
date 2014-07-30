@@ -1,5 +1,7 @@
 #!/usr/bin/env python
-from gi.repository import Gtk,Gdk
+#by ikswss@gmail.com
+
+from gi.repository import Gtk, Gio,Gdk
 import re
 import time
 import cStringIO
@@ -11,7 +13,7 @@ from list_control import MyWindow
 
 config_note = Config()
 path = "/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/turbonote-adds/"
-pathIcon = "/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/"
+path_icon = "/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/"
 stay = ""
 
 def assignNewValueToStay(s):
@@ -36,31 +38,106 @@ def assignNewValueToAttPick(p):
     global attpick
     attpick = p
 
+class HeaderBarWindow(Gtk.Window):
 
-class TextViewWindow(Gtk.Window):
-	def __init__(self):
-		Gtk.Window.__init__(self, title = "New Note")
-		self.set_icon_from_file("/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/turbo.png")	
-		self.set_default_size(300, 300)
-		self.set_border_width(15)     
-		self.set_position(Gtk.WindowPosition.CENTER)
-		self.grid = Gtk.Grid()
-		self.add(self.grid)
-		self.create_textview()    
-		self.set_wmclass ("TurboNote Gnome", "TurboNote Gnome")
-		self.connect('key-press-event',on_button_clicked2)
+    def __init__(self):
+        Gtk.Window.__init__(self, title = "New Note")
+        self.set_icon_from_file("/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/turbo.png")	
+        self.set_border_width(15)
+       	self.set_default_size(300, 350)
+
+        hb = Gtk.HeaderBar()
+        hb.props.show_close_button = True
+        hb.props.title = "New Note"
+
+        box2 = Gtk.VBox(orientation=Gtk.Orientation.HORIZONTAL)
+        Gtk.StyleContext.add_class(box2.get_style_context(), "linked")
+
+        self.set_titlebar(hb)
+        self.set_position(Gtk.WindowPosition.CENTER)
+        self.grid = Gtk.Grid()
+        self.add(self.grid)        
+        self.create_textview(box2,hb)
+        self.set_wmclass ("TurboNote Gnome", "TurboNote Gnome")
+        self.connect('key-press-event',on_button_clicked2)
 
 
-	def create_textview(self):
+    def toggle_titulo_callback(self, button):
+	    if self.toggle_titulo.get_active():
+	    	if onepick:
+	    		self.grid.attach(self.label2, 0, 2, 1 , 1)
+	    		self.grid.attach(self.titulotxt, 0, 1, 1, 1)	 
+	    		assignNewValueToOnePick(False)   	
+	        self.titulotxt.show()
+	        self.label2.show()
+	    else:
+	    	self.titulotxt.set_text("")
+	        self.titulotxt.hide()
+	        self.label2.hide()
+
+    def toggle_stay_callback(self, button):
+	    if self.toggle_stay.get_active():
+	        assignNewValueToStay("Yes")
+	    else:
+	        assignNewValueToStay("")
+
+    def on_button_ss(self, widget):
+		os.system("gnome-screenshot -i -a")
+
+    def on_button_clicked(self, widget):
+		buf  = self.textview.get_buffer()
+		text = buf.get_text(buf.get_start_iter(),buf.get_end_iter(),True)
+		send_turbo(text.decode('utf-8').encode('windows-1252'),self.titulotxt.get_text(),attFile)
+
+    def on_file_clicked(self, widget):
+		if attpick:
+			self.grid.attach(self.label3, 0, 6, 1, 1)			
+			self.grid.attach(self.labelattached, 0, 5, 1, 1)
+			self.attachedbtrmv.hide()				
+			assignNewValueToAttPick(False)			
+		dialog = Gtk.FileChooserDialog("Please choose a file", self,
+            Gtk.FileChooserAction.OPEN,
+            (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
+             Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
+  		  		
+  		resp = dialog.run()
+
+  		if resp == Gtk.ResponseType.OK:     
+	  		self.label3.show()
+			self.labelattached.show()			
+			filename = dialog.get_filename()
+			filename = filename.split("/")
+			assignNewValueToAttFile(dialog.get_filename())
+			self.labelattached.set_markup("Attached file <b>" + filename[len(filename)-1] +  "</b>") 
+			self.attachedbt.hide()
+			self.attachedbtrmv.show()			
+
+		elif resp == Gtk.ResponseType.CANCEL:
+			self.labelattached.set_text("") 
+			assignNewValueToAttFile("")
+
+		dialog.destroy()
+
+    def on_file_clicked_rmv(self, widget):
+		self.labelattached.set_text("")
+		assignNewValueToAttFile("")
+		self.attachedbt.show()	
+		self.attachedbtrmv.hide()	
+		self.label3.hide()
+		self.labelattached.hide()
+
+    def create_textview(self,box2,hb):
 		scrolledwindow = Gtk.ScrolledWindow()
 		scrolledwindow.set_hexpand(True)
 		scrolledwindow.set_vexpand(True)
+		scrolledwindow.set_shadow_type(2)
+		scrolledwindow.set_border_width(border_width=1)
 		scrolledwindow.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
-		self.grid.attach(scrolledwindow, 0, 3, 5, 1)
+		self.grid.attach(scrolledwindow, 0, 3, 1, 1)
 
 		self.textview = Gtk.TextView()
 		self.textview.set_wrap_mode(Gtk.WrapMode.WORD)
-		self.textview.set_border_width(border_width=10)
+		self.textview.set_border_width(10)
 		self.textbuffer = self.textview.get_buffer()
 		self.textbuffer.set_text("")
 		scrolledwindow.add(self.textview) 
@@ -113,86 +190,29 @@ class TextViewWindow(Gtk.Window):
 		self.addattimgrmv = Gtk.Image()	
 		self.addattimgrmv.set_from_file("/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_remove_attached" + config_note.getColor() + ".png")		
 		self.attachedbtrmv.add(self.addattimgrmv)	
-	
 
-		self.grid.attach(self.label, 0, 4, 5, 1)	
-		self.grid.attach(self.toggle_stay, 0, 7, 1, 1)
-		self.grid.attach(self.toggle_titulo, 1, 7, 1, 1)	
-		self.grid.attach(scshot, 2 , 7, 1, 1)	
-		self.grid.attach(responderbt, 3, 7, 1, 1)
-		self.grid.attach(self.attachedbt, 4, 7, 1, 1)
-		self.grid.attach(self.attachedbtrmv, 4, 7, 1, 1)
+		self.grid.attach(self.label, 0, 4, 1, 1)
+		box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+		Gtk.StyleContext.add_class(box.get_style_context(), "linked")			
 		
-	
+		box.add(self.toggle_stay)
+		box.add(self.toggle_titulo)
+		
+		box2.add(scshot)
+		box2.add(responderbt)
+		box2.add(self.attachedbt)
+		box2.add(self.attachedbtrmv)
+		hb.pack_start(box)
+
+		scrolledwindow2 = Gtk.ScrolledWindow()
+		scrolledwindow2.set_hexpand(True)
+		scrolledwindow2.set_vexpand(True)
+		scrolledwindow2.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
+		self.grid.attach(box2, 0, 7, 1, 1)	
+		box2.set_hexpand(True)
 
 		responderbt.connect("clicked", self.on_button_clicked)
 		scshot.connect("clicked", self.on_button_ss)
-
-	def on_file_clicked_rmv(self, widget):
-		self.labelattached.set_text("")
-		assignNewValueToAttFile("")
-		self.attachedbt.show()	
-		self.attachedbtrmv.hide()	
-		self.label3.hide()
-		self.labelattached.hide()	
-
-	def on_file_clicked(self, widget):
-		if attpick:
-			self.grid.attach(self.label3, 0, 6, 5, 1)			
-			self.grid.attach(self.labelattached, 0, 5, 5, 1)
-			self.attachedbtrmv.hide()				
-			assignNewValueToAttPick(False)			
-		dialog = Gtk.FileChooserDialog("Please choose a file", self,
-            Gtk.FileChooserAction.OPEN,
-            (Gtk.STOCK_CANCEL, Gtk.ResponseType.CANCEL,
-             Gtk.STOCK_OPEN, Gtk.ResponseType.OK))
-  		  		
-  		resp = dialog.run()
-
-  		if resp == Gtk.ResponseType.OK:     
-	  		self.label3.show()
-			self.labelattached.show()			
-			filename = dialog.get_filename()
-			filename = filename.split("/")
-			assignNewValueToAttFile(dialog.get_filename())
-			self.labelattached.set_markup("Attached file <b>" + filename[len(filename)-1] +  "</b>") 
-			self.attachedbt.hide()
-			self.attachedbtrmv.show()			
-
-		elif resp == Gtk.ResponseType.CANCEL:
-			self.labelattached.set_text("") 
-			assignNewValueToAttFile("")
-
-		dialog.destroy()
-
-	def on_button_clicked(self, widget):
-		buf  = self.textview.get_buffer()
-		text = buf.get_text(buf.get_start_iter(),buf.get_end_iter(),True)
-		send_turbo(text.decode('utf-8').encode('windows-1252'),self.titulotxt.get_text(),attFile)
-		#Gtk.main_quit() 
-
-	def on_button_ss(self, widget):
-		os.system("gnome-screenshot -i -a") 		
-		#Gtk.main_quit() 
-
-	def toggle_stay_callback(self, button):
-	    if self.toggle_stay.get_active():
-	        assignNewValueToStay("Yes")
-	    else:
-	        assignNewValueToStay("")
-
-	def toggle_titulo_callback(self, button):
-	    if self.toggle_titulo.get_active():
-	    	if onepick:
-	    		self.grid.attach(self.label2, 0, 2, 5, 1)
-	    		self.grid.attach(self.titulotxt, 0, 1, 5, 1)	 
-	    		assignNewValueToOnePick(False)   	
-	        self.titulotxt.show()
-	        self.label2.show()
-	    else:
-	    	self.titulotxt.set_text("")
-	        self.titulotxt.hide()
-	        self.label2.hide()
 
 def on_button_clicked2(self, event):
 	keyval = event.keyval
@@ -201,20 +221,20 @@ def on_button_clicked2(self, event):
 	if mod == "Ctrl+Mod2+Return" or mod == "Ctrl+Mod2+Enter":
 		buf  = self.textview.get_buffer()
 		text = buf.get_text(buf.get_start_iter(),buf.get_end_iter(),True)
-		send_turbo(text.decode('utf-8').encode('windows-1252'),self.titulotxt.get_text(),attFile)
-		#Gtk.main_quit() 
-
+		try:
+			send_turbo(text.decode('utf-8').encode('windows-1252'),self.titulotxt.get_text(),attFile)
+		except Exception, e:
+			msgerror = "Unable to send to " + name.upper() + "\\nInvalid Characters!"
+			command = "notify-send --hint=int:transient:1 \"TurboNote Gnome3\" \"" + (msgerror).decode('iso-8859-1').encode('utf8') + "\" -i " + path_icon + "turbo.png"
+			os.system(command)
+		
 def send_turbo(message,titulo,att):
 	win = MyWindow(message,stay,att,titulo)
 	win.connect("delete-event", Gtk.main_quit)
 	win.show_all()
 	Gtk.main()
-	#call(["python", path + "list_control.py",""+ message + ""])
-	#Gtk.main_quit()
 
-
-if __name__ == "__main__":
-	win = TextViewWindow()
-	win.connect("delete-event", Gtk.main_quit)
-	win.show_all()
-	Gtk.main()
+win = HeaderBarWindow()
+win.connect("delete-event", Gtk.main_quit)
+win.show_all()
+Gtk.main()

@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+#by ikswss@gmail.com
+
 from binascii import hexlify
 
 from base import RawCode

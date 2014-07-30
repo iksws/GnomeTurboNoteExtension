@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+#by ikswss@gmail.com
+
 from gi.repository import Gtk,Gdk
 import sys,os
 import sqlite3
@@ -99,8 +101,8 @@ def treeview_clicked(widget, event,data):
                 n = notifyturbo.Notification((model[iter][1]) ,(lista_histfull[i][2]) ,(path_icon + "turbo.png"))            
 
                 if ('actions' in server_capabilities) or OVERRIDE_NO_ACTIONS:
-                    n.add_action("resp", "Responder", resp_cb,[model[iter][1],lista_histfull[i][2]])
-                    n.add_action("ignore", "Ignorar", ignore_cb)
+                    n.add_action("resp", "Reply", resp_cb,[model[iter][1],lista_histfull[i][2]])
+                    n.add_action("ignore", "Ignore", ignore_cb)
                     n.set_timeout(5)
                     n.show()
         return True
@@ -115,21 +117,28 @@ def treeview_clicked(widget, event,data):
 
 class MyWindow(Gtk.Window):
     def __init__(self):
-        Gtk.Window.__init__(self, title="History[R] Note List")
+        Gtk.Window.__init__(self, title="History Received Note List")
         self.set_default_size(1000, 500)            
+        hb = Gtk.HeaderBar()
+        hb.props.show_close_button = True
+        hb.props.title = "History Received Note List"
+
+        box2 = Gtk.VBox(orientation=Gtk.Orientation.HORIZONTAL)
+        Gtk.StyleContext.add_class(box2.get_style_context(), "linked")
+
+        self.set_titlebar(hb)
         self.set_position(Gtk.WindowPosition.CENTER)
         self.set_icon_from_file("/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/turbo.png")
         self.set_wmclass ("TurboNote Gnome", "TurboNote Gnome")
         grid = Gtk.Grid()
         self.set_border_width(15)
-        #self.connect("destroy", self.destroy)
         scroller = Gtk.ScrolledWindow(hexpand=True, vexpand=True)
-        #scroller.set_border_width(10)
+        scroller.set_shadow_type(2)
+        scroller.set_border_width(border_width=1)
         scroller.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
         grid.attach(scroller, 0, 0, 2, 1) 
          
         treeview = Gtk.TreeView()
-
 
         cell  = Gtk.CellRendererText(weight=300)
         cell2 = Gtk.CellRendererText(weight=300)
@@ -161,9 +170,7 @@ class MyWindow(Gtk.Window):
         scroller.add(treeview)
  
         self.model = Gtk.ListStore(str,str,str,str)             
-
         treeview.set_model(self.model)
-
         
         for i in range(len(lista_hist)):
             self.model.append(lista_hist[i])
@@ -175,7 +182,6 @@ class MyWindow(Gtk.Window):
 
         self.label = Gtk.Label()
         self.label.set_text(" ")
-
 
         self.button_remove = Gtk.Button()
         self.button_remove.connect("clicked", self.remove_cb)
@@ -191,9 +197,14 @@ class MyWindow(Gtk.Window):
         self.button_remove_all.add(self.removeallimg)
 
         self.add(grid)    
-        grid.attach(self.label, 0, 2, 2, 1)  
-        grid.attach(self.button_remove,0, 3,1, 1)
-        grid.attach(self.button_remove_all, 1, 3, 1, 1)  
+        
+        box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+        Gtk.StyleContext.add_class(box.get_style_context(), "linked")           
+        
+        box.add(self.button_remove)
+        box.add(self.button_remove_all)
+        hb.pack_start(box)
+
         notifyturbo.init("TurboNote Gnome 3", mainloop="glib")
         
     def remove_cb(self, button):

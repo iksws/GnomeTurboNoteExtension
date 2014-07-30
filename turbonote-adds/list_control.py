@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+#by ikswss@gmail.com
+
 from gi.repository import Gtk,Gdk
 import sys,os
 import sqlite3
@@ -128,6 +130,14 @@ class MyWindow(Gtk.Window):
     def __init__(self, msg,stay,att,titulo=""):
         Gtk.Window.__init__(self, title="Contact List")
         self.set_default_size(250, 100)
+        hb = Gtk.HeaderBar()
+        hb.props.show_close_button = True
+        hb.props.title = "Contact List"
+
+        box2 = Gtk.VBox(orientation=Gtk.Orientation.HORIZONTAL)
+        Gtk.StyleContext.add_class(box2.get_style_context(), "linked")
+
+        self.set_titlebar(hb)
         self.set_position(Gtk.WindowPosition.CENTER)
         self.set_border_width(15)      
         self.set_icon_from_file("/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/turbo.png")  
@@ -236,11 +246,16 @@ class MyWindow(Gtk.Window):
         grid.attach(self.nometxt, 0, 6, 4, 1)
         grid.attach(self.labelb, 0, 7, 4, 1)
 
-        grid.attach(self.button_send, 3, 8, 1, 1)
-        grid.attach(self.button_add, 2, 8, 1, 1)
-        grid.attach(self.button_remove, 1, 8, 1, 1)
-        grid.attach(self.button_remove_all, 0, 8, 1, 1)
+        box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+        Gtk.StyleContext.add_class(box.get_style_context(), "linked")           
+        
+        box.add(self.button_add)
+        box.add(self.button_remove)
+        box.add(self.button_remove_all)       
 
+        hb.pack_start(box)
+
+        grid.attach(self.button_send, 0, 8, 4, 1)
     
 
     def send_turbo(self, button,data):

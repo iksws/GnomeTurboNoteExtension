@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+#by ikswss@gmail.com
+
 from gi.repository import Gtk,Gdk
 import re
 import time
@@ -12,19 +14,24 @@ config_note = Config()
 path = "/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/turbonote-adds/"
 pathIcon = "/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/"
 
-class TextViewWindow(Gtk.Window):
+class HeaderBarWindow(Gtk.Window):
 	def __init__(self):
 		Gtk.Window.__init__(self, title = "About TurboNote Gnome3")
-		self.set_default_size(100, 250)
-		self.set_border_width(15)     
+		self.set_default_size(100, 380)
+		self.set_border_width(15)  
+		hb = Gtk.HeaderBar()
+		hb.props.show_close_button = True
+		hb.props.title = "About TurboNote Gnome3"
+		box2 = Gtk.VBox(orientation=Gtk.Orientation.HORIZONTAL)
+		Gtk.StyleContext.add_class(box2.get_style_context(), "linked")
+		self.set_titlebar(hb)
 		self.set_position(Gtk.WindowPosition.CENTER)
 		self.grid = Gtk.Grid()
 		self.add(self.grid)
-		self.create_textview()   
+		self.create_textview()
 		self.set_icon_from_file("/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/turbo.png")
 		self.set_wmclass ("TurboNote Gnome", "TurboNote Gnome")
 		self.connect('key-press-event',on_button_clicked2)
-
 
 	def create_textview(self):
 		scrolledwindow = Gtk.ScrolledWindow()
@@ -37,11 +44,23 @@ class TextViewWindow(Gtk.Window):
 		self.label.set_text("Thank you for using this extension, reporting bugs in  \nhttps://github.com/iksws/GnomeTurboNoteExtension\n\nDeveloper mail: ikswss@gmail.com\n\n") 
 		scrolledwindow.add(self.label) 
 
-		responderbt = Gtk.Button("Close")
-		self.grid.attach(responderbt, 0, 3, 4, 1)
+		responderbt = Gtk.Button("       Close       ")		
 		donatebt = Gtk.Button("Make a Donate! :)")		
-		self.grid.attach(donatebt, 0, 4, 4, 1)
 
+		box = Gtk.VBox(orientation=Gtk.Orientation.HORIZONTAL)
+		Gtk.StyleContext.add_class(box.get_style_context(), "linked")
+		
+		box.add(donatebt)
+		box.add(responderbt)
+
+		scrolledwindow2 = Gtk.ScrolledWindow()
+		scrolledwindow2.set_hexpand(True)
+		scrolledwindow2.set_vexpand(True)
+		scrolledwindow2.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
+
+		
+		box.set_hexpand(True)
+		self.grid.attach(box, 0, 3, 1, 1)
 		responderbt.connect("clicked", self.on_button_clicked)
 		donatebt.connect("clicked", self.on_button_clickedDonate)
 
@@ -50,6 +69,11 @@ class TextViewWindow(Gtk.Window):
 
 	def on_button_clickedDonate(self, widget):		
 		os.system("firefox -new-tab https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick'&'hosted_button_id=ZVJ95XE3FKM3E");
+
+    
+
+
+	
 
 def on_button_clicked2(self, event):
 	keyval = event.keyval
@@ -66,8 +90,7 @@ def send_turbo(message):
 	Gtk.main_quit()
 
 
-if __name__ == "__main__":
-	win = TextViewWindow()
-	win.connect("delete-event", Gtk.main_quit)
-	win.show_all()
-	Gtk.main()
+win = HeaderBarWindow()
+win.connect("delete-event", Gtk.main_quit)
+win.show_all()
+Gtk.main()

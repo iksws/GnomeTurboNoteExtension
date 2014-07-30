@@ -55,13 +55,13 @@ const MessageMenu = new Lang.Class({
 		this.actor.add_child(hbox);
 
 		this.new_note_string  = _("New note");
-	    this.history_string   = _("History[R] Manager");
-	    this.historys_string  = _("History[S] Manager");
+	    this.history_string   = _("History Received Manager");
+	    this.historys_string  = _("History Sent Manager");
 	    this.contacts_string  = _("Contacts Manager");
 	    this.attacheds_string = _("Attacheds");
 	    this.restart_string   = _("Start Server");
 	    this.stop_string      = _("Stop Server");	    
-	    this.about_string     = _("By Iksws");
+	    this.about_string     = _("About");
 	
 		this._evolution = null;
 

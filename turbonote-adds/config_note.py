@@ -1,4 +1,6 @@
-#Gnome TurnoNote Confs
+#!/usr/bin/env python
+#by ikswss@gmail.com
+
 import socket, struct, fcntl
 import getpass
 
