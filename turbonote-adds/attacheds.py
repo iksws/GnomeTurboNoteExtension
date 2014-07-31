@@ -162,6 +162,9 @@ class MyWindow(Gtk.Window):
         box.add(self.button_remove_all)
      	hb.pack_start(box)
         
+        self.button_remove.set_tooltip_text("Remove selected")
+        self.button_remove_all.set_tooltip_text("Remove all")
+        
         grid.attach(self.button_remove_all, 1, 3, 1, 1)
 
         

@@ -37,7 +37,7 @@ class HeaderBarWindow(Gtk.Window):
         Gtk.Window.__init__(self, title = "To " + titulo)
         self.set_icon_from_file("/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/turbo.png")	
         self.set_border_width(15)
-       	self.set_default_size(300, 350)
+       	self.set_default_size(350, 350)
 
         hb = Gtk.HeaderBar()
         hb.props.show_close_button = True
@@ -190,8 +190,15 @@ class HeaderBarWindow(Gtk.Window):
 
 		box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
 		Gtk.StyleContext.add_class(box.get_style_context(), "linked")	
+
 		box.add(self.toggle_stay)
 		hb.pack_start(box)
+
+		self.attachedbtrmv.set_tooltip_text("Remove attachment")
+		sendcontact.set_tooltip_text("Send [You can just press CTRL+Enter]")
+		responderbt.set_tooltip_text("Reply to sender [You can just press CTRL+R]")
+		self.attachedbt.set_tooltip_text("Attach file or image")
+		self.toggle_stay.set_tooltip_text("Stay on Top")
 
 		box2.add(responderbt)
 		box2.add(sendcontact)

@@ -44,7 +44,7 @@ class HeaderBarWindow(Gtk.Window):
         Gtk.Window.__init__(self, title = "New Note")
         self.set_icon_from_file("/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/turbo.png")	
         self.set_border_width(15)
-       	self.set_default_size(300, 350)
+       	self.set_default_size(350, 350)
 
         hb = Gtk.HeaderBar()
         hb.props.show_close_button = True
@@ -153,17 +153,23 @@ class HeaderBarWindow(Gtk.Window):
 		self.labelattached.set_text("") 
 
 		self.toggle_stay = Gtk.ToggleButton()
+		self.toggle_stay.set_tooltip_text("Stay on Top")
 		self.toggle_stay.connect("toggled", self.toggle_stay_callback)
 
 		self.toggle_titulo = Gtk.ToggleButton()
+		self.toggle_titulo.set_tooltip_text("Set title")
 		self.toggle_titulo.connect("toggled", self.toggle_titulo_callback)
 
-		self.titulotxt = Gtk.Entry()
-		responderbt = Gtk.Button()		
-		scshot = Gtk.Button()	
-		self.attachedbt = Gtk.Button()
-		self.attachedbtrmv = Gtk.Button()
 
+		self.titulotxt = Gtk.Entry()
+		responderbt = Gtk.Button()	
+		responderbt.set_tooltip_text("Send [You can just press CTRL+Enter]")
+		scshot = Gtk.Button()	
+		scshot.set_tooltip_text("Crop Picture")
+		self.attachedbt = Gtk.Button()
+		self.attachedbt.set_tooltip_text("Attach file or image")
+		self.attachedbtrmv = Gtk.Button()
+		self.attachedbtrmv.set_tooltip_text("Remove attachment")
 		self.attachedbt.connect("clicked", self.on_file_clicked)		
 		self.attachedbtrmv.connect("clicked", self.on_file_clicked_rmv)		
 		

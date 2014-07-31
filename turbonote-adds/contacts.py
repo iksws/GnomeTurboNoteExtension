@@ -149,10 +149,9 @@ class MyWindow(Gtk.Window):
         col2.set_sort_column_id(0)
 
 
-        self.nometxt = Gtk.Entry()
-        self.iptxt   = Gtk.Entry()
-        self.nometxt.set_text("Name")
-        self.iptxt.set_text("Ip")
+        self.nometxt = Gtk.SearchEntry()
+        self.nometxt.set_tooltip_text("Add contact name in entry [You can just press Enter in entry]")     
+        self.nometxt.set_text("Name")     
 
         self.button_remove = Gtk.Button()
         self.button_remove.connect("clicked", self.remove_cb)
@@ -184,6 +183,10 @@ class MyWindow(Gtk.Window):
         box.add(self.button_remove_all)    
 
         hb.pack_start(box)
+
+        self.button_add.set_tooltip_text("Add contact name in entry [You can just press Enter in entry]")
+        self.button_remove.set_tooltip_text("Remove selected contacts")
+        self.button_remove_all.set_tooltip_text("Remove all contacts")        
 
         grid.attach(self.label, 0, 2, 3, 1)        
         grid.attach(self.nometxt, 0, 3, 3, 1)

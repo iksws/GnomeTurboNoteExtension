@@ -151,6 +151,8 @@ class MyWindow(Gtk.Window):
         scroller = Gtk.ScrolledWindow(hexpand=True, vexpand=True)
         scroller.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
         scroller.set_min_content_height(300)
+        scroller.set_shadow_type(2)
+        scroller.set_border_width(border_width=1)
         scroller.set_min_content_width(150)
         grid.attach(scroller, 0, 0, 4, 1) 
          
@@ -205,10 +207,10 @@ class MyWindow(Gtk.Window):
         self.button_send = Gtk.Button()
         self.button_send.connect("clicked", self.send_turbo,msg)
 
-        self.nometxt = Gtk.Entry()
-        self.iptxt   = Gtk.Entry()
+        self.nometxt = Gtk.SearchEntry()
         self.nometxt.set_text("Name")
-        self.iptxt.set_text("Ip")
+
+        self.nometxt.set_tooltip_text("Add contact name in entry [You can just press Enter in entry]")        
 
         self.button_remove = Gtk.Button()
         self.button_remove.connect("clicked", self.remove_cb)
@@ -252,6 +254,11 @@ class MyWindow(Gtk.Window):
         box.add(self.button_add)
         box.add(self.button_remove)
         box.add(self.button_remove_all)       
+        
+        self.button_add.set_tooltip_text("Add contact name in entry [You can just press Enter in entry]")
+        self.button_remove.set_tooltip_text("Remove selected contacts")
+        self.button_remove_all.set_tooltip_text("Remove all contacts")
+        self.button_send.set_tooltip_text("Send [You can just press CTRL+Enter after the selected contact or double click in contact name]")
 
         hb.pack_start(box)
 

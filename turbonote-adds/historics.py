@@ -34,6 +34,35 @@ for history in rowsc:
 
 connb.close()
 
+def searching(self,entry,model):
+    lista_hist[:] = []
+    lista_histfull[:] = []
+
+
+    connb = sqlite3.connect(path + 'turbo.db')
+    a = connb.cursor()    
+    a.execute("SELECT id,nome,texto,data,titulo,ip  FROM history_send where texto like '%" + entry.get_text() + "%' order by id desc")
+    rows =  a.fetchall()
+    for history in rows:
+        lista_hist.append([str(history[0]),history[1],cap(history[2],200),history[3],history[4],history[5]])
+
+    connc = sqlite3.connect(path + 'turbo.db')
+    c = connc.cursor()
+    c.execute("SELECT id,nome,texto,data,titulo,ip  FROM history_send where texto like '%" + entry.get_text() + "%' order by id desc")
+    rowsc =  c.fetchall()
+    for history in rowsc:
+        lista_histfull.append([str(history[0]),history[1],history[2].encode("utf-8"),history[3],history[4],history[5]],)
+
+    connb.close()
+
+    if len(model) != 0:
+        for i in range(len(model)):
+            iter = model.get_iter(0)
+            model.remove(iter)                
+
+    for i in range(len(lista_hist)):
+        model.append(lista_hist[i])
+
 def rmvhistory(idnote):
     connc = sqlite3.connect(path + 'turbo.db')
     c = connc.cursor()
@@ -87,10 +116,17 @@ class MyWindow(Gtk.Window):
         scroller.set_shadow_type(2)
         scroller.set_border_width(border_width=1)
         scroller.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
-        grid.attach(scroller, 0, 0, 3, 1) 
+        self.searchtxt = Gtk.SearchEntry() 
+        self.label3 = Gtk.Label()
+        self.label3.set_text(" ") 
+        self.searchtxt.set_tooltip_text("[press Enter to search]")
+        grid.attach(self.searchtxt, 0, 1, 3, 1)        
+        grid.attach(self.label3, 0, 3, 3, 1) 
+        grid.attach(scroller, 0, 4, 3, 1)   
          
         treeview = Gtk.TreeView()
-
+        treeview.set_enable_tree_lines(True)
+        treeview.set_grid_lines(1)
 
         cell  = Gtk.CellRendererText(weight=300)
         cell2 = Gtk.CellRendererText(weight=300)
@@ -139,7 +175,8 @@ class MyWindow(Gtk.Window):
         for i in range(len(lista_hist)):
             self.model.append(lista_hist[i])
  
- 
+        self.searchtxt.connect("activate", searching, self.searchtxt,self.model) 
+
         self.selection = treeview.get_selection()
         treeview.get_selection().set_mode(Gtk.SelectionMode.MULTIPLE)
         treeview.connect("button-press-event", treeview_clicked,self.selection) 
@@ -177,9 +214,13 @@ class MyWindow(Gtk.Window):
         box.add(self.button_remove)  
         box.add(self.button_remove_all)  
         hb.pack_start(box)
+
+        self.button_remove.set_tooltip_text("Remove selected")
+        self.button_remove_all.set_tooltip_text("Remove all")
+        self.responderbt.set_tooltip_text("Resend  [You can just press double click in message row]")
         
-        grid.attach(self.label, 0, 2, 1, 1)
-        grid.attach(self.responderbt, 0, 3, 3, 1)
+        grid.attach(self.label, 0, 5, 1, 1)
+        grid.attach(self.responderbt, 0, 6, 3, 1)
 
     def resend(self, button):
         if len(self.model) != 0:
