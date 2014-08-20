@@ -72,6 +72,7 @@ IF not show icon on tray or up server check all confs links are corrects!
 
 if you use fedora 
 You need install EOG package for show images
+In fedora check config_note.py change eth0 for em1
 ```
 #!shell
 sudo apt-get install eog-plugins
