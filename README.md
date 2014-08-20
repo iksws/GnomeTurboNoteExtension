@@ -95,6 +95,7 @@ You need have a last version  libre office the app use office-converter in image
 * [**NO**] Note Style Confs (All colors)
 * [**OK**] Receive Images
 * [**OK**] Receive Attacheds
+* [**OK**] Send and responde notes with the Width and Heigth equals a window size
 * [**1/2**] Send Images (Only to linux2linux working at now)
 
 For send images (only linux to linux) use the icon take a picture and save in dir TMP_SEND the app get image in this dir and send with the  message.
