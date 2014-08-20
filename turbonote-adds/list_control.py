@@ -9,9 +9,9 @@ from config_note import Config
 import socket
 
 config_note = Config()
-path = "/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/turbonote-adds/"
-path_icon = "/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/"
-path_attached = "/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/attacheds/"
+path = "/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/turbonote-adds/"
+path_icon = "/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/"
+path_attached = "/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/attacheds/"
 
 lista_contatos = []
 
@@ -28,6 +28,15 @@ nome_sender = ""
 stay = ""
 titulo = ""
 att = ""
+w = ""
+h = ""
+def assignNewValueToW(w1):
+    global w
+    w = w1
+
+def assignNewValueToH(h1):
+    global h
+    h = h1
 
 def assignNewValueToAtt(at):
     global att
@@ -83,7 +92,7 @@ def on_button_clicked2(self, event,data,column,treesortable):
 
         if mod == "Ctrl+Mod2+Return" or mod == "Ctrl+Mod2+Enter":
             if ip_sender:
-                call(["python", path + "cliente.py",""+ data +"","" + ip_sender + "","" + nome_sender + "","" + stay + "","" + titulo + "","" + att + ""])            
+                call(["python", path + "cliente.py",""+ data +"","" + ip_sender + "","" + nome_sender + "","" + stay + "","" + titulo + "","" + att + "" + "","" + str(w) + "" + "","" + str(h) + ""])            
                 sys.exit(0)
             else:
                 msgerror = "No select contact!\\nPlease select one contact!";                      
@@ -115,7 +124,7 @@ def on_button_clicked2(self, event,data,column,treesortable):
 def treeview_clicked(widget, event,select,data):
     if event.type == Gdk.EventType._2BUTTON_PRESS and event.button == 1:    
         if ip_sender:
-            call(["python", path + "cliente.py",""+ data +"","" + ip_sender + "","" + nome_sender + "","" + stay + "","" + titulo + "","" + att + ""])            
+            call(["python", path + "cliente.py",""+ data +"","" + ip_sender + "","" + nome_sender + "","" + stay + "","" + titulo + "","" + att + "" + "","" + str(w) + "" + "","" + str(h) + ""])            
             sys.exit(0)
         else:           
             msgerror = "No select contact!\\nPlease select one contact!";                      
@@ -127,7 +136,7 @@ def treeview_clicked(widget, event,select,data):
          return False 
 
 class MyWindow(Gtk.Window):
-    def __init__(self, msg,stay,att,titulo=""):
+    def __init__(self, msg,stay,att,titulo="",w="",h=""):
         Gtk.Window.__init__(self, title="Contact List")
         self.set_default_size(250, 100)
         hb = Gtk.HeaderBar()
@@ -140,13 +149,15 @@ class MyWindow(Gtk.Window):
         self.set_titlebar(hb)
         self.set_position(Gtk.WindowPosition.CENTER)
         self.set_border_width(15)      
-        self.set_icon_from_file("/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/turbo.png")  
+        self.set_icon_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/turbo.png")  
         self.set_wmclass ("TurboNote Gnome", "TurboNote Gnome")            
         grid = Gtk.Grid()
 
         assignNewValueToAtt(att)
         assignNewValueTotitulo(titulo)
         assignNewValueToStay(stay)
+        assignNewValueToH(h)
+        assignNewValueToW(w)
         
         scroller = Gtk.ScrolledWindow(hexpand=True, vexpand=True)
         scroller.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
@@ -224,19 +235,19 @@ class MyWindow(Gtk.Window):
         view.connect("button-press-event", treeview_clicked,self.selection,msg) 
 
         self.addcontact = Gtk.Image()  
-        self.addcontact.set_from_file("/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_add_person" + config_note.getColor() + ".png")      
+        self.addcontact.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_add_person" + config_note.getColor() + ".png")      
         self.button_add.add(self.addcontact)
 
         self.rmvcontact = Gtk.Image()  
-        self.rmvcontact.set_from_file("/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_rmv_person" + config_note.getColor() + ".png")      
+        self.rmvcontact.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_rmv_person" + config_note.getColor() + ".png")      
         self.button_remove.add(self.rmvcontact)  
 
         self.rmvall = Gtk.Image()  
-        self.rmvall.set_from_file("/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_rmv_group" + config_note.getColor() + ".png")      
+        self.rmvall.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_rmv_group" + config_note.getColor() + ".png")      
         self.button_remove_all.add(self.rmvall) 
 
         self.sending = Gtk.Image()  
-        self.sending.set_from_file("/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_send_now" + config_note.getColor() + ".png")      
+        self.sending.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_send_now" + config_note.getColor() + ".png")      
         self.button_send.add(self.sending) 
 
         
@@ -267,7 +278,7 @@ class MyWindow(Gtk.Window):
 
     def send_turbo(self, button,data):
         if ip_sender:
-            call(["python", path + "cliente.py",""+ data +"","" + ip_sender + "","" + nome_sender + "","" + stay + "","" + titulo + "","" + att + ""])            
+            call(["python", path + "cliente.py",""+ data +"","" + ip_sender + "","" + nome_sender + "","" + stay + "","" + titulo + "","" + att + "" + "","" + str(w) + "" + "","" + str(h) + ""])            
             sys.exit(0)
         else:
             msgerror = "No select contact!\\nPlease select one contact!";                      

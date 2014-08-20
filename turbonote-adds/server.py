@@ -19,10 +19,10 @@ import base64
 OVERRIDE_NO_ACTIONS = True
 
 config_note = Config()
-path = "/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/turbonote-adds/"
-path_icon = "/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/"
-path_tmp = "/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/tmp/"
-path_attached = "/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/attacheds/"
+path = "/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/turbonote-adds/"
+path_icon = "/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/"
+path_tmp = "/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/tmp/"
+path_attached = "/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/attacheds/"
 
 caixa = 1
 titulo = ""

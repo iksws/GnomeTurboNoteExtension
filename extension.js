@@ -18,25 +18,19 @@ const ICON_SIZE = 22;
 
 //CONFIGURATIONS
 owner = GLib.get_user_name();
-path_icon = "/home/" + owner + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/"
-
+path_icon = "/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/"
+path = "/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/"
 
 const MessageMenuItem = new Lang.Class({
 	Name: 'MessageMenu.MessageMenuItem',
 	Extends: PopupMenu.PopupBaseMenuItem,
-	_init: function(app) {
+	_init: function() {
 		this.parent();
-		this._app = app;
-
-		this.label = new St.Label({ text:app.get_name(), style_class: 'program-label' });
+		this.label = new St.Label({ text:"Gnome TurboNote Extension", style_class: 'program-label' });
 		this.actor.add_child(this.label);
-
-		this._icon = app.create_icon_texture(ICON_SIZE);
-		this.actor.add_child(this._icon, { align: St.Align.END, span: -1 });
 	},
 
 	activate: function(event) {
-		this._app.activate_full(-1, event.get_time());
 		this.parent(event);
 	}
 });
@@ -48,8 +42,7 @@ const MessageMenu = new Lang.Class({
 	_init: function() {
 		this.parent(0.0, "MessageMenu");
 		let hbox = new St.BoxLayout({ style_class: 'panel-status-menu-box' });
-		let icon = new St.Icon({ icon_name: 'mymail-symbolic',
-								 style_class: 'system-status-icon' });
+		let icon = new St.Icon({ icon_name: 'mymail-symbolic', style_class: 'system-status-icon' });
 
 		hbox.add_child(icon);
 		this.actor.add_child(hbox);
@@ -63,9 +56,6 @@ const MessageMenu = new Lang.Class({
 	    this.stop_string      = _("Stop Server");	    
 	    this.about_string     = _("About");
 	
-		this._evolution = null;
-
-		this._getApps();
 		this._buildMenu();
 	},
 
@@ -104,12 +94,6 @@ const MessageMenu = new Lang.Class({
 
 	},
 
-	_getApps: function() {
-		let appsys = Shell.AppSystem.get_default();				
-		let app = appsys.lookup_app('turbonote.desktop');
-		this._evolution = app;				
-	},
-
 	_TbExeDesign: function() {
 		try{
 		 	Main.Util.trySpawnCommandLine('firefox "http://www.exedesignsolutions.com/" &');
@@ -119,7 +103,7 @@ const MessageMenu = new Lang.Class({
 	},
 	_TbContacts: function() {
 		try{
-		 	Main.Util.trySpawnCommandLine('python /home/' + owner + '/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/turbonote-adds/contacts.py');
+		 	Main.Util.trySpawnCommandLine('python /usr/share/gnome-shell/extensions/turbonote@iksws.com.br/turbonote-adds/contacts.py');
 		 }catch(Execption){
 		 	notifyTray("ERROR",Execption); 
 		 }
@@ -127,7 +111,7 @@ const MessageMenu = new Lang.Class({
 
 	_TbNewNote: function() {
 		try{
-		 	Main.Util.trySpawnCommandLine('python /home/' + owner + '/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/turbonote-adds/new_note.py');
+		 	Main.Util.trySpawnCommandLine('python /usr/share/gnome-shell/extensions/turbonote@iksws.com.br/turbonote-adds/new_note.py');
 		 }catch(Execption){
 		 	notifyTray("ERROR",Execption); 
 		 }
@@ -135,21 +119,21 @@ const MessageMenu = new Lang.Class({
 
 	_TbHistory: function() {
 		try{			
-		 	Main.Util.trySpawnCommandLine('python /home/' + owner + '/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/turbonote-adds/historic.py');
+		 	Main.Util.trySpawnCommandLine('python /usr/share/gnome-shell/extensions/turbonote@iksws.com.br/turbonote-adds/historic.py');
 		 }catch(Execption){		 	
 		 	notifyTray("ERROR",Execption); 
 		 }
 	},
 	_TbHistorys: function() {
 		try{			
-		 	Main.Util.trySpawnCommandLine('python /home/' + owner + '/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/turbonote-adds/historics.py');
+		 	Main.Util.trySpawnCommandLine('python /usr/share/gnome-shell/extensions/turbonote@iksws.com.br/turbonote-adds/historics.py');
 		 }catch(Execption){		 	
 		 	notifyTray("ERROR",Execption); 
 		 }
 	},
 	_TbAttachdes: function() {
 		try{			
-		 	Main.Util.trySpawnCommandLine('python /home/' + owner + '/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/turbonote-adds/attacheds.py');
+		 	Main.Util.trySpawnCommandLine('python /usr/share/gnome-shell/extensions/turbonote@iksws.com.br/turbonote-adds/attacheds.py');
 		 }catch(Execption){		 	
 		 	notifyTray("ERROR",Execption); 
 		 }
@@ -164,7 +148,7 @@ const MessageMenu = new Lang.Class({
 	},	
 	_TbRestart: function() {
 		try{			
-		 	Util.spawn(['/home/' + owner + '/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/turbonote-adds/server.py'])
+		 	Main.Util.trySpawnCommandLine('python /usr/share/gnome-shell/extensions/turbonote@iksws.com.br/turbonote-adds/server.py')
 		 	notifyTray("Turnbo Note Gnome 3","Server start successful!")
 		 }catch(Execption){		 	
 		 	notifyTray("ERROR",Execption); 
@@ -172,7 +156,7 @@ const MessageMenu = new Lang.Class({
 	},	
 	
 	_TbAbout: function() {
-		Main.Util.trySpawnCommandLine('python /home/' + owner + '/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/turbonote-adds/about.py');
+		Main.Util.trySpawnCommandLine('python /usr/share/gnome-shell/extensions/turbonote@iksws.com.br/turbonote-adds/about.py');
 	},
 
 	destroy: function() {

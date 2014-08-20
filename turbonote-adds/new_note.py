@@ -12,8 +12,8 @@ from config_note import Config
 from list_control import MyWindow
 
 config_note = Config()
-path = "/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/turbonote-adds/"
-path_icon = "/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/"
+path = "/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/turbonote-adds/"
+path_icon = "/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/"
 stay = ""
 
 def assignNewValueToStay(s):
@@ -42,7 +42,7 @@ class HeaderBarWindow(Gtk.Window):
 
     def __init__(self):
         Gtk.Window.__init__(self, title = "New Note")
-        self.set_icon_from_file("/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/turbo.png")	
+        self.set_icon_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/turbo.png")	
         self.set_border_width(15)
        	self.set_default_size(350, 350)
 
@@ -87,7 +87,7 @@ class HeaderBarWindow(Gtk.Window):
     def on_button_clicked(self, widget):
 		buf  = self.textview.get_buffer()
 		text = buf.get_text(buf.get_start_iter(),buf.get_end_iter(),True)
-		send_turbo(text.decode('utf-8').encode('windows-1252'),self.titulotxt.get_text(),attFile)
+		send_turbo(text.decode('utf-8').encode('windows-1252'),self.titulotxt.get_text(),attFile,self.get_size()[0],self.get_size()[1])
 
     def on_file_clicked(self, widget):
 		if attpick:
@@ -174,27 +174,27 @@ class HeaderBarWindow(Gtk.Window):
 		self.attachedbtrmv.connect("clicked", self.on_file_clicked_rmv)		
 		
 		self.photo = Gtk.Image()	
-		self.photo.set_from_file("/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_camera" + config_note.getColor() + ".png")		
+		self.photo.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_camera" + config_note.getColor() + ".png")		
 		scshot.add(self.photo)
 
 		self.sending = Gtk.Image()	
-		self.sending.set_from_file("/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_send_now" + config_note.getColor() + ".png")		
+		self.sending.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_send_now" + config_note.getColor() + ".png")		
 		responderbt.add(self.sending)
 
 		self.staytop = Gtk.Image()	
-		self.staytop.set_from_file("/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_cast" + config_note.getColor() + ".png")		
+		self.staytop.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_cast" + config_note.getColor() + ".png")		
 		self.toggle_stay.add(self.staytop)	
 
 		self.enabletitle = Gtk.Image()	
-		self.enabletitle.set_from_file("/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_labels" + config_note.getColor() + ".png")		
+		self.enabletitle.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_labels" + config_note.getColor() + ".png")		
 		self.toggle_titulo.add(self.enabletitle)
 
 		self.addattimg = Gtk.Image()	
-		self.addattimg.set_from_file("/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_new_attachment" + config_note.getColor() + ".png")		
+		self.addattimg.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_new_attachment" + config_note.getColor() + ".png")		
 		self.attachedbt.add(self.addattimg)
 
 		self.addattimgrmv = Gtk.Image()	
-		self.addattimgrmv.set_from_file("/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_remove_attached" + config_note.getColor() + ".png")		
+		self.addattimgrmv.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_remove_attached" + config_note.getColor() + ".png")		
 		self.attachedbtrmv.add(self.addattimgrmv)	
 
 		self.grid.attach(self.label, 0, 4, 1, 1)
@@ -228,14 +228,14 @@ def on_button_clicked2(self, event):
 		buf  = self.textview.get_buffer()
 		text = buf.get_text(buf.get_start_iter(),buf.get_end_iter(),True)
 		try:
-			send_turbo(text.decode('utf-8').encode('windows-1252'),self.titulotxt.get_text(),attFile)
+			send_turbo(text.decode('utf-8').encode('windows-1252'),self.titulotxt.get_text(),attFile,self.get_size()[0],self.get_size()[1])
 		except Exception, e:
 			msgerror = "Unable to send to " + name.upper() + "\\nInvalid Characters!"
 			command = "notify-send --hint=int:transient:1 \"TurboNote Gnome3\" \"" + (msgerror).decode('iso-8859-1').encode('utf8') + "\" -i " + path_icon + "turbo.png"
 			os.system(command)
 		
-def send_turbo(message,titulo,att):
-	win = MyWindow(message,stay,att,titulo)
+def send_turbo(message,titulo,att,w,h):
+	win = MyWindow(message,stay,att,titulo,w,h)
 	win.connect("delete-event", Gtk.main_quit)
 	win.show_all()
 	Gtk.main()

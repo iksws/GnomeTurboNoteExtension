@@ -7,8 +7,8 @@ from config_note import Config
 from subprocess import call
 import sys,os
 config_note = Config()        
-path_icon = "/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/"
-path = "/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/turbonote-adds/"
+path_icon = "/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/"
+path = "/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/turbonote-adds/"
 from PyQt4.QtCore import QCoreApplication
 import sys
 
@@ -25,8 +25,8 @@ class MyApp(QCoreApplication):
         notifyturbo.init("Multi Action Test", mainloop='qt')
         
         config_note = Config()        
-        path_icon = "/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/"
-        path = "/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/turbonote-adds/"
+        path_icon = "/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/"
+        path = "/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/turbonote-adds/"
         
         server_capabilities = notifyturbo.get_server_caps() 
         

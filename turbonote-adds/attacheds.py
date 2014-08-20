@@ -8,9 +8,9 @@ from subprocess import call
 from config_note import Config
 
 config_note = Config()
-path = "/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/turbonote-adds/"
-path_icon = "/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/"
-path_attached = "/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/attacheds/"
+path = "/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/turbonote-adds/"
+path_icon = "/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/"
+path_attached = "/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/attacheds/"
 
 lista_anexos = [] 
 lista_nome = os.listdir(path_attached)
@@ -88,7 +88,7 @@ class MyWindow(Gtk.Window):
         self.set_titlebar(hb)        
 
         self.set_position(Gtk.WindowPosition.CENTER)
-        self.set_icon_from_file("/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/turbo.png")  
+        self.set_icon_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/turbo.png")  
         self.set_wmclass ("TurboNote Gnome", "TurboNote Gnome")
         grid = Gtk.Grid()
 
@@ -146,11 +146,11 @@ class MyWindow(Gtk.Window):
         self.button_remove_all.connect("clicked", self.remove_all_cb)
 
         self.removeimg = Gtk.Image()  
-        self.removeimg.set_from_file("/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_remove_attached" + config_note.getColor() + ".png")      
+        self.removeimg.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_remove_attached" + config_note.getColor() + ".png")      
         self.button_remove.add(self.removeimg)  
 
         self.removeallimg = Gtk.Image()  
-        self.removeallimg.set_from_file("/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_remove_attached_all" + config_note.getColor() + ".png")        
+        self.removeallimg.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_remove_attached_all" + config_note.getColor() + ".png")        
         self.button_remove_all.add(self.removeallimg)
 
         self.add(grid)

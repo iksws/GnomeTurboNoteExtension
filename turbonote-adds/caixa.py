@@ -12,7 +12,7 @@ from list_control import MyWindow
 
 #call config class for get parameters
 config_note = Config()
-path = "/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/turbonote-adds/"
+path = "/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/turbonote-adds/"
 
 #defini variables
 attpick = True
@@ -35,7 +35,7 @@ def assignNewValueToAttPick(p):
 class HeaderBarWindow(Gtk.Window):
     def __init__(self,titulo,ip,msg_rec,nome):
         Gtk.Window.__init__(self, title = "To " + titulo)
-        self.set_icon_from_file("/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/turbo.png")	
+        self.set_icon_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/turbo.png")	
         self.set_border_width(15)
        	self.set_default_size(350, 350)
 
@@ -57,7 +57,7 @@ class HeaderBarWindow(Gtk.Window):
     def on_button_clicked(self, widget,nome):
 		buf  = self.textview.get_buffer()
 		text = buf.get_text(buf.get_start_iter(),buf.get_end_iter(),True)		
-		s = threading.Thread(target=send_turbo ,args=(text,ip,nome))
+		s = threading.Thread(target=send_turbo ,args=(text,ip,nome,str(self.get_size()[0]),str(self.get_size()[1])))
 		s.start()
 		Gtk.main_quit()
 
@@ -65,7 +65,7 @@ class HeaderBarWindow(Gtk.Window):
 		print "aki"
 		buf  = self.textview.get_buffer()
 		text = buf.get_text(buf.get_start_iter(),buf.get_end_iter(),True)
-		win = MyWindow(text.decode('utf-8').encode('windows-1252'),stay,attFile)
+		win = MyWindow(text.decode('utf-8').encode('windows-1252'),stay,attFile,str(self.get_size()[0]),str(self.get_size()[1]))
 		win.connect("delete-event", Gtk.main_quit)
 		win.show_all()
 		Gtk.main()
@@ -129,9 +129,9 @@ class HeaderBarWindow(Gtk.Window):
 		self.textbuffer.set_text("")
 		scrolledwindow.add(self.textview) 
 
-		msglinux = msg_rec.replace("\\n","#")
+		msglinux = msg_rec.replace("\\n","&N&")
 		
-		msgsplitlinux = msglinux.split('#')
+		msgsplitlinux = msglinux.split('&N&')
 		msg_unicode = ""
 
 		for i in range(len(msgsplitlinux)):                           
@@ -164,23 +164,23 @@ class HeaderBarWindow(Gtk.Window):
 		sendcontact.connect("clicked", self.on_button_contact)
 
 		self.staytop = Gtk.Image()	
-		self.staytop.set_from_file("/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_cast" + config_note.getColor() + ".png")		
+		self.staytop.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_cast" + config_note.getColor() + ".png")		
 		self.toggle_stay.add(self.staytop)	
 
 		self.sending = Gtk.Image()	
-		self.sending.set_from_file("/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_send_now" + config_note.getColor() + ".png")		
+		self.sending.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_send_now" + config_note.getColor() + ".png")		
 		sendcontact.add(self.sending)
 	
 		self.replyico = Gtk.Image()	
-		self.replyico.set_from_file("/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_repley_now" + config_note.getColor() + ".png")		
+		self.replyico.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_repley_now" + config_note.getColor() + ".png")		
 		responderbt.add(self.replyico)
 
 		self.addattimg = Gtk.Image()	
-		self.addattimg.set_from_file("/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_new_attachment" + config_note.getColor() + ".png")		
+		self.addattimg.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_new_attachment" + config_note.getColor() + ".png")		
 		self.attachedbt.add(self.addattimg)
 
 		self.addattimgrmv = Gtk.Image()	
-		self.addattimgrmv.set_from_file("/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_remove_attached" + config_note.getColor() + ".png")		
+		self.addattimgrmv.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_remove_attached" + config_note.getColor() + ".png")		
 		self.attachedbtrmv.add(self.addattimgrmv)	
 
 		self.attachedbt.connect("clicked", self.on_file_clicked)		
@@ -219,19 +219,19 @@ def on_button_clicked2(self, event,nome):
 	if mod == "Ctrl+Mod2+Return" or mod == "Ctrl+Mod2+Enter":
 		buf  = self.textview.get_buffer()
 		text = buf.get_text(buf.get_start_iter(),buf.get_end_iter(),True)
-		win = MyWindow(text.decode('utf-8').encode('windows-1252'),stay,attFile)
+		win = MyWindow(text.decode('utf-8').encode('windows-1252'),stay,attFile,str(self.get_size()[0]),str(self.get_size()[1]))
 		win.connect("delete-event", Gtk.main_quit)
 		win.show_all()
 		Gtk.main()
 	if mod == "Ctrl+Mod2+R":
 		buf  = self.textview.get_buffer()
 		text = buf.get_text(buf.get_start_iter(),buf.get_end_iter(),True)
-		s = threading.Thread(target=send_turbo ,args=(text,ip,nome))
+		s = threading.Thread(target=send_turbo ,args=(text,ip,nome,str(self.get_size()[0]),str(self.get_size()[1])))
 		s.start()
 		Gtk.main_quit() 
 
-def send_turbo(message,ip,nome):  
-	call(["python", path + "cliente.py",""+ message.decode('utf-8').encode('windows-1252') + "","" + ip + "","" + nome + "","" + stay + "","" + "" + "", "" + attFile + ""])        
+def send_turbo(message,ip,nome,w,h):  
+	call(["python", path + "cliente.py",""+ message.decode('utf-8').encode('windows-1252') + "","" + ip + "","" + nome + "","" + stay + "","" + "" + "", "" + attFile + "" + "","" + str(w) + "" + "","" + str(h) + ""])        
 
 if __name__ == "__main__":
 	args = sys.argv[1:]
@@ -239,7 +239,7 @@ if __name__ == "__main__":
 	nome = args[:1]
 	nome = str(nome)[:-2][2:]	
 	nome = nome.decode('iso-8859-1').encode('utf8')	
-	msg_rec = args[2]
+	msg_rec = args[2]	
 
 	win = HeaderBarWindow(nome,ip,msg_rec,nome)
 	win.connect("delete-event", Gtk.main_quit)

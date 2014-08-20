@@ -17,10 +17,10 @@ import sqlite3
 from datetime import datetime
 
 config_note = Config()
-path = "/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/turbonote-adds/"
-path_icon = "/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/"
-path_tmp = "/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/tmp_send/"
-def client(message,ip,nome,stay,titulo="",att=""):     
+path = "/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/turbonote-adds/"
+path_icon = "/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/"
+path_tmp = "/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/tmp_send/"
+def client(message,ip,nome,stay,titulo="",att="",w="",h=""):     
       #check if have img
       files = ""
       lista_dir = os.listdir(path_tmp)
@@ -89,8 +89,16 @@ def client(message,ip,nome,stay,titulo="",att=""):
             output.write("\r\n" + "TiFoColor=16777215#" + "\r\n") #cores
             output.write("\r\n" + "X=804#" + "\r\n")
             output.write("\r\n" + "Y=194#" + "\r\n")
-            output.write("\r\n" + "Width=281#" + "\r\n")
-            output.write("\r\n" + "Height=111#" + "\r\n")
+            print w,h
+            if w != "" and w != "408":
+                  output.write("\r\n" + "Width=" + w + "#" + "\r\n")                 
+            else:
+                  output.write("\r\n" + "Width=250#" + "\r\n")
+            if h != "" and h != "350":
+                  output.write("\r\n" + "Height="+ h +"#" + "\r\n")
+            else:
+                  output.write("\r\n" + "Height=200#" + "\r\n")
+                                    
             output.write("\r\n" + "Sponsored=#" + "\r\n")
             output.write("\r\n" + "LFHEIGHT=-13#" + "\r\n")
             output.write("\r\n" + "LFWIDTH=0#" + "\r\n")
@@ -260,4 +268,6 @@ nome = args[2]
 stay = args[3]
 titulo = args[4]
 att = args[5]
-client(message,ip,nome,stay,titulo,att)
+w = args[6]
+h = args[7]
+client(message,ip,nome,stay,titulo,att,w,h)

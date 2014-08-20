@@ -4,24 +4,24 @@ from config_note import Config
 from gi.repository import GdkPixbuf
 
 config_note = Config()
-path = "/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/turbonote-adds/"
-pathIcon = "/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/"
+path = "/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/turbonote-adds"
+pathIcon = "/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/"
 
 
 
 aboutdialog = Gtk.AboutDialog()
 aboutdialog.set_name("Gnome TuboNote Extension")
-aboutdialog.set_version("V 1.0")
+aboutdialog.set_version("V 1.1")
 aboutdialog.set_comments("Thank you for using this extension, reporting bugs in")
 aboutdialog.set_website("https://github.com/iksws/GnomeTurboNoteExtension")
 aboutdialog.set_website_label("GitHub")
 aboutdialog.set_authors(["iksws <ikswss@gmail.com>"])
 aboutdialog.set_copyright(".Exe Design 2014")
-with open ("/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/COPYING", "r") as myfile:
+with open ("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/COPYING", "r") as myfile:
 	data=myfile.read()
 aboutdialog.set_license(data)
 aboutdialog.set_program_name("Gnome TurboNote Extension")
-pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size("/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/turbo.png",60,60)
+pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/turbo.png",60,60)
 aboutdialog.set_logo(pixbuf)
 aboutdialog.run()
 aboutdialog.destroy()

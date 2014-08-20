@@ -31,7 +31,7 @@ class Config():
 		print "YOUR CONFS"
 		print "IP: " + ip
 		print "USERNAME: " + owner.upper()
-		
+
 		if self.getColor() == "":
 			print "COLOR ICONS: WHITE"
 		else:

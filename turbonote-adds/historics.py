@@ -9,8 +9,8 @@ from subprocess import call
 from config_note import Config
 
 config_note = Config()
-path = "/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/turbonote-adds/"
-path_icon = "/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/"
+path = "/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/turbonote-adds/"
+path_icon = "/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/"
 
 lista_hist = []
 lista_histfull = []
@@ -88,7 +88,7 @@ def treeview_clicked(widget, event,data):
     if event.type == Gdk.EventType._2BUTTON_PRESS and event.button == 1:        
         for i in range(len(lista_histfull)):
             if lista_histfull[i][0] == model[iter][0]:  
-                call(["python", path + "cliente.py",""+ (model[iter][2]).decode('utf-8').encode('iso-8859-1') +"","" + (model[iter][5]) + "","" + (model[iter][1]) + "","" + 'TRUE' + "","" + (model[iter][4]) + "","" + '' + ""])            
+                call(["python", path + "cliente.py",""+ (model[iter][2]).decode('utf-8').encode('iso-8859-1') +"","" + (model[iter][5]) + "","" + (model[iter][1]) + "","" + 'TRUE' + "","" + (model[iter][4]) + "","" + '' + "","" + '' + "","" + '' + ""])            
         return True
     
 
@@ -108,7 +108,7 @@ class MyWindow(Gtk.Window):
         Gtk.StyleContext.add_class(box2.get_style_context(), "linked")
 
         self.set_titlebar(hb)
-        self.set_icon_from_file("/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/turbo.png")
+        self.set_icon_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/turbo.png")
         self.set_wmclass ("TurboNote Gnome", "TurboNote Gnome")
         grid = Gtk.Grid()
         self.set_border_width(15)
@@ -191,17 +191,17 @@ class MyWindow(Gtk.Window):
         self.button_remove_all.connect("clicked", self.remove_all_cb)
 
         self.removeimg = Gtk.Image()  
-        self.removeimg.set_from_file("/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_storage" + config_note.getColor() + ".png")      
+        self.removeimg.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_storage" + config_note.getColor() + ".png")      
         self.button_remove.add(self.removeimg)  
 
         self.removeallimg = Gtk.Image()  
-        self.removeallimg.set_from_file("/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_storage_all" + config_note.getColor() + ".png")        
+        self.removeallimg.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_storage_all" + config_note.getColor() + ".png")        
         self.button_remove_all.add(self.removeallimg)
 
         self.responderbt = Gtk.Button()      
 
         self.sending = Gtk.Image()  
-        self.sending.set_from_file("/home/" + config_note.getOwner() + "/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_send_now" + config_note.getColor() + ".png")        
+        self.sending.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_send_now" + config_note.getColor() + ".png")        
         self.responderbt.add(self.sending)
 
         self.responderbt.connect("clicked", self.resend)
@@ -232,7 +232,7 @@ class MyWindow(Gtk.Window):
                 
             if len(iters) != 0:
                 for i in range(len(iters)):                                             
-                  call(["python", path + "cliente.py",""+ (self.model[iters[i]][2]) +"","" + (self.model[iters[i]][5]) + "","" + (self.model[iters[i]][1]) + "","" + 'TRUE' + "","" + (self.model[iters[i]][4]) + "","" + '' + ""])            
+                  call(["python", path + "cliente.py",""+ (self.model[iters[i]][2]) +"","" + (self.model[iters[i]][5]) + "","" + (self.model[iters[i]][1]) + "","" + 'TRUE' + "","" + (self.model[iters[i]][4]) + "","" + '' + "","" + '' + "","" + '' + ""])            
             else:
                 msgerror = "No select Note!\\nPlease select one Note to remove!";                      
                 command = "notify-send --hint=int:transient:1 \"TurboNote Gnome3\" \"" + (msgerror).decode('iso-8859-1').encode('utf8') + "\" -i " + path_icon + "turbo.png"                  
