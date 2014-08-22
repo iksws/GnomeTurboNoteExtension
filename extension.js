@@ -53,7 +53,8 @@ const MessageMenu = new Lang.Class({
 	    this.contacts_string  = _("Contacts Manager");
 	    this.attacheds_string = _("Attacheds");
 	    this.restart_string   = _("Start Server");
-	    this.stop_string      = _("Stop Server");	    
+	    this.stop_string      = _("Stop Server");
+	    this.svnupdate_string = _("Check SVN Updates");	    
 	    this.about_string     = _("About");
 	
 		this._buildMenu();
@@ -71,7 +72,9 @@ const MessageMenu = new Lang.Class({
 		this.attacheds_tb =  new PopupMenu.PopupMenuItem("        "+this.attacheds_string);
 		this.restart_tb   =  new PopupMenu.PopupMenuItem(this.restart_string);
 		this.stop_tb      =  new PopupMenu.PopupMenuItem(this.stop_string);
+		this.svnupdate_tb =  new PopupMenu.PopupMenuItem(this.svnupdate_string);
 		this.about_tb     =  new PopupMenu.PopupMenuItem(this.about_string);
+		
 		
 		this.about_tb.connect('activate', Lang.bind(this, this._TbAbout));		
 		this.newnote_tb.connect('activate', Lang.bind(this, this._TbNewNote));				
@@ -81,6 +84,7 @@ const MessageMenu = new Lang.Class({
 		this.restart_tb.connect('activate', Lang.bind(this, this._TbRestart));
 		this.stop_tb.connect('activate', Lang.bind(this, this._TbStop));		
 		this.historys_tb.connect('activate', Lang.bind(this, this._TbHistorys));		
+		this.svnupdate_tb.connect('activate', Lang.bind(this, this._TbSvnUpdate));
 
 		this.menu.addMenuItem(this.newnote_tb);
 		this.menu.addMenuItem(this.attacheds_tb);
@@ -89,7 +93,8 @@ const MessageMenu = new Lang.Class({
 		this.menu.addMenuItem(this.historys_tb);
 		this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
 		this.menu.addMenuItem(this.restart_tb);		
-		this.menu.addMenuItem(this.stop_tb);		
+		this.menu.addMenuItem(this.stop_tb);	
+		this.menu.addMenuItem(this.svnupdate_tb);		
 		this.menu.addMenuItem(this.about_tb);	
 
 	},
@@ -127,6 +132,13 @@ const MessageMenu = new Lang.Class({
 	_TbHistorys: function() {
 		try{			
 		 	Main.Util.trySpawnCommandLine('python /usr/share/gnome-shell/extensions/turbonote@iksws.com.br/turbonote-adds/historics.py');
+		 }catch(Execption){		 	
+		 	notifyTray("ERROR",Execption); 
+		 }
+	},
+	_TbSvnUpdate: function() {
+		try{			
+		 	Main.Util.trySpawnCommandLine('cd /usr/share/gnome-shell/extensions/turbonote@iksws.com.br/; svn update;');
 		 }catch(Execption){		 	
 		 	notifyTray("ERROR",Execption); 
 		 }
