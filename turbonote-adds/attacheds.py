@@ -314,7 +314,7 @@ class MyWindow(Gtk.Window):
             self.buttonGO.set_sensitive(True)
             self.buttonBK.set_sensitive(False)        
 
-        if self.strip_one_space(str(filesFound[pageCounter-1][-4:])).strip(".") != "png":
+        if self.strip_one_space(str(filesFound[pageCounter-1][-4:])).strip(".") != "png" and self.strip_one_space(str(filesFound[pageCounter-1][-4:])).strip(".") != "gif" and self.strip_one_space(str(filesFound[pageCounter-1][-4:])).strip(".") != "jpg" and self.strip_one_space(str(filesFound[pageCounter-1][-4:])).strip(".") != "bmp":
             self.labelCounter.set_text(str(pageCounter) + " - [This file not is image]/" + str(len(filesFound))) 
             pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/turbo.png", 200, 200, True)
             image.set_from_pixbuf(pixbuf)   
@@ -351,7 +351,7 @@ class MyWindow(Gtk.Window):
         datafile =  str(model[iters[i]][1])[:2]  + str(model[iters[i]][1])[3:-14]  + str(model[iters[i]][1])[6:-9]  + str(model[iters[i]][1])[11:-6] + str(model[iters[i]][1])[14:-3]+ str(model[iters[i]][1])[17:]        
         
         if len(filesFound) == 1:      
-            if self.strip_one_space(str(filesFound[pageCounter-1][-4:])).strip(".") != "png":
+            if self.strip_one_space(str(filesFound[pageCounter-1][-4:])).strip(".") != "png" and self.strip_one_space(str(filesFound[pageCounter-1][-4:])).strip(".") != "gif" and self.strip_one_space(str(filesFound[pageCounter-1][-4:])).strip(".") != "jpg" and self.strip_one_space(str(filesFound[pageCounter-1][-4:])).strip(".") != "bmp":
                 self.labelCounter.set_text("This file not is image")
                 pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/turbo.png", 200, 200, True)
                 image.set_from_pixbuf(pixbuf)   
@@ -364,7 +364,7 @@ class MyWindow(Gtk.Window):
                 self.buttonGO.set_sensitive(False)
                 self.buttonBK.set_sensitive(False)
         else:            
-            if self.strip_one_space(str(filesFound[pageCounter-1][-4:])).strip(".") != "png":
+            if self.strip_one_space(str(filesFound[pageCounter-1][-4:])).strip(".") != "png" and self.strip_one_space(str(filesFound[pageCounter-1][-4:])).strip(".") != "gif" and self.strip_one_space(str(filesFound[pageCounter-1][-4:])).strip(".") != "jpg" and self.strip_one_space(str(filesFound[pageCounter-1][-4:])).strip(".") != "bmp":
                self.labelCounter.set_text("1 - [This file not is image]/" + str(len(filesFound)))
                self.buttonGO.set_sensitive(True)
                pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/turbo.png", 200, 200, True)
