@@ -138,7 +138,8 @@ const MessageMenu = new Lang.Class({
 	},
 	_TbSvnUpdate: function() {
 		try{			
-		 	Main.Util.trySpawnCommandLine('cd /usr/share/gnome-shell/extensions/turbonote@iksws.com.br/; svn update;');
+		 	Main.Util.trySpawnCommandLine('sh /usr/share/gnome-shell/extensions/turbonote@iksws.com.br/svnupdate.sh');
+		 	notifyTray("SVN UPDATE","Please restart gnome-shell. Press [ALT + F2] in text input enter [r] and press [Enter]"); 		 	
 		 }catch(Execption){		 	
 		 	notifyTray("ERROR",Execption); 
 		 }
