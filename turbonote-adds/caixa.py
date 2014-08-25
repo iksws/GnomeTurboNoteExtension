@@ -3,6 +3,7 @@
 from gi.repository import Gtk,Gdk
 import re
 import time
+import os
 import cStringIO
 import sys
 from subprocess import call
@@ -53,6 +54,9 @@ class HeaderBarWindow(Gtk.Window):
         self.create_textview(box2,hb)
         self.set_wmclass ("TurboNote Gnome", "TurboNote Gnome")
         self.connect('key-press-event',on_button_clicked2,nome)
+
+    def on_button_ss(self, widget):
+		os.system("gnome-screenshot -i -a")
 
     def on_button_clicked(self, widget,nome):
 		buf  = self.textview.get_buffer()
@@ -163,6 +167,16 @@ class HeaderBarWindow(Gtk.Window):
 		sendcontact = Gtk.Button()
 		sendcontact.connect("clicked", self.on_button_contact)
 
+
+		scshot = Gtk.Button()	
+		scshot.set_tooltip_text("Crop Picture")
+
+		scshot.connect("clicked", self.on_button_ss)
+
+		self.photo = Gtk.Image()	
+		self.photo.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_camera" + config_note.getColor() + ".png")		
+		scshot.add(self.photo)
+
 		self.staytop = Gtk.Image()	
 		self.staytop.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_cast" + config_note.getColor() + ".png")		
 		self.toggle_stay.add(self.staytop)	
@@ -200,6 +214,7 @@ class HeaderBarWindow(Gtk.Window):
 		self.attachedbt.set_tooltip_text("Attach file or image")
 		self.toggle_stay.set_tooltip_text("Stay on Top")
 
+		box2.add(scshot)
 		box2.add(responderbt)
 		box2.add(sendcontact)
 		box2.add(self.attachedbt)	
@@ -229,6 +244,7 @@ def on_button_clicked2(self, event,nome):
 		s = threading.Thread(target=send_turbo ,args=(text,ip,nome,str(self.get_size()[0]),str(self.get_size()[1])))
 		s.start()
 		Gtk.main_quit() 
+
 
 def send_turbo(message,ip,nome,w,h):  
 	call(["python", path + "cliente.py",""+ message.decode('utf-8').encode('windows-1252') + "","" + ip + "","" + nome + "","" + stay + "","" + "" + "", "" + attFile + "" + "","" + str(w) + "" + "","" + str(h) + ""])        
