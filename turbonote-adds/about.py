@@ -11,7 +11,7 @@ pathIcon = "/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/"
 
 aboutdialog = Gtk.AboutDialog()
 aboutdialog.set_name("Gnome TuboNote Extension")
-aboutdialog.set_version("V 1.1")
+aboutdialog.set_version("V 1.2")
 aboutdialog.set_comments("Thank you for using this extension, please reporting bugs in")
 aboutdialog.set_website("https://github.com/iksws/GnomeTurboNoteExtension")
 aboutdialog.set_website_label("GitHub")
