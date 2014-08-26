@@ -104,6 +104,8 @@ def update(buffer,progressbar,window,label):
     if restart:
         buffer.insert(buffer.get_end_iter(), str("\n\nREQUIRE RESTART PRESS [ALT+F2] ENTER [r] IN INPUT BOX PRESS [ENTER]"))
 
+    buffer.insert(buffer.get_end_iter(), str("\n\nFINISH!"))
+
     progressbar.hide()  
     label.hide();
     
