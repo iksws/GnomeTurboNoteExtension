@@ -92,9 +92,16 @@ class ProgressBarWindow(Gtk.Window):
         return True
 
 def update(buffer,progressbar,window,label):
+    restart = False;
     for line in  commands.getstatusoutput('cd /usr/share/gnome-shell/extensions/turbonote@iksws.com.br; svn update'):
         if str(line) != '0':
-            buffer.insert(buffer.get_end_iter(), str(line))       
+            if "server.py" in line or  "extension.js" in line:
+                restart = True
+            buffer.insert(buffer.get_end_iter(), str(line))
+
+    if restart:
+        buffer.insert(buffer.get_end_iter(), str("REQUIRE RESTART PRESS [ALT+F2] ENTER [r] IN INPUT BOX PRESS [ENTER]"))
+
     progressbar.hide()  
     label.hide();
     
