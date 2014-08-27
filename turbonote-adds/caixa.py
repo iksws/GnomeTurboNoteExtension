@@ -247,6 +247,8 @@ def on_button_clicked2(self, event,nome):
 
 
 def send_turbo(message,ip,nome,w,h):  
+	#fix windows
+	message.replace("\\","\\\\");
 	call(["python", path + "cliente.py",""+ message.decode('utf-8').encode('windows-1252') + "","" + ip + "","" + nome + "","" + stay + "","" + "" + "", "" + attFile + "" + "","" + str(w) + "" + "","" + str(h) + ""])        
 
 if __name__ == "__main__":

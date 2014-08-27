@@ -227,6 +227,10 @@ def on_button_clicked2(self, event):
 	if mod == "Ctrl+Mod2+Return" or mod == "Ctrl+Mod2+Enter":
 		buf  = self.textview.get_buffer()
 		text = buf.get_text(buf.get_start_iter(),buf.get_end_iter(),True)
+
+		#fix windows
+		text.replace("\\","\\\\");
+
 		try:
 			send_turbo(text.decode('utf-8').encode('windows-1252'),self.titulotxt.get_text(),attFile,self.get_size()[0],self.get_size()[1])
 		except Exception, e:
