@@ -104,9 +104,11 @@ def update(buffer,progressbar,window,label):
     if restart:
         buffer.insert(buffer.get_end_iter(), str("\n\nREQUIRE RESTART PRESS [ALT+F2] ENTER [r] IN INPUT BOX PRESS [ENTER]"))   
 
+    buffer.insert(buffer.get_end_iter(), str("\n\n"))
+    buffer.insert(buffer.get_end_iter(), str("Last 5 updates..."))
     buffer.insert(buffer.get_end_iter(), str("\n"))
 
-    for line2 in  commands.getstatusoutput('svn log  https://github.com/iksws/GnomeTurboNoteExtension/trunk -l1'):
+    for line2 in  commands.getstatusoutput('svn log  https://github.com/iksws/GnomeTurboNoteExtension/trunk -l5'):
         if str(line2) != '0':
             buffer.insert(buffer.get_end_iter(), str(line2))
 
