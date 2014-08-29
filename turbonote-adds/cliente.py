@@ -20,6 +20,13 @@ config_note = Config()
 path = "/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/turbonote-adds/"
 path_icon = "/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/"
 path_tmp = "/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/tmp_send/"
+
+def hex_to_rgb(value):
+    value = value.lstrip('#')
+    lv = len(value)
+    return tuple(int(value[i:i+lv/3], 16) for i in range(0, lv, lv/3))
+
+
 def client(message,ip,nome,stay,titulo="",att="",w="",h=""):     
       #check if have img
       files = ""
@@ -173,8 +180,8 @@ def client(message,ip,nome,stay,titulo="",att="",w="",h=""):
             output.write("\r\n" + "TILESTRETCH_V60=0#" + "\r\n")
 
             if imageBase64 == "":
-                  output.write("\r\n" + "RTF_V60={\\rtf1\\ansi\\ansicpg1252\deff0\deflang1046{\\fonttbl{\\f0\\froman\\fprq2\\fcharset0 Times New Roman;}}" + "\r\n")
-                  output.write("\r\n" + "{\colortbl ;\\red0\green0\\blue0;}" + "\r\n")                  
+                  output.write("\r\n" + "RTF_V60={\\rtf1\\ansi\\ansicpg1252\deff0\deflang1046{\\fonttbl{\\f0\\froman\\fprq2\\fcharset0 "+ fontbt +";}}" + "\r\n")
+                  output.write("\r\n" + "{\colortbl ;\\red"+str(hex_to_rgb(font4)[0])+"\green"+str(hex_to_rgb(font4)[1])+"\\blue"+str(hex_to_rgb(font4)[2])+";}" + "\r\n")                  
             else:
                   output.write("\r\n" + "RTF_V60=" +  imageBase64 + "|#!ENDOF rtf tcpip#")         
         
@@ -235,7 +242,7 @@ def richTextMaker(imagesrc):
       image = Image(imagesrc)
       outputrtf = cStringIO.StringIO()
 
-      outputrtf.write("{\\rtf1\\ansi\\ansicpg1252\deff0\deflang1046{\\fonttbl{\\f0\\froman\\fprq6\\fcharset0 Arial;}}" + "\r\n")
+      outputrtf.write("{\\rtf1\\ansi\\ansicpg1252\deff0\deflang1046{\\fonttbl{\\f0\\froman\\fprq6\\fcharset0 "+ fontbb +";}}" + "\r\n")
       outputrtf.write("{\colortbl ;\\red0\green0\\blue0;}"  + "\r\n")
       outputrtf.write("\\viewkind4\uc1\pard\cf1\\f0\\fs20  \par"  + "\r\n")
       outputrtf.write(image.getData()  + "\r\n")        
