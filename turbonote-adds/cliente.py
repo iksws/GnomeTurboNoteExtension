@@ -65,6 +65,18 @@ def client(message,ip,nome,stay,titulo="",att="",w="",h=""):
       sussecs = "1"             
       ip_sender = ip.split(',')  
 
+      connb = sqlite3.connect(path + 'turbo.db')
+      a = connb.cursor()
+      a.execute("SELECT * FROM notestyle")
+      rows =  a.fetchall()
+      font1 = (str(rows[0][0]))
+      font2 = (str(rows[0][1]))
+      font3 = (str(rows[0][2]))
+      font4 = (str(rows[0][3]))
+      fontbt = str(rows[0][4])
+      fontbb = str(rows[0][5])
+
+      connb.close()
 
       for x in range(len(ip_sender)):            
             msgsplitlinux  = message.splitlines()            
@@ -83,13 +95,13 @@ def client(message,ip,nome,stay,titulo="",att="",w="",h=""):
             else:
                   output.write("\r\n" + "StayOnTop=#" + "\r\n" )
             output.write("\r\n" + "HasBorder=#" + "\r\n")
-            output.write("\r\n" + "BkColor=16777215#" + "\r\n") #cores
-            output.write("\r\n" + "FoColor=0#" + "\r\n") #cores
-            output.write("\r\n" + "TiBkColor=0#" + "\r\n") #cores
-            output.write("\r\n" + "TiFoColor=16777215#" + "\r\n") #cores
+            output.write("\r\n" + "BkColor=" + str(int(font2[1:][::-1],16)) + "#" + "\r\n") #cor fundo do body
+            output.write("\r\n" + "FoColor=" +  str(int(font4[1:][::-1],16))+ "#" + "\r\n") #cores texto body
+            output.write("\r\n" + "TiBkColor=" +  str(int(font1[1:][::-1],16)) + "#" + "\r\n") #cor fundo titulo
+            output.write("\r\n" + "TiFoColor=" +  str(int(font3[1:][::-1],16)) + "#" + "\r\n") #Cor do texto titulo
             output.write("\r\n" + "X=804#" + "\r\n")
             output.write("\r\n" + "Y=194#" + "\r\n")
-            print w,h
+            #print w,h
             if w != "" and w != "408":
                   output.write("\r\n" + "Width=" + w + "#" + "\r\n")                 
             else:
@@ -113,7 +125,7 @@ def client(message,ip,nome,stay,titulo="",att="",w="",h=""):
             output.write("\r\n" + "LFCLIPPREC=2#" + "\r\n")
             output.write("\r\n" + "LFQUALITY=1#" + "\r\n")
             output.write("\r\n" + "LFPITCHAND=18#" + "\r\n")
-            output.write("\r\n" + "LFFACENAME=Verdana#" + "\r\n")
+            output.write("\r\n" + "LFFACENAME="+ fontbb +"#" + "\r\n") #body font
             output.write("\r\n" + "LFHEIGHTTI=-15#" + "\r\n")
             output.write("\r\n" + "LFWIDTHTI=0#" + "\r\n")
             output.write("\r\n" + "LFESCAPETI=0#" + "\r\n")
@@ -127,7 +139,7 @@ def client(message,ip,nome,stay,titulo="",att="",w="",h=""):
             output.write("\r\n" + "LFCLIPPRTI=2#" + "\r\n")
             output.write("\r\n" + "LFQUALITTI=1#" + "\r\n")
             output.write("\r\n" + "LFPITCHTI=18#" + "\r\n")
-            output.write("\r\n" + "LFFACENATI=Verdana#" + "\r\n") #font
+            output.write("\r\n" + "LFFACENATI="+ fontbt +"#" + "\r\n") #title font
             if titulo:
                   output.write("\r\n" + "SZTITLE=" + titulo + "#" + "\r\n")
             else:
@@ -186,6 +198,7 @@ def client(message,ip,nome,stay,titulo="",att="",w="",h=""):
 
             msgfinal = ""
 
+            #print output.getvalue()
             saveMsg(nome,ip,titulo,message)            
             try:
                   if DoesServiceExist(ip_sender[x]):

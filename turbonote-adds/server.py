@@ -62,7 +62,8 @@ class EchoRequestHandler(SocketServer.BaseRequestHandler):
             else:
                 data += longmax 
 
-        if data:     
+        if data:    
+            print data 
             turbodata = data.split('End of TCPIP text')
             
             

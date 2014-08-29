@@ -10,6 +10,7 @@ from subprocess import call
 import threading
 from config_note import Config
 from list_control import MyWindow
+from notestyle import WindowStyle
 
 config_note = Config()
 path = "/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/turbonote-adds/"
@@ -61,6 +62,11 @@ class HeaderBarWindow(Gtk.Window):
         self.set_wmclass ("TurboNote Gnome", "TurboNote Gnome")
         self.connect('key-press-event',on_button_clicked2)
 
+    def noteStyle(self,widget):
+    	style = WindowStyle()
+    	style.connect("delete-event", Gtk.main_quit)
+    	style.show_all()
+    	Gtk.main()
 
     def toggle_titulo_callback(self, button):
 	    if self.toggle_titulo.get_active():
@@ -160,6 +166,9 @@ class HeaderBarWindow(Gtk.Window):
 		self.toggle_titulo.set_tooltip_text("Set title")
 		self.toggle_titulo.connect("toggled", self.toggle_titulo_callback)
 
+		self.settings = Gtk.Button()
+		self.settings.set_tooltip_text("Style windows settings")
+		self.settings.connect("clicked", self.noteStyle)
 
 		self.titulotxt = Gtk.Entry()
 		responderbt = Gtk.Button()	
@@ -197,12 +206,17 @@ class HeaderBarWindow(Gtk.Window):
 		self.addattimgrmv.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_remove_attached" + config_note.getColor() + ".png")		
 		self.attachedbtrmv.add(self.addattimgrmv)	
 
+		self.settingsimg = Gtk.Image()	
+		self.settingsimg.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_settings" + config_note.getColor() + ".png")		
+		self.settings.add(self.settingsimg)
+
 		self.grid.attach(self.label, 0, 4, 1, 1)
 		box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
 		Gtk.StyleContext.add_class(box.get_style_context(), "linked")			
 		
 		box.add(self.toggle_stay)
 		box.add(self.toggle_titulo)
+		box.add(self.settings)
 		
 		box2.add(scshot)
 		box2.add(responderbt)

@@ -2,6 +2,7 @@ from gi.repository import Gtk, Gdk,GObject
 import commands
 import time
 import sys,os
+import os.path
 import threading
 
 class ProgressBarWindow(Gtk.Window):
@@ -100,6 +101,13 @@ def update(buffer,progressbar,window,label):
             if "server.py" in line or  "extension.js" in line:
                 restart = True
             buffer.insert(buffer.get_end_iter(), str(line))
+
+    if os.path.exists("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/turbonote-adds/updatebd.sql"):
+        buffer.insert(buffer.get_end_iter(), str("\n"))
+        buffer.insert(buffer.get_end_iter(), str("\nDATABASE UPDATE FOUND!"))
+        buffer.insert(buffer.get_end_iter(), str("\nUPDATING DATABSE...\n"))
+        os.system("sqlite3 /usr/share/gnome-shell/extensions/turbonote@iksws.com.br/turbonote-adds/turbo.db < /usr/share/gnome-shell/extensions/turbonote@iksws.com.br/turbonote-adds/updatebd.sql")
+        os.system("rm -rf /usr/share/gnome-shell/extensions/turbonote@iksws.com.br/turbonote-adds/updatebd.sql")
 
     if restart:
         buffer.insert(buffer.get_end_iter(), str("\n\nREQUIRE RESTART PRESS [ALT+F2] ENTER [r] IN INPUT BOX PRESS [ENTER]"))   
