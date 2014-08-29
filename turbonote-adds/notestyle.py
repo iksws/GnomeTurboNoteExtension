@@ -4,8 +4,13 @@ import time
 import sys,os
 import threading
 import sqlite3
+from config_note import Config
 
+config_note = Config()
 path = "/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/turbonote-adds/"
+path_icon = "/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/"
+stay = ""
+
 
 connb = sqlite3.connect(path + 'turbo.db')
 a = connb.cursor()
@@ -62,43 +67,109 @@ class WindowStyle(Gtk.Window):
         self.space2 = Gtk.Label()
         self.space2.set_text("      ") 
 
-        self.noteTextLabel = Gtk.Label("\n\n\n\n\n           Select font for text note...           \n\n\n\n\n")
-        fontbt = Gtk.Button("Select body font")
-        fontbt.connect("clicked", self.on_clickedTextFont)
-        fontcolorbt = Gtk.Button("Select text body color")
-        fontcolorbt.connect("clicked", self.on_clickedTextColor)
+        self.space3 = Gtk.Label()
+        self.space3.set_text("      ") 
 
+        self.space4 = Gtk.Label()
+        self.space4.set_text("      ") 
+
+        self.space5 = Gtk.Label()
+        self.space5.set_text("      ") 
+
+        self.title_body = Gtk.Label()
+        self.title_body.set_text("Body Components") 
+
+        self.title_title = Gtk.Label()
+        self.title_title.set_text("Title Components") 
+
+        self.noteTextLabel = Gtk.Label("\n\n\n\n\n           Select font for text note...           \n\n\n\n\n")
         self.noteTextTitle = Gtk.Label("          Note Title...           ")
 
-        fontbtTitle = Gtk.Button("Select font title")
+
+        fontbt = Gtk.Button()
+        fontbt.set_tooltip_text("Body font")
+        fontbt.connect("clicked", self.on_clickedTextFont)
+       
+        fontcolorbt = Gtk.Button()
+        fontcolorbt.set_tooltip_text("Text body color")
+        fontcolorbt.connect("clicked", self.on_clickedTextColor)
+
+        fontbtTitle = Gtk.Button()
+        fontbtTitle.set_tooltip_text("Font title")
         fontbtTitle.connect("clicked", self.on_clickedTextFontTitle)
-        fontcolorbtTitle = Gtk.Button("Select title text color")
+        
+        fontcolorbtTitle = Gtk.Button()
+        fontcolorbtTitle.set_tooltip_text("title text color")
         fontcolorbtTitle.connect("clicked", self.on_clickedTextColorTitle)
 
-        bodyColor = Gtk.Button("Select body color")
+        bodyColor = Gtk.Button()
+        bodyColor.set_tooltip_text("Body Color")
         bodyColor.connect("clicked", self.on_clickedTextColorBody)
 
-        bodytitleColor = Gtk.Button("Select title color")
+        bodytitleColor = Gtk.Button()
+        bodytitleColor.set_tooltip_text("Title color")
         bodytitleColor.connect("clicked", self.on_clickedTextColorTitleBody)
 
-        save = Gtk.Button("Save")
+        save = Gtk.Button()
+        save.set_tooltip_text("Save Config")
         save.connect("clicked", self.on_save)
 
-
-        self.grid.attach(self.noteTextTitle, 2,0 , 1 , 1)
-        self.grid.attach(self.noteTextLabel, 2,1 , 1 , 5)
-
-        self.grid.attach(self.space, 1,0 , 1 , 6)
         
-        self.grid.attach(fontbt, 0,0 , 1 , 1)
-        self.grid.attach(fontcolorbt, 0,1 , 1 , 1)
 
-        self.grid.attach(fontbtTitle, 0,2 , 1 , 1)
-        self.grid.attach(fontcolorbtTitle, 0,3 , 1 , 1) 
-        self.grid.attach(bodyColor, 0,4 , 1 , 1) 
-        self.grid.attach(bodytitleColor, 0,5 , 1 , 1) 
-        self.grid.attach(self.space2, 0, 6 , 3 , 1) 
-        self.grid.attach(save, 0, 7 , 3 , 1) 
+        self.colorBody = Gtk.Image()  
+        self.colorBody.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_new_eventb" + config_note.getColor() + ".png")     
+        bodyColor.add(self.colorBody)
+
+        self.colorTextBody = Gtk.Image()  
+        self.colorTextBody.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_new_eventtb" + config_note.getColor() + ".png")     
+        fontcolorbt.add(self.colorTextBody)
+
+        self.fontTextBody = Gtk.Image()  
+        self.fontTextBody.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_new_eventt" + config_note.getColor() + ".png")     
+        fontbt.add(self.fontTextBody)
+
+        self.colorBodyTitle = Gtk.Image()  
+        self.colorBodyTitle.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_new_eventb" + config_note.getColor() + ".png")     
+        fontcolorbtTitle.add(self.colorBodyTitle)
+
+        self.colorTextBodyTitle = Gtk.Image()  
+        self.colorTextBodyTitle.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_new_eventtb" + config_note.getColor() + ".png")     
+        bodytitleColor.add(self.colorTextBodyTitle)
+
+        self.fontTextBodyTitle = Gtk.Image()  
+        self.fontTextBodyTitle.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_new_eventt" + config_note.getColor() + ".png")     
+        fontbtTitle.add(self.fontTextBodyTitle)
+
+        self.saveimg = Gtk.Image()  
+        self.saveimg.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_save" + config_note.getColor() + ".png")     
+        save.add(self.saveimg)
+        
+
+        self.grid.attach(self.title_body, 0,0 , 3 , 1)
+
+        self.grid.attach(self.space2, 0,1 , 1 , 1)
+
+        self.grid.attach(bodyColor    ,0,2 , 1 , 1) 
+        self.grid.attach(fontcolorbt  ,1,2 , 1 , 1)
+        self.grid.attach(fontbt       ,2,2 , 1 , 1)
+
+        self.grid.attach(self.space, 3,2 , 1 , 3)
+
+        self.grid.attach(self.noteTextTitle, 4,0 , 1 , 2)
+        self.grid.attach(self.noteTextLabel, 4,1 , 1 , 8)
+
+        self.grid.attach(self.space3, 0,3 , 3 , 1)
+        self.grid.attach(self.title_title, 0,4 , 3 , 1)
+     
+        self.grid.attach(self.space4, 0,5 , 3 , 1)
+
+        self.grid.attach(fontbtTitle, 0,6 , 1 , 1)
+        self.grid.attach(bodytitleColor, 1,6 , 1 , 1) 
+        self.grid.attach(fontcolorbtTitle, 2,6, 1 , 1) 
+
+        self.grid.attach(self.space5, 0,7 , 3 , 1)
+
+        self.grid.attach(save, 0,8 , 3 , 1)
 
         font1 = Gdk.RGBA()        
         font2 = Gdk.RGBA()       
