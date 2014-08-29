@@ -45,7 +45,7 @@ class HeaderBarWindow(Gtk.Window):
         Gtk.Window.__init__(self, title = "New Note")
         self.set_icon_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/turbo.png")	
         self.set_border_width(15)
-       	self.set_default_size(400, 350)
+       	self.set_default_size(480, 350)
 
         hb = Gtk.HeaderBar()
         hb.props.show_close_button = True

@@ -163,9 +163,9 @@ class WindowStyle(Gtk.Window):
      
         self.grid.attach(self.space4, 0,5 , 3 , 1)
 
-        self.grid.attach(fontbtTitle, 0,6 , 1 , 1)
+        self.grid.attach(fontbtTitle, 2,6 , 1 , 1)
         self.grid.attach(bodytitleColor, 1,6 , 1 , 1) 
-        self.grid.attach(fontcolorbtTitle, 2,6, 1 , 1) 
+        self.grid.attach(fontcolorbtTitle, 0,6, 1 , 1) 
 
         self.grid.attach(self.space5, 0,7 , 3 , 1)
 
