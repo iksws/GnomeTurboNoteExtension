@@ -3,9 +3,8 @@
   "description": "TurboNote Plugin extension Gnome 3", 
   "gettext-domain": "gnome-shell-extensions", 
   "name": "GnomeTurboNoteExtension", 
-  "shell-version": [
-    "3.10", 
-    "3.12"
+  "cinnamon-version": [
+    "2.2.16"
   ], 
   "url": "https://github.com/iksws/GnomeTurboNoteExtension", 
   "uuid": "turbonote@iksws.com.br", 

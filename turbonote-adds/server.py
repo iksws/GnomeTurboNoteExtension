@@ -19,10 +19,10 @@ import base64
 OVERRIDE_NO_ACTIONS = True
 
 config_note = Config()
-path = "/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/turbonote-adds/"
-path_icon = "/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/"
-path_tmp = "/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/tmp/"
-path_attached = "/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/attacheds/"
+path = "/usr/share/cinnamon/applets/turbonote@iksws.com.br/turbonote-adds/"
+path_icon = "/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/"
+path_tmp = "/usr/share/cinnamon/applets/turbonote@iksws.com.br/tmp/"
+path_attached = "/usr/share/cinnamon/applets/turbonote@iksws.com.br/attacheds/"
 
 caixa = 1
 titulo = ""
@@ -186,7 +186,7 @@ def notificar(nome,conteudo,ipsender):
 	command21 = "mv " +  path_tmp +  hojefile + nome + "/fullscreen.odt " +  path_tmp +  hojefile + nome + "/fullscreen.zip"
 	command22 = "unzip " +  path_tmp +  hojefile + nome + "/fullscreen.zip -d " + path_tmp + hojefile + nome + "/odt"   
         command3 = "mkdir " +  path_attached +  nome + "/" + hojefile 
-        command4 = "cd " +  path_tmp + hojefile +  nome +  "/odt/Pictures/; mv *.gif *.png *.jpg *.jpeg *.bmp *.wmf "  + path_attached + nome + "/" + hojefile  + "/"
+        command4 = "cd " +  path_tmp + hojefile +  nome +  "/odt/Pictures/; cp *.gif *.png *.jpg *.jpeg *.bmp *.wmf "  + path_attached + nome + "/" + hojefile  + "/"
         command5 = "rm -Rf " +  path_tmp + "*" 
         os.system(command0)   
         os.system(command1)   
@@ -209,7 +209,7 @@ def notificar(nome,conteudo,ipsender):
 	command21 = "mv " +  path_tmp +  hojefile + nome + "/fullscreen.odt " +  path_tmp +  hojefile + nome + "/fullscreen.zip"
 	command22 = "unzip " +  path_tmp +  hojefile + nome + "/fullscreen.zip -d " + path_tmp + hojefile + nome + "/odt"      
 	command2 = "mkdir " +  path_attached +  nome + "/" + hojefile
-        command3 = "cd " +  path_tmp + hojefile +  nome +  "; mv *.gif *.png *.jpg *.jpeg *.bmp *.wmf"  + path_attached + nome + "/" + hojefile  + "/"
+        command3 = "cd " +  path_tmp + hojefile +  nome +  "; cp *.gif *.png *.jpg *.jpeg *.bmp *.wmf"  + path_attached + nome + "/" + hojefile  + "/"
         command4 = "rm -Rf " +  path_tmp + "*"        
         os.system(command0)   
         os.system(command1)   

@@ -94,22 +94,22 @@ class ProgressBarWindow(Gtk.Window):
 
 def update(buffer,progressbar,window,label):
     buffer.insert(buffer.get_end_iter(), str("Waiting...\n"))
-    buffer.insert(buffer.get_end_iter(), str("Connecting to https://github.com/iksws/GnomeTurboNoteExtension/...\n"))
+    buffer.insert(buffer.get_end_iter(), str("Connecting to https://github.com/iksws/GnomeTurboNoteExtension/branches/Cinnamon...\n"))
     restart = False;
-    for line in  commands.getstatusoutput('cd /usr/share/gnome-shell/extensions/turbonote@iksws.com.br; svn update'):
+    for line in  commands.getstatusoutput('cd /usr/share/cinnamon/applets/turbonote@iksws.com.br; svn update'):
         if str(line) != '0':
             if "server.py" in line or  "extension.js" in line:
                 restart = True
             buffer.insert(buffer.get_end_iter(), str(line))
 
-    if os.path.exists("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/turbonote-adds/updatebd.sql"):
-        statinfo = os.stat("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/turbonote-adds/updatebd.sql")
+    if os.path.exists("/usr/share/cinnamon/applets/turbonote@iksws.com.br/turbonote-adds/updatebd.sql"):
+        statinfo = os.stat("/usr/share/cinnamon/applets/turbonote@iksws.com.br/turbonote-adds/updatebd.sql")
         if statinfo.st_size > 1:
             buffer.insert(buffer.get_end_iter(), str("\n"))
             buffer.insert(buffer.get_end_iter(), str("\nDATABASE UPDATE FOUND!"))
             buffer.insert(buffer.get_end_iter(), str("\nUPDATING DATABSE...\n"))
-            os.system("sqlite3 /usr/share/gnome-shell/extensions/turbonote@iksws.com.br/turbonote-adds/turbo.db < /usr/share/gnome-shell/extensions/turbonote@iksws.com.br/turbonote-adds/updatebd.sql")
-            os.system("echo "" > /usr/share/gnome-shell/extensions/turbonote@iksws.com.br/turbonote-adds/updatebd.sql")
+            os.system("sqlite3 /usr/share/cinnamon/applets/turbonote@iksws.com.br/turbonote-adds/turbo.db < /usr/share/cinnamon/applets/turbonote@iksws.com.br/turbonote-adds/updatebd.sql")
+            os.system("echo "" > /usr/share/cinnamon/applets/turbonote@iksws.com.br/turbonote-adds/updatebd.sql")
 
     if restart:
         buffer.insert(buffer.get_end_iter(), str("\n\nREQUIRE RESTART PRESS [ALT+F2] ENTER [r] IN INPUT BOX PRESS [ENTER]"))   

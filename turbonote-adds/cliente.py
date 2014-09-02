@@ -17,9 +17,9 @@ import sqlite3
 from datetime import datetime
 
 config_note = Config()
-path = "/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/turbonote-adds/"
-path_icon = "/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/"
-path_tmp = "/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/tmp_send/"
+path = "/usr/share/cinnamon/applets/turbonote@iksws.com.br/turbonote-adds/"
+path_icon = "/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/"
+path_tmp = "/usr/share/cinnamon/applets/turbonote@iksws.com.br/tmp_send/"
 
 def hex_to_rgb(value):
     value = value.lstrip('#')

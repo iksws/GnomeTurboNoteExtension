@@ -9,9 +9,9 @@ from config_note import Config
 from gi.repository import GdkPixbuf
 
 config_note = Config()
-path = "/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/turbonote-adds/"
-path_icon = "/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/"
-path_attached = "/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/attacheds/"
+path = "/usr/share/cinnamon/applets/turbonote@iksws.com.br/turbonote-adds/"
+path_icon = "/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/"
+path_attached = "/usr/share/cinnamon/applets/turbonote@iksws.com.br/attacheds/"
 
 lista_anexos = [] 
 lista_nome = os.listdir(path_attached)
@@ -125,7 +125,7 @@ class MyWindow(Gtk.Window):
         self.buttonGO.set_sensitive(False)
 
         self.set_position(Gtk.WindowPosition.CENTER)
-        self.set_icon_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/turbo.png")  
+        self.set_icon_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/turbo.png")  
         self.set_wmclass ("TurboNote Gnome", "TurboNote Gnome")
         grid = Gtk.Grid()
 
@@ -209,11 +209,11 @@ class MyWindow(Gtk.Window):
         self.button_remove_all.connect("clicked", self.remove_all_cb)
 
         self.removeimg = Gtk.Image()  
-        self.removeimg.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_remove_attached" + config_note.getColor() + ".png")      
+        self.removeimg.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_remove_attached" + config_note.getColor() + ".png")      
         self.button_remove.add(self.removeimg)  
 
         self.removeallimg = Gtk.Image()  
-        self.removeallimg.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_remove_attached_all" + config_note.getColor() + ".png")        
+        self.removeallimg.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_remove_attached_all" + config_note.getColor() + ".png")        
         self.button_remove_all.add(self.removeallimg)
 
         self.add(grid)
@@ -270,11 +270,11 @@ class MyWindow(Gtk.Window):
 
         if self.strip_one_space(str(filesFound[pageCounter-1][-4:])).strip(".") != "png":           
             self.labelCounter.set_text(str(pageCounter) + " - This file not is image/" + str(len(filesFound))) 
-            pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/turbo.png", 200, 200, True)
+            pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/turbo.png", 200, 200, True)
             image.set_from_pixbuf(pixbuf)   
         else:           
             self.labelCounter.set_text(str(pageCounter) + "/" + str(len(filesFound)))        
-            pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/attacheds/"+str(model[iters[i]][0])+"/" + datafile + "/" + self.strip_one_space(str(filesFound[pageCounter-1])) , 500, 500, True)
+            pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale("/usr/share/cinnamon/applets/turbonote@iksws.com.br/attacheds/"+str(model[iters[i]][0])+"/" + datafile + "/" + self.strip_one_space(str(filesFound[pageCounter-1])) , 500, 500, True)
             image.set_from_pixbuf(pixbuf)
 
     def strip_one_space(self,s):
@@ -316,11 +316,11 @@ class MyWindow(Gtk.Window):
 
         if self.strip_one_space(str(filesFound[pageCounter-1][-4:])).strip(".") != "png" and self.strip_one_space(str(filesFound[pageCounter-1][-4:])).strip(".") != "gif" and self.strip_one_space(str(filesFound[pageCounter-1][-4:])).strip(".") != "jpg" and self.strip_one_space(str(filesFound[pageCounter-1][-4:])).strip(".") != "bmp":
             self.labelCounter.set_text(str(pageCounter) + " - [This file not is image]/" + str(len(filesFound))) 
-            pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/turbo.png", 200, 200, True)
+            pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/turbo.png", 200, 200, True)
             image.set_from_pixbuf(pixbuf)   
         else:
             self.labelCounter.set_text(str(pageCounter) + "/" + str(len(filesFound)))        
-            pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/attacheds/"+str(model[iters[i]][0])+"/" + datafile + "/" + self.strip_one_space(str(filesFound[pageCounter-1])) , 400, 400, True)
+            pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale("/usr/share/cinnamon/applets/turbonote@iksws.com.br/attacheds/"+str(model[iters[i]][0])+"/" + datafile + "/" + self.strip_one_space(str(filesFound[pageCounter-1])) , 400, 400, True)
             image.set_from_pixbuf(pixbuf)
 
     def on_changed(self, selection,image):
@@ -353,12 +353,12 @@ class MyWindow(Gtk.Window):
         if len(filesFound) == 1:      
             if self.strip_one_space(str(filesFound[pageCounter-1][-4:])).strip(".") != "png" and self.strip_one_space(str(filesFound[pageCounter-1][-4:])).strip(".") != "gif" and self.strip_one_space(str(filesFound[pageCounter-1][-4:])).strip(".") != "jpg" and self.strip_one_space(str(filesFound[pageCounter-1][-4:])).strip(".") != "bmp":
                 self.labelCounter.set_text("This file not is image")
-                pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/turbo.png", 200, 200, True)
+                pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/turbo.png", 200, 200, True)
                 image.set_from_pixbuf(pixbuf)   
                 self.buttonGO.set_sensitive(False)
                 self.buttonBK.set_sensitive(False)
             else: 
-                pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/attacheds/"+str(model[iters[i]][0])+"/" + datafile + "/" + str(model[iters[i]][2]) , 400, 400, True)
+                pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale("/usr/share/cinnamon/applets/turbonote@iksws.com.br/attacheds/"+str(model[iters[i]][0])+"/" + datafile + "/" + str(model[iters[i]][2]) , 400, 400, True)
                 image.set_from_pixbuf(pixbuf)
                 self.labelCounter.set_text("1/1")
                 self.buttonGO.set_sensitive(False)
@@ -367,12 +367,12 @@ class MyWindow(Gtk.Window):
             if self.strip_one_space(str(filesFound[pageCounter-1][-4:])).strip(".") != "png" and self.strip_one_space(str(filesFound[pageCounter-1][-4:])).strip(".") != "gif" and self.strip_one_space(str(filesFound[pageCounter-1][-4:])).strip(".") != "jpg" and self.strip_one_space(str(filesFound[pageCounter-1][-4:])).strip(".") != "bmp":
                self.labelCounter.set_text("1 - [This file not is image]/" + str(len(filesFound)))
                self.buttonGO.set_sensitive(True)
-               pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/turbo.png", 200, 200, True)
+               pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/turbo.png", 200, 200, True)
                image.set_from_pixbuf(pixbuf)   
             else:
                 self.labelCounter.set_text("1/" + str(len(filesFound)))
                 self.buttonGO.set_sensitive(True)
-                pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/attacheds/"+str(model[iters[i]][0])+"/" + datafile + "/" + str(filesFound[0][:-1]) , 400, 400, True)
+                pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_scale("/usr/share/cinnamon/applets/turbonote@iksws.com.br/attacheds/"+str(model[iters[i]][0])+"/" + datafile + "/" + str(filesFound[0][:-1]) , 400, 400, True)
                 image.set_from_pixbuf(pixbuf)
 
 

@@ -13,7 +13,7 @@ from list_control import MyWindow
 
 #call config class for get parameters
 config_note = Config()
-path = "/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/turbonote-adds/"
+path = "/usr/share/cinnamon/applets/turbonote@iksws.com.br/turbonote-adds/"
 
 #defini variables
 attpick = True
@@ -36,7 +36,7 @@ def assignNewValueToAttPick(p):
 class HeaderBarWindow(Gtk.Window):
     def __init__(self,titulo,ip,msg_rec,nome):
         Gtk.Window.__init__(self, title = "To " + titulo)
-        self.set_icon_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/turbo.png")	
+        self.set_icon_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/turbo.png")	
         self.set_border_width(15)
        	self.set_default_size(350, 350)
 
@@ -174,27 +174,27 @@ class HeaderBarWindow(Gtk.Window):
 		scshot.connect("clicked", self.on_button_ss)
 
 		self.photo = Gtk.Image()	
-		self.photo.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_camera" + config_note.getColor() + ".png")		
+		self.photo.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_action_camera" + config_note.getColor() + ".png")		
 		scshot.add(self.photo)
 
 		self.staytop = Gtk.Image()	
-		self.staytop.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_cast" + config_note.getColor() + ".png")		
+		self.staytop.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_action_cast" + config_note.getColor() + ".png")		
 		self.toggle_stay.add(self.staytop)	
 
 		self.sending = Gtk.Image()	
-		self.sending.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_send_now" + config_note.getColor() + ".png")		
+		self.sending.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_action_send_now" + config_note.getColor() + ".png")		
 		sendcontact.add(self.sending)
 	
 		self.replyico = Gtk.Image()	
-		self.replyico.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_repley_now" + config_note.getColor() + ".png")		
+		self.replyico.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_action_repley_now" + config_note.getColor() + ".png")		
 		responderbt.add(self.replyico)
 
 		self.addattimg = Gtk.Image()	
-		self.addattimg.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_new_attachment" + config_note.getColor() + ".png")		
+		self.addattimg.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_action_new_attachment" + config_note.getColor() + ".png")		
 		self.attachedbt.add(self.addattimg)
 
 		self.addattimgrmv = Gtk.Image()	
-		self.addattimgrmv.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_remove_attached" + config_note.getColor() + ".png")		
+		self.addattimgrmv.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_remove_attached" + config_note.getColor() + ".png")		
 		self.attachedbtrmv.add(self.addattimgrmv)	
 
 		self.attachedbt.connect("clicked", self.on_file_clicked)		

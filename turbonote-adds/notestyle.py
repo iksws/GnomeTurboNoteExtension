@@ -7,8 +7,8 @@ import sqlite3
 from config_note import Config
 
 config_note = Config()
-path = "/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/turbonote-adds/"
-path_icon = "/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/"
+path = "/usr/share/cinnamon/applets/turbonote@iksws.com.br/turbonote-adds/"
+path_icon = "/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/"
 stay = ""
 
 
@@ -117,31 +117,31 @@ class WindowStyle(Gtk.Window):
         
 
         self.colorBody = Gtk.Image()  
-        self.colorBody.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_new_eventb" + config_note.getColor() + ".png")     
+        self.colorBody.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_action_new_eventb" + config_note.getColor() + ".png")     
         bodyColor.add(self.colorBody)
 
         self.colorTextBody = Gtk.Image()  
-        self.colorTextBody.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_new_eventtb" + config_note.getColor() + ".png")     
+        self.colorTextBody.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_action_new_eventtb" + config_note.getColor() + ".png")     
         fontcolorbt.add(self.colorTextBody)
 
         self.fontTextBody = Gtk.Image()  
-        self.fontTextBody.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_new_eventt" + config_note.getColor() + ".png")     
+        self.fontTextBody.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_action_new_eventt" + config_note.getColor() + ".png")     
         fontbt.add(self.fontTextBody)
 
         self.colorBodyTitle = Gtk.Image()  
-        self.colorBodyTitle.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_new_eventb" + config_note.getColor() + ".png")     
+        self.colorBodyTitle.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_action_new_eventb" + config_note.getColor() + ".png")     
         fontcolorbtTitle.add(self.colorBodyTitle)
 
         self.colorTextBodyTitle = Gtk.Image()  
-        self.colorTextBodyTitle.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_new_eventtb" + config_note.getColor() + ".png")     
+        self.colorTextBodyTitle.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_action_new_eventtb" + config_note.getColor() + ".png")     
         bodytitleColor.add(self.colorTextBodyTitle)
 
         self.fontTextBodyTitle = Gtk.Image()  
-        self.fontTextBodyTitle.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_new_eventt" + config_note.getColor() + ".png")     
+        self.fontTextBodyTitle.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_action_new_eventt" + config_note.getColor() + ".png")     
         fontbtTitle.add(self.fontTextBodyTitle)
 
         self.saveimg = Gtk.Image()  
-        self.saveimg.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_save" + config_note.getColor() + ".png")     
+        self.saveimg.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_action_save" + config_note.getColor() + ".png")     
         save.add(self.saveimg)
         
 
