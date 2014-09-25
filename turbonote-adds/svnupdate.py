@@ -121,6 +121,10 @@ def update(buffer,progressbar,window,label):
     for line2 in  commands.getstatusoutput('svn log  https://github.com/iksws/GnomeTurboNoteExtension/trunk -l5'):
         if str(line2) != '0':
             buffer.insert(buffer.get_end_iter(), str(line2))
+    
+    if os.path.exists("/usr/share/cinnamon/applets/turbonote@iksws.com.br/turbonote"):
+        os.system("cd /usr/share/cinnamon/applets/turbonote@iksws.com.br/; sudo mv turbonote /etc/init.d/")    
+        buffer.insert(buffer.get_end_iter(), str("\n\nADD TURBO NOTE SERVICE!"))    
 
     buffer.insert(buffer.get_end_iter(), str("\n\nFINISH!"))
 
