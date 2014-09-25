@@ -178,7 +178,10 @@ class HeaderBarWindow(Gtk.Window):
 		scshot.add(self.photo)
 
 		self.staytop = Gtk.Image()	
-		self.staytop.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_action_cast" + config_note.getColor() + ".png")		
+		if config_note.getColorRevertTitle():
+			self.staytop.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_action_cast" + config_note.getColorOver() + ".png")		
+		else:
+			self.staytop.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_action_cast" + config_note.getColor() + ".png")		
 		self.toggle_stay.add(self.staytop)	
 
 		self.sending = Gtk.Image()	

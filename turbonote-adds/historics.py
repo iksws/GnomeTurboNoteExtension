@@ -191,11 +191,17 @@ class MyWindow(Gtk.Window):
         self.button_remove_all.connect("clicked", self.remove_all_cb)
 
         self.removeimg = Gtk.Image()  
-        self.removeimg.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_action_storage" + config_note.getColor() + ".png")      
+        if config_note.getColorRevertTitle():
+            self.removeimg.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_action_storage" + config_note.getColorOver() + ".png")      
+        else:
+            self.removeimg.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_action_storage" + config_note.getColor() + ".png")      
         self.button_remove.add(self.removeimg)  
 
         self.removeallimg = Gtk.Image()  
-        self.removeallimg.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_action_storage_all" + config_note.getColor() + ".png")        
+        if config_note.getColorRevertTitle():
+            self.removeallimg.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_action_storage_all" + config_note.getColorOver() + ".png")        
+        else:
+            self.removeallimg.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_action_storage_all" + config_note.getColor() + ".png")        
         self.button_remove_all.add(self.removeallimg)
 
         self.responderbt = Gtk.Button()      

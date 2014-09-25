@@ -235,15 +235,24 @@ class MyWindow(Gtk.Window):
         view.connect("button-press-event", treeview_clicked,self.selection,msg) 
 
         self.addcontact = Gtk.Image()  
-        self.addcontact.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_action_add_person" + config_note.getColor() + ".png")      
+        if config_note.getColorRevertTitle(): 
+            self.addcontact.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_action_add_person" + config_note.getColorOver() + ".png")      
+        else:
+            self.addcontact.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_action_add_person" + config_note.getColor() + ".png")                  
         self.button_add.add(self.addcontact)
 
         self.rmvcontact = Gtk.Image()  
-        self.rmvcontact.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_action_rmv_person" + config_note.getColor() + ".png")      
+        if config_note.getColorRevertTitle(): 
+            self.rmvcontact.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_action_rmv_person" + config_note.getColorOver() + ".png")      
+        else:
+            self.rmvcontact.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_action_rmv_person" + config_note.getColor() + ".png")      
         self.button_remove.add(self.rmvcontact)  
 
         self.rmvall = Gtk.Image()  
-        self.rmvall.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_action_rmv_group" + config_note.getColor() + ".png")      
+        if config_note.getColorRevertTitle(): 
+            self.rmvall.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_action_rmv_group" + config_note.getColorOver() + ".png")      
+        else:
+            self.rmvall.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_action_rmv_group" + config_note.getColor() + ".png")      
         self.button_remove_all.add(self.rmvall) 
 
         self.sending = Gtk.Image()  

@@ -191,11 +191,17 @@ class HeaderBarWindow(Gtk.Window):
 		responderbt.add(self.sending)
 
 		self.staytop = Gtk.Image()	
-		self.staytop.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_action_cast" + config_note.getColor() + ".png")		
+		if config_note.getColorRevertTitle():
+			self.staytop.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_action_cast" + config_note.getColorOver() + ".png")		
+		else:
+			self.staytop.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_action_cast" + config_note.getColor() + ".png")		
 		self.toggle_stay.add(self.staytop)	
 
 		self.enabletitle = Gtk.Image()	
-		self.enabletitle.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_action_labels" + config_note.getColor() + ".png")		
+		if config_note.getColorRevertTitle():
+			self.enabletitle.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_action_labels" + config_note.getColorOver() + ".png")		
+		else:
+			self.enabletitle.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_action_labels" + config_note.getColor() + ".png")		
 		self.toggle_titulo.add(self.enabletitle)
 
 		self.addattimg = Gtk.Image()	
@@ -207,7 +213,10 @@ class HeaderBarWindow(Gtk.Window):
 		self.attachedbtrmv.add(self.addattimgrmv)	
 
 		self.settingsimg = Gtk.Image()	
-		self.settingsimg.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_action_settings" + config_note.getColor() + ".png")		
+		if config_note.getColorRevertTitle():
+			self.settingsimg.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_action_settings" + config_note.getColorOver() + ".png")		
+		else:
+			self.settingsimg.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_action_settings" + config_note.getColor() + ".png")		
 		self.settings.add(self.settingsimg)
 
 		self.grid.attach(self.label, 0, 4, 1, 1)
