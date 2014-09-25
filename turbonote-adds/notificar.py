@@ -76,7 +76,7 @@ class MyApp(QCoreApplication):
         #if ('actions' in server_capabilities) or OVERRIDE_NO_ACTIONS:
         data = [nome,conteudo,ipsender]
         n.add_action("resp", "Reply", self.resp_cb,data)
-        n.add_action("ignore", "Ignore", self.ignore_cb)
+        n.add_action("ignore", "Close", self.ignore_cb)
         if img_atach != "None":
             lista_nome = os.listdir(img_atach)
             if lista_nome[0].find("png") != -1 or lista_nome[0].find("jpg")  != -1 or lista_nome[0].find("jpeg") or  lista_nome[0].find("wmf")  != -1 or lista_nome[0].find("gif")  != -1 or lista_nome[0].find("bmp")  != -1:    
