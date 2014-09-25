@@ -1,9 +1,14 @@
+#!/usr/bin/env python
+#by ikswss@gmail.com
+
 from gi.repository import Gtk, Gdk,GObject
 import commands
 import time
 import sys,os
 import os.path
 import threading
+path = "/usr/share/cinnamon/applets/turbonote@iksws.com.br/turbonote-adds/"
+path_icon = "/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/"
 
 class ProgressBarWindow(Gtk.Window):
 
@@ -46,13 +51,25 @@ class ProgressBarWindow(Gtk.Window):
         self.textbuffer.set_text("")
         scrolledwindow.add(self.textview) 
 
+        self.titulotxt = Gtk.Entry()
+        self.label2 = Gtk.Label()
+        self.label2.set_text("\nNeed root password:\n") 
+
+        self.send = Gtk.Button("OK")              
+
         self.grid.attach(self.progressbar, 0, 0, 1 , 1)
         self.label = Gtk.Label()
         self.label.set_text(" ")         
         self.grid.attach(self.label, 0, 1, 1 , 1)
         self.grid.attach(scrolledwindow, 0, 2, 1 , 1)
-        buffer = self.textview.get_buffer()               
-                   
+
+        self.grid.attach(self.label2, 0, 3, 1 , 1)
+        self.grid.attach(self.titulotxt, 0, 4, 1 , 1)
+        self.grid.attach(self.send, 0, 5, 1 , 1)
+
+        buffer = self.textview.get_buffer()                       
+        self.send.connect("clicked", self.checkpw,buffer) 
+
         bg_color = Gdk.RGBA()
         bg_color.parse("#000000")
 
@@ -61,13 +78,26 @@ class ProgressBarWindow(Gtk.Window):
 
         self.textview.override_color(Gtk.StateType.NORMAL, tx_color)
         self.textview.override_background_color(Gtk.StateType.NORMAL, bg_color)
+        self.progressbar.hide()
+        self.titulotxt.set_visibility(False)
 
+    def checkpw(self,widget,buffer):
+        if self.titulotxt.get_text() != "":
+            self.titulotxt.hide()
+            self.label2.hide()
+            self.send.hide()
+            self.update_now(buffer)
+        else:
+            msgerror = "Enter root password!"
+            command = "notify-send --hint=int:transient:1 \"TurboNote Gnome3\" \"" + (msgerror).decode('iso-8859-1').encode('utf8') + "\" -i " + path_icon + "turbo.png"
+            os.system(command)
+        
+
+    def update_now(self,buffer):
         self.activity_mode = True     
         self.progressbar.pulse()
-        t = threading.Thread(target=update,args=[buffer,self.progressbar,self,self.label])
+        t = threading.Thread(target=update,args=[buffer,self.progressbar,self,self.label,self.titulotxt.get_text()])
         t.start()
-
-    
 
     def _autoscroll(self,scrolledwindow,*args):
             """The actual scrolling method"""
@@ -92,7 +122,7 @@ class ProgressBarWindow(Gtk.Window):
         # continues to get called
         return True
 
-def update(buffer,progressbar,window,label):
+def update(buffer,progressbar,window,label,password):
     buffer.insert(buffer.get_end_iter(), str("Waiting...\n"))
     buffer.insert(buffer.get_end_iter(), str("Connecting to https://github.com/iksws/GnomeTurboNoteExtension/branches/Cinnamon...\n"))
     restart = False;
@@ -123,7 +153,7 @@ def update(buffer,progressbar,window,label):
             buffer.insert(buffer.get_end_iter(), str(line2))
     
     if os.path.exists("/usr/share/cinnamon/applets/turbonote@iksws.com.br/turbonote"):
-        os.system("cd /usr/share/cinnamon/applets/turbonote@iksws.com.br/; sudo mv turbonote /etc/init.d/")    
+        os.system(" echo '"+ password + "' | sudo -S mv /usr/share/cinnamon/applets/turbonote@iksws.com.br/turbonote /etc/init.d/")          
         buffer.insert(buffer.get_end_iter(), str("\n\nADD TURBO NOTE SERVICE!"))    
 
     buffer.insert(buffer.get_end_iter(), str("\n\nFINISH!"))
