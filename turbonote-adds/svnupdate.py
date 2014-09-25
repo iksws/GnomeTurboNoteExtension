@@ -128,7 +128,7 @@ def update(buffer,progressbar,window,label,password):
     restart = False;
     for line in  commands.getstatusoutput('cd /usr/share/cinnamon/applets/turbonote@iksws.com.br; svn update'):
         if str(line) != '0':
-            if "server.py" in line or  "extension.js" in line:
+            if "server.py" in line or  "applet.js" in line:
                 restart = True
             buffer.insert(buffer.get_end_iter(), str(line))
 
