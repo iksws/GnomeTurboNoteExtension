@@ -98,7 +98,7 @@ MyApplet.prototype = {
             
             this._statusChanged = this.notificationsSwitch.connect('toggled', Lang.bind(this, function(item, state) {
                 if (state){                    							
-					Util.trySpawnCommandLine('service turbonote start')			
+					Util.trySpawnCommandLine('python /usr/share/cinnamon/applets/turbonote@iksws.com.br/turbonote-adds/server.py')			
                 }else{
                     Util.trySpawnCommandLine('service turbonote stop')
                 }
