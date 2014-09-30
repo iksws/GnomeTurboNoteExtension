@@ -6,7 +6,7 @@ export DISPLAY=:0
 case "$1" in
     start)
         echo "Iniciando serviço..."
-	/usr/share/cinnamon/applets/turbonote@iksws.com.br/turbonote-adds/server.py &
+	#/usr/share/cinnamon/applets/turbonote@iksws.com.br/turbonote-adds/server.py &
         ;; 
  
     stop)
