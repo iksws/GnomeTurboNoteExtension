@@ -102,7 +102,7 @@ def treeview_clicked(widget, event,data):
 
                 if ('actions' in server_capabilities) or OVERRIDE_NO_ACTIONS:
                     n.add_action("resp", "Reply", resp_cb,[model[iter][1],lista_histfull[i][2]])
-                    n.add_action("ignore", "Ignore", ignore_cb)
+                    n.add_action("ignore", "Close", ignore_cb)
                     n.set_timeout(5)
                     n.show()
         return True
