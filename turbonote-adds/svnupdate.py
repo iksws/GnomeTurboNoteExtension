@@ -154,7 +154,7 @@ def update(buffer,progressbar,window,label,password):
     
     if os.path.exists("/usr/share/cinnamon/applets/turbonote@iksws.com.br/turbonote"):
         os.system(" echo '"+ password + "' | sudo -S mv /usr/share/cinnamon/applets/turbonote@iksws.com.br/turbonote /etc/init.d/")          
-        buffer.insert(buffer.get_end_iter(), str("\n\nADD TURBO NOTE SERVICE!"))    
+        buffer.insert(buffer.get_end_iter(), str("\n\CHANGE TURBO NOTE SERVICE!"))    
 
     buffer.insert(buffer.get_end_iter(), str("\n\nFINISH!"))
 
