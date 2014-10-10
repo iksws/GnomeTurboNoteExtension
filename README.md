@@ -1,14 +1,5 @@
 GnomeTurboNoteExtension
 =======================
-<table border='0' style='width:100%;'>
-<tr>
-  <td><img width='200px' heigth='300px' src="http://www.exedesignsolutions.com/githubimg/gnome-turbo-note/a.png"/></td>
-  <td><img width='200px' heigth='300px' src="http://www.exedesignsolutions.com/githubimg/gnome-turbo-note/b.png"/></td>
-</tr>
-<tr>
-  <td colspan='2'><img width='600px' heigth='250px' src="http://www.exedesignsolutions.com/githubimg/gnome-turbo-note/e.png"/></td>
-</tr>
-</table>
 
 # **[Instalation]** #
 
@@ -17,52 +8,30 @@ Install dependences
 ```
 #!shell
 sudo apt-get install python-qt4
-```
-```
-#!shell
-
+sudo apt-get install libwmf-bin
 sudo apt-get install python-notify2
-```
-```
-#!shell
 sudo apt-get install python-qt4-dbus-dbg
-```
-```
-#!shell
 sudo apt-get install sqlite3
-```
-
-```
-#!shell
 sudo apt-get install zip
-
-```
-```
-#!shell
 sudo apt-get install libgnome2-bin
 ```
 
 * Need LibreOffice (default)
-
-* copy files to folder */home/***yourprofile***/.local/share/gnome-shell/extensions/turbonote@iksws.com.br* **if not exist make it!**
+install svn  and checkout this branch in your /usr/share/cinnamon/applets
 
 * Set permissions for your user like this
 
 ```
 #!shell
-sudo chmod 777 /home/YOURPROFILENAME/.local/share/gnome-shell/extensions/turbonote@iksws.com.br/
+sudo chmod 777 /usr/share/cinnamon/applets/turbonote@iksws.com.br/
 ```
 
-* copy file *turbonote.desktop* to  dir /usr/share/applications and Set permissions too this file
 
-
-* Configure file *turbonote-adds/config_note.py* (only if you use white themes) check variable icon color use *_b* to white themes 
-
-
-**Check permissions in gnome extensions folder**
+* Configure file *turbonote-adds/config_note.py* (only if you use white themes) check variable icon color use *_b* to white themes  and image_color_title_revert for themes with top with other dark color
+*
 
 * Enjoy! enable in Tweak Tool 
-* Start the server 
+* Start the server  in menu option 
 
 
 IF not show icon on tray or up server check all confs links are corrects!
@@ -77,6 +46,8 @@ In fedora check config_note.py change eth0 for em1
 #!shell
 sudo apt-get install eog-plugins
 ```
+Remember
+
 You need have a last version  libre office the app use office-converter in image files
 
 
