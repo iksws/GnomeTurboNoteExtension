@@ -66,15 +66,21 @@ class MyApp(QCoreApplication):
 	#convert fim
         
         server_capabilities = notifyturbo.get_server_caps() 
-        
+        fullconteudo = conteudo
         if nome.find("=") == 1:
             nome = nome[2:]
-            n = notifyturbo.Notification(nome,conteudo,(path_icon + "turbo.png"))
+            if len(conteudo) > 600:
+            	n = notifyturbo.Notification(nome,conteudo[:600]+"[...]",(path_icon + "turbo.png"))
+            else:
+            	n = notifyturbo.Notification(nome,conteudo,(path_icon + "turbo.png"))
         else:
-            n = notifyturbo.Notification(nome,conteudo,(path_icon + "turbo.png"))
+        	if len(conteudo) > 600:
+        		n = notifyturbo.Notification(nome,conteudo[:600]+"[...]",(path_icon + "turbo.png"))
+        	else:
+        		n = notifyturbo.Notification(nome,conteudo,(path_icon + "turbo.png"))
 
         #if ('actions' in server_capabilities) or OVERRIDE_NO_ACTIONS:
-        data = [nome,conteudo,ipsender]
+        data = [nome,fullconteudo,ipsender]
         n.add_action("resp", "Reply", self.resp_cb,data)
         n.add_action("ignore", "Close", self.ignore_cb)
         if img_atach != "None":
