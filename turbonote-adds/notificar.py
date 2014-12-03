@@ -24,7 +24,7 @@ def stringToDate(dt):
     return data
 
 class MyApp(QCoreApplication):
-    def __init__(self, argv,nome,conteudo,ipsender,img_atach):
+    def __init__(self, argv,nome,conteudo,ipsender,img_atach,new_img):
         super(MyApp, self).__init__(argv)
         # This needs to be before any other use of notifyturbo, but after the Qt
         # application has been instantiated.
@@ -82,7 +82,7 @@ class MyApp(QCoreApplication):
 
             data = [nome,fullconteudo,ipsender,tipo,img_atach + lista_nome[0]]
     
-            call(["python", path + "caixa.py",""+ data[0] +"","" + data[2] + "","" + data[1] + "","" + data[2] + "","" + data[3] + "","" + data[4] + ""]) 
+            call(["python", path + "caixa.py",""+ data[0] +"","" + data[2] + "","" + data[1] + "","" + data[2] + "","" + data[3] + "","" + data[4] + "","" + new_img + ""]) 
             os.kill(os.getpid() , signal.SIGQUIT)
 
         else:     
@@ -94,9 +94,9 @@ class MyApp(QCoreApplication):
                     tipo = "att"                            
             data = [nome,fullconteudo,ipsender,tipo,img_atach + lista_nome[0]]
 
-            call(["python", path + "caixa.py",""+ data[0] +"","" + data[2] + "","" + data[1] + "" + "","" + data[2] + "","" + data[3] + "","" + data[4] + ""]) 
+            call(["python", path + "caixa.py",""+ data[0] +"","" + data[2] + "","" + data[1] + "" + "","" + data[2] + "","" + data[3] + "","" + data[4] + "","" + new_img + ""]) 
             os.kill(os.getpid() , signal.SIGQUIT)  
 
 if __name__ == "__main__":
     args = sys.argv[1:]
-    MyApp(sys.argv, args[0], args[1], args[2],args[3]).exec_()
+    MyApp(sys.argv, args[0], args[1], args[2],args[3],args[4]).exec_()
