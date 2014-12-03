@@ -227,7 +227,12 @@ class Notification(object):
         """
         if self.id != 0:
             dbus_iface.CloseNotification(self.id) 
-	    os.kill(os.getpid() , signal.SIGQUIT)         
+            print "killed"
+        try:
+            os.kill(os.getpid() , signal.SIGQUIT) 
+        except Exception, e:
+            print e    
+	           
     
     def set_hint(self, key, value):
         """n.set_hint(key, value) <--> n.hints[key] = value

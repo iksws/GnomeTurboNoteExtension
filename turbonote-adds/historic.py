@@ -7,6 +7,7 @@ import sqlite3
 import notifyturbo
 from subprocess import call
 from config_note import Config
+import threading
 
 config_note = Config()
 path = "/usr/share/cinnamon/applets/turbonote@iksws.com.br/turbonote-adds/"
@@ -29,7 +30,6 @@ def resp_cb(n, action,data):
 
         connb.close()
         msgerror = "this contact does not exist!"
-        print ip_sender
         if not ip_sender:
             command = "notify-send --hint=int:transient:1 \"TurboNote Gnome3\" \"" + (msgerror).decode('iso-8859-1').encode('utf8') + "\" -i " + path_icon + "turbo.png"                  
             os.system(command)        
@@ -55,17 +55,17 @@ def cap(s, l):
 
 connb = sqlite3.connect(path + 'turbo.db')
 a = connb.cursor()
-a.execute("SELECT id,nome,conteudo,data FROM history order by id desc")
+a.execute("SELECT id,nome,conteudo,data,tipo,ip FROM history order by id desc")
 rows =  a.fetchall()
 for history in rows:
-    lista_hist.append([str(history[0]),history[1],cap(history[2],50),history[3]])
+    lista_hist.append([str(history[0]),history[1],cap(history[2],50),history[3],history[4],history[5]])
 
 connc = sqlite3.connect(path + 'turbo.db')
 c = connc.cursor()
-c.execute("SELECT id,nome,conteudo,data FROM history order by id desc")
+c.execute("SELECT id,nome,conteudo,data,tipo,ip FROM history order by id desc")
 rowsc =  c.fetchall()
 for history in rowsc:
-    lista_histfull.append([str(history[0]),history[1],history[2].encode("utf-8"),history[3]])
+    lista_histfull.append([str(history[0]),history[1],history[2].encode("utf-8"),history[3],history[4],history[5]])
 
 connb.close()
 
@@ -85,6 +85,9 @@ def rmvhistoryall():
     connc.commit()
     connc.close()    
 
+def caixa(nome,conteudo,ip):
+    call(["python", path + "caixa.py",""+ nome + "","" + ip + "","" + conteudo  + "",""," "," "])       
+
 def treeview_clicked(widget, event,data):
 
     (model, iter) = data.get_selected_rows()
@@ -97,14 +100,20 @@ def treeview_clicked(widget, event,data):
         server_capabilities = notifyturbo.get_server_caps()  
     
         for i in range(len(lista_histfull)):
-           if lista_histfull[i][0] == model[iter][0]:               
-                n = notifyturbo.Notification((model[iter][1]) ,(lista_histfull[i][2]) ,(path_icon + "turbo.png"))            
+            if lista_histfull[i][0] == model[iter][0]: 
+                connb = sqlite3.connect(path + 'turbo.db')
+                a = connb.cursor()
+                a.execute("SELECT ip FROM contacts WHERE upper(nome) =  '" +  model[iter][1] + "'" )
+                try:
+                    ip_sender =  str(a.fetchone()[0])            
+                except (RuntimeError, TypeError, NameError):
+                    pass
+                    ip_sender = ""
 
-                if ('actions' in server_capabilities) or OVERRIDE_NO_ACTIONS:
-                    n.add_action("resp", "Reply", resp_cb,[model[iter][1],lista_histfull[i][2]])
-                    n.add_action("ignore", "Close", ignore_cb)
-                    n.set_timeout(5)
-                    n.show()
+                connb.close()   
+                t = threading.Thread(target=caixa,args=[model[iter][1],lista_histfull[i][2],ip_sender])
+                t.start()                                       
+                #call(["python", path + "caixa.py",""+ model[iter][1] + "","" + ip_sender + "","" + lista_histfull[i][2]   + "",""," "," "])                                  
         return True
     
 
@@ -118,17 +127,17 @@ def searching(self,entry,model):
 
     connb = sqlite3.connect(path + 'turbo.db')
     a = connb.cursor()    
-    a.execute("SELECT id,nome,conteudo,data FROM history where conteudo like '%" + entry.get_text() + "%' order by id desc")
+    a.execute("SELECT id,nome,conteudo,data,tipo,ip FROM history where conteudo like '%" + entry.get_text() + "%' order by id desc")
     rows =  a.fetchall()
     for history in rows:
-        lista_hist.append([str(history[0]),history[1],cap(history[2],200),history[3]])
+        lista_hist.append([str(history[0]),history[1],cap(history[2],200),history[3],history[4],history[5]])
 
     connc = sqlite3.connect(path + 'turbo.db')
     c = connc.cursor()
-    c.execute("SELECT id,nome,conteudo,data FROM history where conteudo like '%" + entry.get_text() + "%' order by id desc")
+    c.execute("SELECT id,nome,conteudo,data,tipo,ip FROM history where conteudo like '%" + entry.get_text() + "%' order by id desc")
     rowsc =  c.fetchall()
     for history in rowsc:
-        lista_histfull.append([str(history[0]),history[1],history[2].encode("utf-8"),history[3]])
+        lista_histfull.append([str(history[0]),history[1],history[2].encode("utf-8"),history[3],history[4],history[5]])
 
     connb.close()
 
@@ -144,11 +153,11 @@ def searching(self,entry,model):
 
 class MyWindow(Gtk.Window):
     def __init__(self):
-        Gtk.Window.__init__(self, title="History Received Note List")
+        Gtk.Window.__init__(self, title="History Note List")
         self.set_default_size(1000, 500)            
         hb = Gtk.HeaderBar()
         hb.props.show_close_button = True
-        hb.props.title = "History Received Note List"
+        hb.props.title = "History Note List"
 
         box2 = Gtk.VBox(orientation=Gtk.Orientation.HORIZONTAL)
         Gtk.StyleContext.add_class(box2.get_style_context(), "linked")
@@ -180,32 +189,45 @@ class MyWindow(Gtk.Window):
         cell2 = Gtk.CellRendererText(weight=300)
         cell3 = Gtk.CellRendererText(weight=300)
         cell4 = Gtk.CellRendererText(weight=300)
+        cell5 = Gtk.CellRendererText(weight=50)
+        cell6 = Gtk.CellRendererText(weight=50)
 
         cell.set_fixed_size(50, 5)
         cell2.set_fixed_size(200, -1)
         cell3.set_fixed_size(500, -1)
         cell4.set_fixed_size(150, -1)
+        cell5.set_fixed_size(50, -1)
+        cell6.set_fixed_size(50, -1)
 
         col  = Gtk.TreeViewColumn("ID",    cell, text=0)
         col2 = Gtk.TreeViewColumn("Name", cell2, text=1)
         col3 = Gtk.TreeViewColumn("Data", cell3, text=2)
         col4 = Gtk.TreeViewColumn("Date", cell4, text=3)
+        col5 = Gtk.TreeViewColumn("R/S", cell5, text=4)
+        col6 = Gtk.TreeViewColumn("IP", cell6, text=5)
 
         treeview.append_column(col)
         treeview.append_column(col2)
         treeview.append_column(col3)
         treeview.append_column(col4)
+        treeview.append_column(col5)
+        treeview.append_column(col6)
 
         cell.set_visible(False)
         col.set_visible(False)
 
+        cell6.set_visible(False)
+        col6.set_visible(False)
+
+
         col2.set_sort_column_id(0)
         col3.set_sort_column_id(0)
         col4.set_sort_column_id(0)
+        col5.set_sort_column_id(0)
 
         scroller.add(treeview)
  
-        self.model = Gtk.ListStore(str,str,str,str)             
+        self.model = Gtk.ListStore(str,str,str,str,str,str)             
         treeview.set_model(self.model)
         
         for i in range(len(lista_hist)):
@@ -239,8 +261,14 @@ class MyWindow(Gtk.Window):
             self.removeallimg.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_action_storage_all" + config_note.getColor() + ".png")        
         self.button_remove_all.add(self.removeallimg)
 
-        
-        
+        self.responderbt = Gtk.Button()      
+
+        self.sending = Gtk.Image()  
+        self.sending.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_action_send_now" + config_note.getColorOver() + ".png")        
+        self.responderbt.add(self.sending)
+
+        self.responderbt.connect("clicked", self.resend)        
+        self.responderbt.set_tooltip_text("Resend  [You can just press double click in message row]")
        
         self.add(grid)   
         box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
@@ -248,13 +276,34 @@ class MyWindow(Gtk.Window):
         
         box.add(self.button_remove)
         box.add(self.button_remove_all)
+        box.add(self.responderbt)
         hb.pack_start(box)
 
         self.button_remove.set_tooltip_text("Remove selected")
         self.button_remove_all.set_tooltip_text("Remove all")
         
         notifyturbo.init("TurboNote Gnome 3", mainloop="glib")
-        
+    
+    def resend(self, button):
+        if len(self.model) != 0:
+            (self.model, iter) = self.selection.get_selected_rows()
+            iters = []
+
+            for row in iter:                
+                iters.append(self.model.get_iter(row))              
+                
+            if len(iters) != 0:
+                for i in range(len(iters)):                     
+                  call(["python", path + "cliente.py",""+ (self.model[iters[i]][2]) +"","" + (self.model[iters[i]][5]) + "","" + (self.model[iters[i]][1]) + "","" + 'TRUE' + "","" + '' + "","" + '' + "","" + '' + "","" + '' + ""])            
+            else:
+                msgerror = "No select Note!\\nPlease select one Note to resend!";                      
+                command = "notify-send --hint=int:transient:1 \"TurboNote Gnome3\" \"" + (msgerror).decode('iso-8859-1').encode('utf8') + "\" -i " + path_icon + "turbo.png"                  
+                os.system(command)        
+        else:
+            msgerror = "Empty list!\\nYou don't have Notes to resend!";                      
+            command = "notify-send --hint=int:transient:1 \"TurboNote Gnome3\" \"" + (msgerror).decode('iso-8859-1').encode('utf8') + "\" -i " + path_icon + "turbo.png"                  
+            os.system(command)
+
     def remove_cb(self, button):
         if len(self.model) != 0:
             (self.model, iter) = self.selection.get_selected_rows()

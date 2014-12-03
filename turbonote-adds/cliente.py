@@ -261,12 +261,12 @@ def saveMsg(nome,ip,titulo,message):
       savesend = sqlite3.connect(path + 'turbo.db')
       try:
             c = savesend.cursor()
-            c.execute("INSERT INTO history_send (nome,ip,texto,titulo,data) VALUES (?,?,?,?,?)",(nome,ip,message,titulo,data))
+            c.execute("INSERT INTO history (nome,ip,conteudo,data,tipo) VALUES (?,?,?,?,?)",(nome,ip,titulo + "\r\n" + message,data,'S'))
             savesend.commit()
             savesend.close()
       except:
             c = savesend.cursor()
-            c.execute("INSERT INTO history_send (nome,ip,texto,titulo,data) VALUES (?,?,?,?,?)",(nome,ip,message.decode('iso-8859-1'),titulo,data))
+            c.execute("INSERT INTO history (nome,ip,conteudo,data,tipo) VALUES (?,?,?,?,?)",(nome,ip,titulo + "\r\n" + message.decode('iso-8859-1'),data,'S'))
             savesend.commit()
             savesend.close()
 

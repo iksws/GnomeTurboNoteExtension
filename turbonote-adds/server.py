@@ -81,7 +81,7 @@ class EchoRequestHandler(SocketServer.BaseRequestHandler):
             conteudo = turbodata[0].decode('iso-8859-1').encode('utf8')
             conna = sqlite3.connect(path + 'turbo.db')
             c = conna.cursor()               
-            c.execute("INSERT INTO history (nome,conteudo,data) VALUES (?,?,?)",(nome,turbodata[0].decode('iso-8859-1'),hoje))
+            c.execute("INSERT INTO history (nome,conteudo,data,tipo,ip) VALUES (?,?,?,?,?)",(nome,turbodata[0].decode('iso-8859-1'),hoje,'R',ipsender))
             conna.commit()
             conna.close()
            
@@ -167,8 +167,9 @@ class EchoRequestHandler(SocketServer.BaseRequestHandler):
                 f2.write(base64.b64decode(imagedata))
                 f2.close()              
 
-            t = threading.Thread(target=notificar,args=[nome,conteudo,ipsender])
-            t.start()
+            #t = threading.Thread(target=notificar,args=[nome,conteudo,ipsender])
+            #t.start()
+            notificar(nome,conteudo,ipsender)
         
 
         return
