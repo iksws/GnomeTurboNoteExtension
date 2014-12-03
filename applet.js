@@ -85,9 +85,9 @@ MyApplet.prototype = {
 		    this.menu.addAction(_("History Received Manager"), Lang.bind(this, function() {
 					Util.spawnCommandLine("python /usr/share/cinnamon/applets/turbonote@iksws.com.br/turbonote-adds/historic.py");
 	            }));
-		    this.menu.addAction(_("History Sent Manager"), Lang.bind(this, function() {
+		    /*this.menu.addAction(_("History Sent Manager"), Lang.bind(this, function() {
 					Util.spawnCommandLine("python /usr/share/cinnamon/applets/turbonote@iksws.com.br/turbonote-adds/historics.py");
-	            }));
+	            }));*/
 		    this.menu.addAction(_("Attacheds"), Lang.bind(this, function() {
 					Util.spawnCommandLine("python /usr/share/cinnamon/applets/turbonote@iksws.com.br/turbonote-adds/attacheds.py");
 	            }));
@@ -98,7 +98,8 @@ MyApplet.prototype = {
             
             this._statusChanged = this.notificationsSwitch.connect('toggled', Lang.bind(this, function(item, state) {
                 if (state){                    							
-					Util.trySpawnCommandLine('python /usr/share/cinnamon/applets/turbonote@iksws.com.br/turbonote-adds/server.py')			
+					Util.trySpawnCommandLine('python /usr/share/cinnamon/applets/turbonote@iksws.com.br/turbonote-adds/server.py')	
+					Util.trySpawnCommandLine('service turbonote start')			
                 }else{
                     Util.trySpawnCommandLine('service turbonote stop')
                 }
