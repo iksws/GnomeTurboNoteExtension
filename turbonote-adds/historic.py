@@ -34,7 +34,7 @@ def resp_cb(n, action,data):
             command = "notify-send --hint=int:transient:1 \"TurboNote Gnome3\" \"" + (msgerror).decode('iso-8859-1').encode('utf8') + "\" -i " + path_icon + "turbo.png"                  
             os.system(command)        
         else:            
-            call(["python", path + "caixa.py",""+ data[0] +"","" + str(ip_sender) + "","" + data[1] + ""])   
+            call(["python", path + "caixa.py",""+ data[0] +"","" + str(ip_sender) + "","" + data[1] + ""," "])   
         #Gtk.main_quit()                     
     except ValueError:
         print("saindo de erro....")
@@ -95,7 +95,7 @@ def rmvhistoryall():
     connc.close()    
 
 def caixa(nome,conteudo,ip):
-    call(["python", path + "caixa.py",""+ nome + "","" + ip + "","" + conteudo  + "",""," "," "])       
+    call(["python", path + "caixa.py",""+ nome + "","" + ip + "","" + conteudo  + "",""," "," "," "])       
 
 def treeview_clicked(widget, event,data):
 

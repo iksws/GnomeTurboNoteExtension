@@ -42,12 +42,19 @@ def assignNewValueToTipo(t):
     global tipo
     tipo = t
 
+def assignNewValueToMsg(m):
+    global new_msg
+    new_msg = m
+
 class HeaderBarWindow(Gtk.Window):
-    def __init__(self,titulo,ip,msg_rec,nome,tipo,link):
+    def __init__(self,titulo,ip,msg_rec,nome,tipo,link,new_msg):
         Gtk.Window.__init__(self, title = "From " + titulo)
         self.set_icon_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/turbo.png")	
         self.set_border_width(15)
-       	self.set_default_size(450, 350)
+        if(new_msg != "N"):
+       		self.set_default_size(500, 350)
+       	else:
+       		self.set_default_size(500, 0)
        	self.move(0,0)
         hb = Gtk.HeaderBar()
         hb.props.show_close_button = True
@@ -55,6 +62,7 @@ class HeaderBarWindow(Gtk.Window):
 
         assignNewValueToLink(link)
         assignNewValueToTipo(tipo)
+        assignNewValueToMsg(new_msg)
 
         box2 = Gtk.VBox(orientation=Gtk.Orientation.HORIZONTAL)
         Gtk.StyleContext.add_class(box2.get_style_context(), "linked")
@@ -62,10 +70,16 @@ class HeaderBarWindow(Gtk.Window):
         self.set_titlebar(hb)
         self.set_position(Gtk.WindowPosition.CENTER)
         self.grid = Gtk.Grid()
-        self.add(self.grid)        
+         
         self.create_textview(box2,hb)
         self.set_wmclass ("TurboNote Gnome", "TurboNote Gnome")
         self.connect('key-press-event',on_button_clicked2,nome)
+
+    def msg_show(self,event,bt):
+    	self.resize(500, 350)
+    	self.add(self.grid)  
+    	self.show_all()
+    	bt.hide()
 
     def attaches_cb(self,event,data):
 		try:
@@ -186,6 +200,9 @@ class HeaderBarWindow(Gtk.Window):
 		self.att1 = Gtk.Button()
 		self.att1.connect("clicked", self.attaches_cb,link)	
 
+		self.msg = Gtk.Button()
+		self.msg.connect("clicked", self.msg_show,self.msg)	
+
 		self.att2 = Gtk.Button()
 		self.att2.connect("clicked", self.attaches_cb2,link)	
 
@@ -201,6 +218,17 @@ class HeaderBarWindow(Gtk.Window):
 		scshot.set_tooltip_text("Crop Picture")
 
 		scshot.connect("clicked", self.on_button_ss)
+
+
+
+		self.icomsg = Gtk.Image()	
+		if config_note.getColorRevertTitle():
+			self.icomsg.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_action_email_all" + config_note.getColorOver() + ".png")		
+		else:
+			self.icomsg.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_action_email_all" + config_note.getColor() + ".png")		
+
+		self.msg.add(self.icomsg)
+
 
 		self.att1ico = Gtk.Image()	
 		if config_note.getColorRevertTitle():
@@ -257,9 +285,15 @@ class HeaderBarWindow(Gtk.Window):
 
 		if(tipo == "img"):
 			box.add(self.att1)
+
 		if(tipo == "att"):
 			box.add(self.att2)
-				
+
+		if (new_msg == "N"):
+			box.add(self.msg)
+		else:		
+			self.add(self.grid)  
+
 		hb.pack_start(box)
 
 		self.attachedbtrmv.set_tooltip_text("Remove attachment")
@@ -317,8 +351,9 @@ if __name__ == "__main__":
 	msg_rec = args[2]	
 	tipo = args[4]	
 	img_link = args[5]
+	new_msg = args[6]
 
-	win = HeaderBarWindow(nome,ip,msg_rec,nome,tipo,img_link)
+	win = HeaderBarWindow(nome,ip,msg_rec,nome,tipo,img_link,new_msg)
 	win.connect("delete-event", Gtk.main_quit)
 	win.show_all()
 	Gtk.main()

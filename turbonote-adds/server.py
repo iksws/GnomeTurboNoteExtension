@@ -202,7 +202,7 @@ def notificar(nome,conteudo,ipsender):
         time.sleep(2)
         os.system(command5)  
         assignNewValueToAnexo("1")        
-        call(["python", path + "notificar.py",""+ nome + " at " + hoje + "","" + conteudo + "","" + ipsender + "", "" +  path_attached + nome + "/" + hojefile  + "/"])    
+        call(["python", path + "notificar.py",""+ nome + " at " + hoje + "","" + conteudo + "","" + ipsender + "", "" +  path_attached + nome + "/" + hojefile  + "/","N"])    
     elif imganexada == "2":
         assignNewValueToAnexo("1")
         command0 = "mkdir " +  path_tmp +  hojefile + nome
@@ -223,13 +223,13 @@ def notificar(nome,conteudo,ipsender):
         time.sleep(2)
         os.system(command4)  
         assignNewValueToAnexo("1")  
-        call(["python", path + "notificar.py",""+ nome + " at " + hoje + "","" + conteudo + "","" + ipsender + "", "" +  path_attached + nome + "/" + hojefile  + "/"])    
+        call(["python", path + "notificar.py",""+ nome + " at " + hoje + "","" + conteudo + "","" + ipsender + "", "" +  path_attached + nome + "/" + hojefile  + "/","N"])    
     elif imganexada == "4":
         assignNewValueToAnexo("1")  
-        call(["python", path + "notificar.py",""+ nome + " at " + hoje + "","" + conteudo + "","" + ipsender + "", "" +  path_attached + nome + "/" + hojefile  + "/"])    
+        call(["python", path + "notificar.py",""+ nome + " at " + hoje + "","" + conteudo + "","" + ipsender + "", "" +  path_attached + nome + "/" + hojefile  + "/","N"])    
     else:
         assignNewValueToAnexo("1")  
-        call(["python", path + "notificar.py",""+ nome  + " at " + hoje + "","" + conteudo + "","" + ipsender + "","None"])        
+        call(["python", path + "notificar.py",""+ nome  + " at " + hoje + "","" + conteudo + "","" + ipsender + "","None","N"])        
 
 
 class EchoServer(SocketServer.TCPServer):
