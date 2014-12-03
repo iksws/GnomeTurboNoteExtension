@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #by ikswss@gmail.com
 
-from gi.repository import Gtk,Gdk
+from gi.repository import Gtk,Gdk,GdkPixbuf
 import sys,os
 import sqlite3
 import notifyturbo
@@ -53,19 +53,28 @@ def ignore_cb(n, action):
 def cap(s, l):
     return s if len(s)<=l else s[0:l-3]+'...'
 
+ico_send = GdkPixbuf.Pixbuf.new_from_file_at_size(path_icon+"ic_action_send_now_b.png", 16, 16)
+ico_receive = GdkPixbuf.Pixbuf.new_from_file_at_size(path_icon+"ic_action_repley_now_b.png", 16, 16)
+
 connb = sqlite3.connect(path + 'turbo.db')
 a = connb.cursor()
 a.execute("SELECT id,nome,conteudo,data,tipo,ip FROM history order by id desc")
 rows =  a.fetchall()
 for history in rows:
-    lista_hist.append([str(history[0]),history[1],cap(history[2],50),history[3],history[4],history[5]])
+    if history[4] == "S":
+        lista_hist.append([str(history[0]),history[1],cap(history[2],50),history[3],ico_send,history[5]])
+    else:
+        lista_hist.append([str(history[0]),history[1],cap(history[2],50),history[3],ico_receive,history[5]])
 
 connc = sqlite3.connect(path + 'turbo.db')
 c = connc.cursor()
 c.execute("SELECT id,nome,conteudo,data,tipo,ip FROM history order by id desc")
 rowsc =  c.fetchall()
 for history in rowsc:
-    lista_histfull.append([str(history[0]),history[1],history[2].encode("utf-8"),history[3],history[4],history[5]])
+    if history[4] == "S":
+        lista_histfull.append([str(history[0]),history[1],history[2].encode("utf-8"),history[3],ico_send,history[5]])
+    else:
+        lista_histfull.append([str(history[0]),history[1],history[2].encode("utf-8"),history[3],ico_receive,history[5]])
 
 connb.close()
 
@@ -130,14 +139,20 @@ def searching(self,entry,model):
     a.execute("SELECT id,nome,conteudo,data,tipo,ip FROM history where conteudo like '%" + entry.get_text() + "%' order by id desc")
     rows =  a.fetchall()
     for history in rows:
-        lista_hist.append([str(history[0]),history[1],cap(history[2],200),history[3],history[4],history[5]])
+        if history[4] == "S":
+            lista_hist.append([str(history[0]),history[1],cap(history[2],200),history[3],ico_send,history[5]])
+        else:
+            lista_hist.append([str(history[0]),history[1],cap(history[2],200),history[3],ico_receive,history[5]])
 
     connc = sqlite3.connect(path + 'turbo.db')
     c = connc.cursor()
     c.execute("SELECT id,nome,conteudo,data,tipo,ip FROM history where conteudo like '%" + entry.get_text() + "%' order by id desc")
     rowsc =  c.fetchall()
     for history in rowsc:
-        lista_histfull.append([str(history[0]),history[1],history[2].encode("utf-8"),history[3],history[4],history[5]])
+        if history[4] == "S":
+            lista_histfull.append([str(history[0]),history[1],history[2].encode("utf-8"),history[3],ico_send,history[5]])
+        else:
+            lista_histfull.append([str(history[0]),history[1],history[2].encode("utf-8"),history[3],ico_receive,history[5]])
 
     connb.close()
 
@@ -189,7 +204,7 @@ class MyWindow(Gtk.Window):
         cell2 = Gtk.CellRendererText(weight=300)
         cell3 = Gtk.CellRendererText(weight=300)
         cell4 = Gtk.CellRendererText(weight=300)
-        cell5 = Gtk.CellRendererText(weight=50)
+        cell5 = Gtk.CellRendererPixbuf()
         cell6 = Gtk.CellRendererText(weight=50)
 
         cell.set_fixed_size(50, 5)
@@ -203,8 +218,9 @@ class MyWindow(Gtk.Window):
         col2 = Gtk.TreeViewColumn("Name", cell2, text=1)
         col3 = Gtk.TreeViewColumn("Data", cell3, text=2)
         col4 = Gtk.TreeViewColumn("Date", cell4, text=3)
-        col5 = Gtk.TreeViewColumn("R/S", cell5, text=4)
+        col5 = Gtk.TreeViewColumn("R/S",cell5, pixbuf=4)
         col6 = Gtk.TreeViewColumn("IP", cell6, text=5)
+        
 
         treeview.append_column(col)
         treeview.append_column(col2)
@@ -227,7 +243,7 @@ class MyWindow(Gtk.Window):
 
         scroller.add(treeview)
  
-        self.model = Gtk.ListStore(str,str,str,str,str,str)             
+        self.model = Gtk.ListStore(str,str,str,str,GdkPixbuf.Pixbuf,str)             
         treeview.set_model(self.model)
         
         for i in range(len(lista_hist)):
