@@ -82,7 +82,7 @@ MyApplet.prototype = {
 		    this.menu.addAction(_("Contacts Manager"), Lang.bind(this, function() {
 					Util.spawnCommandLine("python /usr/share/cinnamon/applets/turbonote@iksws.com.br/turbonote-adds/contacts.py");
 	            }));
-		    this.menu.addAction(_("History Received Manager"), Lang.bind(this, function() {
+		    this.menu.addAction(_("History Manager"), Lang.bind(this, function() {
 					Util.spawnCommandLine("python /usr/share/cinnamon/applets/turbonote@iksws.com.br/turbonote-adds/historic.py");
 	            }));
 		    /*this.menu.addAction(_("History Sent Manager"), Lang.bind(this, function() {
