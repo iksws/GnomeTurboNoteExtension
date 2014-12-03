@@ -75,10 +75,12 @@ class HeaderBarWindow(Gtk.Window):
         self.set_wmclass ("TurboNote Gnome", "TurboNote Gnome")
         self.connect('key-press-event',on_button_clicked2,nome)
 
-    def msg_show(self,event,bt):
+    def msg_show(self,event,bt,box,attbtrmv):
     	self.resize(500, 350)
     	self.add(self.grid)  
+    	box.add(self.toggle_stay)    	
     	self.show_all()
+    	attbtrmv.hide();
     	bt.hide()
 
     def attaches_cb(self,event,data):
@@ -175,6 +177,9 @@ class HeaderBarWindow(Gtk.Window):
 		msgsplitlinux = msglinux.split('&N&')
 		msg_unicode = ""
 
+		box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+		Gtk.StyleContext.add_class(box.get_style_context(), "linked")	
+
 		for i in range(len(msgsplitlinux)):                           
 			msg_unicode = msg_unicode+ (msgsplitlinux[i].replace("\\r"," ") + "\n")
 
@@ -201,7 +206,7 @@ class HeaderBarWindow(Gtk.Window):
 		self.att1.connect("clicked", self.attaches_cb,link)	
 
 		self.msg = Gtk.Button()
-		self.msg.connect("clicked", self.msg_show,self.msg)	
+		self.msg.connect("clicked", self.msg_show,self.msg,box,self.attachedbtrmv)	
 
 		self.att2 = Gtk.Button()
 		self.att2.connect("clicked", self.attaches_cb2,link)	
@@ -276,12 +281,7 @@ class HeaderBarWindow(Gtk.Window):
 		self.attachedbt.connect("clicked", self.on_file_clicked)		
 		self.attachedbtrmv.connect("clicked", self.on_file_clicked_rmv)	
 
-		self.grid.attach(self.label, 0, 2, 4, 1)
-
-		box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
-		Gtk.StyleContext.add_class(box.get_style_context(), "linked")	
-
-		box.add(self.toggle_stay)
+		self.grid.attach(self.label, 0, 2, 4, 1)		
 
 		if(tipo == "img"):
 			box.add(self.att1)
@@ -291,8 +291,9 @@ class HeaderBarWindow(Gtk.Window):
 
 		if (new_msg == "N"):
 			box.add(self.msg)
-		else:		
-			self.add(self.grid)  
+		else:
+			box.add(self.toggle_stay)
+			self.add(self.grid)
 
 		hb.pack_start(box)
 
