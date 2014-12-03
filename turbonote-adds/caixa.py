@@ -203,11 +203,19 @@ class HeaderBarWindow(Gtk.Window):
 		scshot.connect("clicked", self.on_button_ss)
 
 		self.att1ico = Gtk.Image()	
-		self.att1ico.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_action_picture" + config_note.getColorOver() + ".png")		
+		if config_note.getColorRevertTitle():
+			self.att1ico.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_action_picture_all" + config_note.getColorOver() + ".png")		
+		else:
+			self.att1ico.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_action_picture_all" + config_note.getColor() + ".png")		
+
 		self.att1.add(self.att1ico)
 
 		self.att2ico = Gtk.Image()	
-		self.att2ico.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_action_attachment" + config_note.getColorOver() + ".png")		
+		if config_note.getColorRevertTitle():
+			self.att2ico.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_action_attachment_all" + config_note.getColorOver() + ".png")	
+		else:
+			self.att2ico.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_action_attachment_all" + config_note.getColor() + ".png")	
+
 		self.att2.add(self.att2ico)
 
 		self.photo = Gtk.Image()	

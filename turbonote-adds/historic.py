@@ -264,7 +264,11 @@ class MyWindow(Gtk.Window):
         self.responderbt = Gtk.Button()      
 
         self.sending = Gtk.Image()  
-        self.sending.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_action_send_now" + config_note.getColorOver() + ".png")        
+        if config_note.getColorRevertTitle():
+            self.sending.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_action_send_now_all" + config_note.getColorOver() + ".png")        
+        else:
+            self.sending.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_action_send_now_all" + config_note.getColor() + ".png")        
+
         self.responderbt.add(self.sending)
 
         self.responderbt.connect("clicked", self.resend)        
