@@ -53,8 +53,8 @@ def ignore_cb(n, action):
 def cap(s, l):
     return s if len(s)<=l else s[0:l-3]+'...'
 
-ico_send = GdkPixbuf.Pixbuf.new_from_file_at_size(path_icon+"ic_action_send_now_b.png", 16, 16)
-ico_receive = GdkPixbuf.Pixbuf.new_from_file_at_size(path_icon+"ic_action_repley_now_b.png", 16, 16)
+ico_send = GdkPixbuf.Pixbuf.new_from_file_at_size(path_icon+"ic_action_send_now_b.png", 20, 20)
+ico_receive = GdkPixbuf.Pixbuf.new_from_file_at_size(path_icon+"ic_action_repley_now_b.png", 20, 20)
 
 connb = sqlite3.connect(path + 'turbo.db')
 a = connb.cursor()
