@@ -95,10 +95,12 @@ class HeaderBarWindow(Gtk.Window):
 		text = buf.get_text(buf.get_start_iter(),buf.get_end_iter(),True)
 		send_turbo(text.decode('utf-8').encode('windows-1252'),self.titulotxt.get_text(),attFile,self.get_size()[0],self.get_size()[1])
 
-    def on_file_clicked(self, widget):
+    def on_file_clicked(self, widget,box2):
 		if attpick:
 			self.grid.attach(self.label3, 0, 6, 1, 1)			
 			self.grid.attach(self.labelattached, 0, 5, 1, 1)
+			box2.add(self.attachedbtrmv)
+			self.show_all()
 			self.attachedbtrmv.hide()				
 			assignNewValueToAttPick(False)			
 		dialog = Gtk.FileChooserDialog("Please choose a file", self,
@@ -179,7 +181,7 @@ class HeaderBarWindow(Gtk.Window):
 		self.attachedbt.set_tooltip_text("Attach file or image")
 		self.attachedbtrmv = Gtk.Button()
 		self.attachedbtrmv.set_tooltip_text("Remove attachment")
-		self.attachedbt.connect("clicked", self.on_file_clicked)		
+		self.attachedbt.connect("clicked", self.on_file_clicked,box2)		
 		self.attachedbtrmv.connect("clicked", self.on_file_clicked_rmv)		
 		
 		self.photo = Gtk.Image()	
@@ -229,8 +231,7 @@ class HeaderBarWindow(Gtk.Window):
 		
 		box2.add(scshot)
 		box2.add(responderbt)
-		box2.add(self.attachedbt)
-		box2.add(self.attachedbtrmv)
+		box2.add(self.attachedbt)		
 		hb.pack_start(box)
 
 		scrolledwindow2 = Gtk.ScrolledWindow()
