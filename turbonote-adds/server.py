@@ -88,14 +88,20 @@ class EchoRequestHandler(SocketServer.BaseRequestHandler):
             
             connb = sqlite3.connect(path + 'turbo.db')
             a = connb.cursor()
-            a.execute("SELECT nome FROM contacts WHERE upper(nome) = '" + nome + "'")
-            contactsName =  a.fetchone()
+            a.execute("SELECT nome,ip FROM contacts WHERE upper(nome) = '" + nome + "'")
+            dataContact =  a.fetchone()
+            contactsName = dataContact[0]
+            ipData  = dataContact[1]
             connb.close()
 
             if not contactsName:
                 addcontacts(nome,ipsender)
                 command = "mkdir " + path_attached + nome
-                os.system(command)   
+                os.system(command)  
+            else:
+                if ipsender != ipData:
+                    updateContacts(nome,ipsender)
+
 
             self.request.send(data)                 
             
@@ -167,9 +173,11 @@ class EchoRequestHandler(SocketServer.BaseRequestHandler):
                 f2.write(base64.b64decode(imagedata))
                 f2.close()              
 
-            #t = threading.Thread(target=notificar,args=[nome,conteudo,ipsender])
-            #t.start()
-            notificar(nome,conteudo,ipsender)
+            if config_note.getNotify():
+                t = threading.Thread(target=notificar,args=[nome,conteudo,ipsender])
+                t.start()
+            else:
+                notificar(nome,conteudo,ipsender)
         
 
         return
@@ -277,6 +285,13 @@ class EchoServer(SocketServer.TCPServer):
         #self.logger.debug('close_request(%s)', request_address)
         return SocketServer.TCPServer.close_request(self, request_address)    
 
+
+def updateContacts(contactnome,addressip):
+    connc = sqlite3.connect(path + 'turbo.db')
+    c = connc.cursor()
+    c.execute("UPDATE contacts set ip = (?) where nome = (?)",(addressip,contactnome))#s.getsockname()'')
+    connc.commit()
+    connc.close()
 
 def addcontacts(contactnome,addressip):
     connc = sqlite3.connect(path + 'turbo.db')

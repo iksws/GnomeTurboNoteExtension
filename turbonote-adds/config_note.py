@@ -19,6 +19,7 @@ def get_ip(iface = 'eth0'):
 ip = get_ip('eth0')
 image_color = "_b" # _b for black
 image_color_title_revert = True
+multiThread = True #multi note or not
 
 class Config():
 	def __init__(self):
@@ -26,9 +27,13 @@ class Config():
 		image_color = ""
 		image_color_title_revert = True
 		ip = get_ip('eth0')
+		multiThread = True
 
 	def getOwner(self):
 		return owner;
+
+	def getNotify(self):
+		return multiThread;
 
 	def getColorRevertTitle(self):
 		return image_color_title_revert;
