@@ -15,6 +15,16 @@ path_icon = "/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/"
 
 lista_hist = []
 lista_histfull = []
+lista_contatos = []
+
+connb = sqlite3.connect(path + 'turbo.db')
+a = connb.cursor()
+a.execute("SELECT nome FROM contacts order by nome asc")
+rows =  a.fetchall()
+lista_contatos.append("ALL")
+for contacts in rows:
+   lista_contatos.append(contacts[0])
+connb.close()
 
 def resp_cb(n, action,data):
     assert action == "resp"  
@@ -190,10 +200,10 @@ class MyWindow(Gtk.Window):
         self.searchtxt = Gtk.SearchEntry() 
         self.label3 = Gtk.Label()
         self.label3.set_text(" ") 
+        self.label4 = Gtk.Label()
+        self.label4.set_text(" ") 
         self.searchtxt.set_tooltip_text("[press Enter to search]")
-        grid.attach(self.searchtxt, 0, 1, 3, 1)        
-        grid.attach(self.label3, 0, 3, 3, 1) 
-        grid.attach(scroller, 0, 4, 3, 1)     
+           
          
         treeview = Gtk.TreeView()
         treeview.set_enable_tree_lines(True)
@@ -263,6 +273,25 @@ class MyWindow(Gtk.Window):
         self.button_remove_all = Gtk.Button()
         self.button_remove_all.connect("clicked", self.remove_all_cb)
 
+        self.nomeStore = Gtk.ListStore(str)
+
+        for nomes in lista_contatos:            
+            self.nomeStore.append([nomes])
+
+        self.nomecombo = Gtk.ComboBox.new_with_model(self.nomeStore)
+        renderer_text = Gtk.CellRendererText()
+        self.nomecombo.pack_start(renderer_text, True)
+        self.nomecombo.add_attribute(renderer_text, "text", 0)
+        self.nomecombo.connect("changed", self.on_nome_combo_changed,self.model)
+
+        grid.attach(self.searchtxt, 0, 1, 3, 1)                
+        grid.attach(self.label3, 0, 3, 3, 1) 
+        grid.attach(scroller, 0, 4, 3, 1) 
+        grid.attach(self.label4, 0, 5, 3, 1) 
+        grid.attach(self.nomecombo, 0, 6, 3, 1) 
+
+        self.nomecombo.set_active(0)       
+
         self.removeimg = Gtk.Image()  
         if config_note.getColorRevertTitle():
             self.removeimg.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_action_storage" + config_note.getColorOver() + ".png")      
@@ -303,6 +332,56 @@ class MyWindow(Gtk.Window):
         self.button_remove_all.set_tooltip_text("Remove all")
         
         notifyturbo.init("TurboNote Gnome 3", mainloop="glib")
+
+    def on_nome_combo_changed(self, combo,model):
+        nome = ""
+        tree_iter = combo.get_active_iter()
+        if tree_iter != None:
+            model1 = combo.get_model()
+            nome = model1[tree_iter][0]
+
+        lista_hist[:] = []
+        lista_histfull[:] = []
+
+
+        connb = sqlite3.connect(path + 'turbo.db')
+        a = connb.cursor()   
+        if nome == "ALL": 
+            a.execute("SELECT id,nome,conteudo,data,tipo,ip FROM history order by id desc")
+        else:
+            a.execute("SELECT id,nome,conteudo,data,tipo,ip FROM history where nome = '" + nome + "' order by id desc")            
+        rows =  a.fetchall()
+        for history in rows:
+            if history[4] == "S":
+                lista_hist.append([str(history[0]),history[1],cap(history[2],200),history[3],ico_send,history[5]])
+            else:
+                lista_hist.append([str(history[0]),history[1],cap(history[2],200),history[3],ico_receive,history[5]])
+
+        connc = sqlite3.connect(path + 'turbo.db')
+        c = connc.cursor()
+        if nome == "ALL": 
+            c.execute("SELECT id,nome,conteudo,data,tipo,ip FROM history order by id desc")
+        else:
+            c.execute("SELECT id,nome,conteudo,data,tipo,ip FROM history where nome = '" + nome + "' order by id desc")            
+        rows =  a.fetchall()
+        rowsc =  c.fetchall()
+        for history in rowsc:
+            if history[4] == "S":
+                lista_histfull.append([str(history[0]),history[1],history[2].encode("utf-8"),history[3],ico_send,history[5]])
+            else:
+                lista_histfull.append([str(history[0]),history[1],history[2].encode("utf-8"),history[3],ico_receive,history[5]])
+
+        connb.close()
+
+        if len(model) != 0:
+            for i in range(len(model)):
+                iter = model.get_iter(0)
+                model.remove(iter)                
+
+        for i in range(len(lista_hist)):
+            model.append(lista_hist[i])
+
+            
     
     def resend(self, button):
         if len(self.model) != 0:
