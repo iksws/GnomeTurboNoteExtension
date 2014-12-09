@@ -280,15 +280,17 @@ class MyWindow(Gtk.Window):
 
         self.nomecombo = Gtk.ComboBox.new_with_model(self.nomeStore)
         renderer_text = Gtk.CellRendererText()
-        self.nomecombo.pack_start(renderer_text, True)
+        self.nomecombo.pack_start(renderer_text, False)
         self.nomecombo.add_attribute(renderer_text, "text", 0)
         self.nomecombo.connect("changed", self.on_nome_combo_changed,self.model)
+        self.nomecombo.set_wrap_width(7)        
 
         grid.attach(self.searchtxt, 0, 1, 3, 1)                
         grid.attach(self.label3, 0, 3, 3, 1) 
         grid.attach(scroller, 0, 4, 3, 1) 
         grid.attach(self.label4, 0, 5, 3, 1) 
         grid.attach(self.nomecombo, 0, 6, 3, 1) 
+
 
         self.nomecombo.set_active(0)       
 
