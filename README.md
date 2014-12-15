@@ -6,28 +6,15 @@ Install dependences
 ```
 #!shell
 sudo apt-get install python-qt4
-```
-```
-#!shell
 
 sudo apt-get install python-notify2
-```
-```
-#!shell
-sudo apt-get install python-qt4-dbus-dbg
-```
-```
-#!shell
-sudo apt-get install sqlite3
-```
 
-```
-#!shell
+sudo apt-get install python-qt4-dbus-dbg
+
+sudo apt-get install sqlite3
+
 sudo apt-get install zip
 
-```
-```
-#!shell
 sudo apt-get install libgnome2-bin
 ```
 
@@ -39,7 +26,6 @@ use SVN!
 go to /home/YOURPROFILENAME/.local/share/gnome-shell/extensions/
 
 svn checkout https://github.com/iksws/GnomeTurboNoteExtension/trunk turbonote@iksws.com.br
-*
 
 * Set permissions for your user like this
 
