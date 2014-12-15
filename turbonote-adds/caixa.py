@@ -19,7 +19,8 @@ path = "/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/turbonote-adds/
 attpick = True
 attFile = ""
 stay = ""
-
+link = ""
+tipo = ""
 #get and setters
 def assignNewValueToStay(s):
     global stay
@@ -33,16 +34,35 @@ def assignNewValueToAttPick(p):
     global attpick
     attpick = p
 
+def assignNewValueToLink(l):
+    global link
+    link = l
+
+def assignNewValueToTipo(t):
+    global tipo
+    tipo = t
+
+def assignNewValueToMsg(m):
+    global new_msg
+    new_msg = m
+
 class HeaderBarWindow(Gtk.Window):
-    def __init__(self,titulo,ip,msg_rec,nome):
-        Gtk.Window.__init__(self, title = "To " + titulo)
+    def __init__(self,titulo,ip,msg_rec,nome,tipo,link,new_msg):
+        Gtk.Window.__init__(self, title = "From " + titulo)
         self.set_icon_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/turbo.png")	
         self.set_border_width(15)
-       	self.set_default_size(350, 350)
-
+        if(new_msg != "N"):
+       		self.set_default_size(500, 350)
+       	else:
+       		self.set_default_size(500, 0)
+       	self.move(0,0)
         hb = Gtk.HeaderBar()
         hb.props.show_close_button = True
-        hb.props.title = title = "To " + titulo
+        hb.props.title = title = "From " + titulo
+
+        assignNewValueToLink(link)
+        assignNewValueToTipo(tipo)
+        assignNewValueToMsg(new_msg)
 
         box2 = Gtk.VBox(orientation=Gtk.Orientation.HORIZONTAL)
         Gtk.StyleContext.add_class(box2.get_style_context(), "linked")
@@ -50,10 +70,30 @@ class HeaderBarWindow(Gtk.Window):
         self.set_titlebar(hb)
         self.set_position(Gtk.WindowPosition.CENTER)
         self.grid = Gtk.Grid()
-        self.add(self.grid)        
+         
         self.create_textview(box2,hb)
         self.set_wmclass ("TurboNote Gnome", "TurboNote Gnome")
         self.connect('key-press-event',on_button_clicked2,nome)
+
+    def msg_show(self,event,bt,box,attbtrmv):
+    	self.resize(500, 350)
+    	self.add(self.grid)  
+    	box.add(self.toggle_stay)    	
+    	self.show_all()
+    	attbtrmv.hide();
+    	bt.hide()
+
+    def attaches_cb(self,event,data):
+		try:
+			call(["eog", data])
+		except ValueError:
+			print("saindo de erro....")
+
+    def attaches_cb2(self,event,data):
+		try:
+			call(["gnome-open", data])
+		except ValueError:
+			print("saindo de erro....")
 
     def on_button_ss(self, widget):
 		os.system("gnome-screenshot -i -a")
@@ -66,7 +106,6 @@ class HeaderBarWindow(Gtk.Window):
 		Gtk.main_quit()
 
     def on_button_contact(self,button):
-		print "aki"
 		buf  = self.textview.get_buffer()
 		text = buf.get_text(buf.get_start_iter(),buf.get_end_iter(),True)
 		win = MyWindow(text.decode('utf-8').encode('windows-1252'),stay,attFile,str(self.get_size()[0]),str(self.get_size()[1]))
@@ -138,6 +177,9 @@ class HeaderBarWindow(Gtk.Window):
 		msgsplitlinux = msglinux.split('&N&')
 		msg_unicode = ""
 
+		box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+		Gtk.StyleContext.add_class(box.get_style_context(), "linked")	
+
 		for i in range(len(msgsplitlinux)):                           
 			msg_unicode = msg_unicode+ (msgsplitlinux[i].replace("\\r"," ") + "\n")
 
@@ -158,7 +200,16 @@ class HeaderBarWindow(Gtk.Window):
 
 
 		self.toggle_stay = Gtk.ToggleButton()
-		self.toggle_stay.connect("toggled", self.toggle_stay_callback)	
+		self.toggle_stay.connect("toggled", self.toggle_stay_callback)
+
+		self.att1 = Gtk.Button()
+		self.att1.connect("clicked", self.attaches_cb,link)	
+
+		self.msg = Gtk.Button()
+		self.msg.connect("clicked", self.msg_show,self.msg,box,self.attachedbtrmv)	
+
+		self.att2 = Gtk.Button()
+		self.att2.connect("clicked", self.attaches_cb2,link)	
 
 		responderbt = Gtk.Button()
 		
@@ -173,12 +224,42 @@ class HeaderBarWindow(Gtk.Window):
 
 		scshot.connect("clicked", self.on_button_ss)
 
+
+
+		self.icomsg = Gtk.Image()	
+		if config_note.getColorRevertTitle():
+			self.icomsg.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_email_all" + config_note.getColorOver() + ".png")		
+		else:
+			self.icomsg.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_email_all" + config_note.getColor() + ".png")		
+
+		self.msg.add(self.icomsg)
+
+
+		self.att1ico = Gtk.Image()	
+		if config_note.getColorRevertTitle():
+			self.att1ico.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_picture_all" + config_note.getColorOver() + ".png")		
+		else:
+			self.att1ico.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_picture_all" + config_note.getColor() + ".png")		
+
+		self.att1.add(self.att1ico)
+
+		self.att2ico = Gtk.Image()	
+		if config_note.getColorRevertTitle():
+			self.att2ico.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_attachment_all" + config_note.getColorOver() + ".png")	
+		else:
+			self.att2ico.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_attachment_all" + config_note.getColor() + ".png")	
+
+		self.att2.add(self.att2ico)
+
 		self.photo = Gtk.Image()	
 		self.photo.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_camera" + config_note.getColor() + ".png")		
 		scshot.add(self.photo)
 
 		self.staytop = Gtk.Image()	
-		self.staytop.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_cast" + config_note.getColor() + ".png")		
+		if config_note.getColorRevertTitle():
+			self.staytop.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_cast" + config_note.getColorOver() + ".png")		
+		else:
+			self.staytop.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_cast" + config_note.getColor() + ".png")		
 		self.toggle_stay.add(self.staytop)	
 
 		self.sending = Gtk.Image()	
@@ -200,12 +281,20 @@ class HeaderBarWindow(Gtk.Window):
 		self.attachedbt.connect("clicked", self.on_file_clicked)		
 		self.attachedbtrmv.connect("clicked", self.on_file_clicked_rmv)	
 
-		self.grid.attach(self.label, 0, 2, 4, 1)
+		self.grid.attach(self.label, 0, 2, 4, 1)		
 
-		box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
-		Gtk.StyleContext.add_class(box.get_style_context(), "linked")	
+		if(tipo == "img"):
+			box.add(self.att1)
 
-		box.add(self.toggle_stay)
+		if(tipo == "att"):
+			box.add(self.att2)
+
+		if (new_msg == "N"):
+			box.add(self.msg)
+		else:
+			box.add(self.toggle_stay)
+			self.add(self.grid)
+
 		hb.pack_start(box)
 
 		self.attachedbtrmv.set_tooltip_text("Remove attachment")
@@ -213,6 +302,9 @@ class HeaderBarWindow(Gtk.Window):
 		responderbt.set_tooltip_text("Reply to sender [You can just press CTRL+R]")
 		self.attachedbt.set_tooltip_text("Attach file or image")
 		self.toggle_stay.set_tooltip_text("Stay on Top")
+
+		self.att1.set_tooltip_text("Received Img")
+		self.att2.set_tooltip_text("Received File")
 
 		box2.add(scshot)
 		box2.add(responderbt)
@@ -258,8 +350,11 @@ if __name__ == "__main__":
 	nome = str(nome)[:-2][2:]	
 	nome = nome.decode('iso-8859-1').encode('utf8')	
 	msg_rec = args[2]	
+	tipo = args[4]	
+	img_link = args[5]
+	new_msg = args[6]
 
-	win = HeaderBarWindow(nome,ip,msg_rec,nome)
+	win = HeaderBarWindow(nome,ip,msg_rec,nome,tipo,img_link,new_msg)
 	win.connect("delete-event", Gtk.main_quit)
 	win.show_all()
 	Gtk.main()

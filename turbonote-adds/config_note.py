@@ -10,38 +10,42 @@ SIOCGIFADDR = 0x8915
 owner = getpass.getuser()
 
 def get_ip(iface = 'eth0'):
-	ifreq = struct.pack('16sH14s', iface, socket.AF_INET, '\x00'*14)
-	try:
-		res = fcntl.ioctl(sockfd, SIOCGIFADDR, ifreq)
-	except:
-		return None
-	
-	ip = struct.unpack('16sH2x4s8x', res)[2]
-	return socket.inet_ntoa(ip)
+	s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+	s.connect(("google.com",80))
+	ip =  (s.getsockname()[0])
+	s.close()
+	return ip	
 
 ip = get_ip('eth0')
-image_color = "" # _b for black
+image_color = "_b" # _b for black
+image_color_title_revert = False
+multiThread = True #multi note or not
 
 class Config():
-	 def __init__(self):
+	def __init__(self):
 		owner = getpass.getuser()
 		image_color = ""
+		image_color_title_revert = False
 		ip = get_ip('eth0')
+		multiThread = True
 
-		print "YOUR CONFS"
-		print "IP: " + ip
-		print "USERNAME: " + owner.upper()
+	def getOwner(self):
+		return owner;
 
-		if self.getColor() == "":
-			print "COLOR ICONS: WHITE"
+	def getNotify(self):
+		return multiThread;
+
+	def getColorRevertTitle(self):
+		return image_color_title_revert;
+
+	def getColor(self):
+		return image_color;
+
+	def getColorOver(self):
+		if image_color == "_b":
+			return ""
 		else:
-			print "COLOR ICONS: BLACK"
+			return "_b"		
 
-
-	 def getOwner(self):
-	 		return owner;
-	 def getColor(self):
-	 		return image_color;
-
-	 def getIp(self):
-	 		return ip;	
+	def getIp(self):
+		return ip;	

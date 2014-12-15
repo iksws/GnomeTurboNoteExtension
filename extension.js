@@ -48,8 +48,7 @@ const MessageMenu = new Lang.Class({
 		this.actor.add_child(hbox);
 
 		this.new_note_string  = _("New note");
-	    this.history_string   = _("History Received Manager");
-	    this.historys_string  = _("History Sent Manager");
+	    this.history_string   = _("History Manager");
 	    this.contacts_string  = _("Contacts Manager");
 	    this.attacheds_string = _("Attacheds");
 	    this.restart_string   = _("Start Server");
@@ -67,7 +66,6 @@ const MessageMenu = new Lang.Class({
 
 		this.newnote_tb   =  new PopupMenu.PopupMenuItem("        "+this.new_note_string);
 		this.history_tb   =  new PopupMenu.PopupMenuItem("        "+this.history_string);
-		this.historys_tb  =  new PopupMenu.PopupMenuItem("        "+this.historys_string);
 		this.contacts_tb  =  new PopupMenu.PopupMenuItem("        "+this.contacts_string);
 		this.attacheds_tb =  new PopupMenu.PopupMenuItem("        "+this.attacheds_string);
 		this.restart_tb   =  new PopupMenu.PopupMenuItem(this.restart_string);
@@ -82,15 +80,13 @@ const MessageMenu = new Lang.Class({
 		this.contacts_tb.connect('activate', Lang.bind(this, this._TbContacts));		
 		this.attacheds_tb.connect('activate', Lang.bind(this, this._TbAttachdes));		
 		this.restart_tb.connect('activate', Lang.bind(this, this._TbRestart));
-		this.stop_tb.connect('activate', Lang.bind(this, this._TbStop));		
-		this.historys_tb.connect('activate', Lang.bind(this, this._TbHistorys));		
+		this.stop_tb.connect('activate', Lang.bind(this, this._TbStop));				
 		this.svnupdate_tb.connect('activate', Lang.bind(this, this._TbSvnUpdate));
 
 		this.menu.addMenuItem(this.newnote_tb);
 		this.menu.addMenuItem(this.attacheds_tb);
 		this.menu.addMenuItem(this.contacts_tb);	
 		this.menu.addMenuItem(this.history_tb);
-		this.menu.addMenuItem(this.historys_tb);
 		this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
 		this.menu.addMenuItem(this.restart_tb);		
 		this.menu.addMenuItem(this.stop_tb);	
@@ -128,14 +124,7 @@ const MessageMenu = new Lang.Class({
 		 }catch(Execption){		 	
 		 	notifyTray("ERROR",Execption); 
 		 }
-	},
-	_TbHistorys: function() {
-		try{			
-		 	Main.Util.trySpawnCommandLine('python /usr/share/gnome-shell/extensions/turbonote@iksws.com.br/turbonote-adds/historics.py');
-		 }catch(Execption){		 	
-		 	notifyTray("ERROR",Execption); 
-		 }
-	},
+	},	
 	_TbSvnUpdate: function() {
 		try{			
 		 	Main.Util.trySpawnCommandLine('python /usr/share/gnome-shell/extensions/turbonote@iksws.com.br/turbonote-adds/svnupdate.py');		 	

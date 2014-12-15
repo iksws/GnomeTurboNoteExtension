@@ -1,133 +1,106 @@
-from gi.repository import Gtk, Gdk,GObject
-import commands
-import time
-import sys,os
-import os.path
-import threading
+
+from gi.repository import Gtk, Gdk,GObject,Pango
+import os
+from subprocess import Popen, PIPE
+import fcntl
+
+sub_proc = Popen("cd /usr/share/cinnamon/applets/turbonote@iksws.com.br; svn update;", stdout=PIPE, shell=True)
+sub_outp = ""
+
+restart = False
 
 class ProgressBarWindow(Gtk.Window):
 
-    def __init__(self):
-        Gtk.Window.__init__(self, title="SVN UPDATE")
-        self.set_default_size(800, 400)
-        self.set_border_width(15)      
-        self.set_position(Gtk.WindowPosition.CENTER)
-        
-        hb = Gtk.HeaderBar()
-        hb.props.show_close_button = True
-        hb.props.title = "SVN UPDATE"        
-        self.set_titlebar(hb)    
+   def __init__(self):
+      Gtk.Window.__init__(self, title="SVN UPDATE")
+      self.set_default_size(800, 400)
+      self.set_border_width(15)      
+      self.set_position(Gtk.WindowPosition.CENTER)
 
-        self.progressbar = Gtk.ProgressBar()
+      hb = Gtk.HeaderBar()
+      hb.props.show_close_button = True
+      hb.props.title = "SVN UPDATE"        
+      self.set_titlebar(hb)    
 
-        self.timeout_id = GObject.timeout_add(50, self.on_timeout, None)
+      self.progressbar = Gtk.ProgressBar()
+      self.progressbar.set_text("Checking for updates in SVN")
+      self.progressbar.set_show_text("Checking for updates in SVN")    
 
-        self.progressbar.set_text("Checking for updates in SVN")
-        self.progressbar.set_show_text("Checking for updates in SVN")        
+      self.textview = Gtk.TextView()
+      fontdesc = Pango.FontDescription("monospace")
+      self.textview.modify_font(fontdesc)
+      scrolledwindow = Gtk.ScrolledWindow()
+      scrolledwindow.set_hexpand(True)
+      scrolledwindow.set_vexpand(True)
+      scrolledwindow.set_shadow_type(2)
+      scrolledwindow.set_border_width(border_width=1)
+      scrolledwindow.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
+      scrolledwindow.add(self.textview)
+      self.textview.set_border_width(10)
+
+      self.exp = Gtk.Expander()
+      self.exp.set_label("Update Log")
+      self.exp.add(scrolledwindow)
+
+      self.grid = Gtk.Grid()
+      self.add(self.grid)       
+
+      self.grid.attach(self.progressbar, 0, 0, 1 , 1)
       
-        self.grid = Gtk.Grid()
-        self.add(self.grid)        
-        self.textview = Gtk.TextView()
+      self.label = Gtk.Label()
+      self.label.set_text(" ") 
+      self.grid.attach(self.label, 0, 1, 1 , 1)  
 
-        scrolledwindow = Gtk.ScrolledWindow()
-        scrolledwindow.set_hexpand(True)
-        scrolledwindow.set_vexpand(True)
-        scrolledwindow.set_shadow_type(2)
-        scrolledwindow.set_border_width(border_width=1)
-        scrolledwindow.set_policy(Gtk.PolicyType.AUTOMATIC, Gtk.PolicyType.AUTOMATIC)
-        scrolledwindow.add_with_viewport(self.textview )
-        
-        scrolledwindow.connect("size-allocate", self._autoscroll)
-        self.textview.set_property('editable', False)
+      self.grid.attach(self.exp, 0, 2, 1 , 1)
 
-        self.textview.set_wrap_mode(Gtk.WrapMode.WORD)
-        self.textview.set_border_width(10)
-        self.textbuffer = self.textview.get_buffer()
-        self.textbuffer.set_text("")
-        scrolledwindow.add(self.textview) 
+      self.show_all()    
+      GObject.timeout_add(100, update_terminal,self.textview,self.progressbar,self)
+      self.textview.get_buffer().insert_at_cursor("Connecting to https://github.com/iksws/GnomeTurboNoteExtension/branches/Cinnamon!\n\n")
 
-        self.grid.attach(self.progressbar, 0, 0, 1 , 1)
-        self.label = Gtk.Label()
-        self.label.set_text(" ")         
-        self.grid.attach(self.label, 0, 1, 1 , 1)
-        self.grid.attach(scrolledwindow, 0, 2, 1 , 1)
-        buffer = self.textview.get_buffer()               
-                   
-        bg_color = Gdk.RGBA()
-        bg_color.parse("#000000")
 
-        tx_color = Gdk.RGBA()
-        tx_color.parse("#FFFFFF")
 
-        self.textview.override_color(Gtk.StateType.NORMAL, tx_color)
-        self.textview.override_background_color(Gtk.StateType.NORMAL, bg_color)
+   def isFinish(self):
+      self.progressbar.hide()
+      self.label.hide()
+      self.exp.set_expanded(True)
+      self.textview.get_buffer().insert_at_cursor("\nUpdate Finish!")
+      if restart:
+         self.textview.get_buffer().insert_at_cursor("\n\nREQUIRE RESTART PRESS [ALT+F2] ENTER [r] IN INPUT BOX PRESS [ENTER]")   
 
-        self.activity_mode = True     
-        self.progressbar.pulse()
-        t = threading.Thread(target=update,args=[buffer,self.progressbar,self,self.label])
-        t.start()
 
-    
 
-    def _autoscroll(self,scrolledwindow,*args):
-            """The actual scrolling method"""
-            adj = scrolledwindow.get_vadjustment()
-            adj.set_value(adj.get_upper() - adj.get_page_size())
+def update_now(progressbar,win):
+   win.activity_mode = True     
+   progressbar.pulse()
 
-    def on_timeout(self, user_data):
-        """
-        Update value on the progress bar
-        """
-        if self.activity_mode:
-            self.progressbar.pulse()
-        else:
-            new_value = self.progressbar.get_fraction() + 0.01
 
-            if new_value > 1:
-                new_value = 0
 
-            self.progressbar.set_fraction(new_value)
+def non_block_read(output):
+   fd = output.fileno()
+   fl = fcntl.fcntl(fd, fcntl.F_GETFL)
+   fcntl.fcntl(fd, fcntl.F_SETFL, fl | os.O_NONBLOCK)
+   try:      
+      return output.read()
+   except:
+      return ''
 
-        # As this is a timeout function, return True so that it
-        # continues to get called
-        return True
 
-def update(buffer,progressbar,window,label):
-    buffer.insert(buffer.get_end_iter(), str("Waiting...\n"))
-    buffer.insert(buffer.get_end_iter(), str("Connecting to https://github.com/iksws/GnomeTurboNoteExtension/...\n"))
-    restart = False;
-    for line in  commands.getstatusoutput('cd /usr/share/gnome-shell/extensions/turbonote@iksws.com.br; svn update'):
-        if str(line) != '0':
-            if "server.py" in line or  "extension.js" in line:
-                restart = True
-            buffer.insert(buffer.get_end_iter(), str(line))
+def update_terminal(textview,progressbar,win):
+   txt = non_block_read(sub_proc.stdout)
+   if "server.py" in txt or  "applet.js" in txt:
+      restart = True
 
-    if os.path.exists("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/turbonote-adds/updatebd.sql"):
-        statinfo = os.stat("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/turbonote-adds/updatebd.sql")
-        if statinfo.st_size > 1:
-            buffer.insert(buffer.get_end_iter(), str("\n"))
-            buffer.insert(buffer.get_end_iter(), str("\nDATABASE UPDATE FOUND!"))
-            buffer.insert(buffer.get_end_iter(), str("\nUPDATING DATABSE...\n"))
-            os.system("sqlite3 /usr/share/gnome-shell/extensions/turbonote@iksws.com.br/turbonote-adds/turbo.db < /usr/share/gnome-shell/extensions/turbonote@iksws.com.br/turbonote-adds/updatebd.sql")
-            os.system("echo "" > /usr/share/gnome-shell/extensions/turbonote@iksws.com.br/turbonote-adds/updatebd.sql")
+   textview.get_buffer().insert_at_cursor(txt)
+   update_now(progressbar,win)
+   #return sub_proc.poll() is None
+   if sub_proc.poll() is None:
+      return sub_proc.poll() is None
+   else:
+      win.isFinish()
 
-    if restart:
-        buffer.insert(buffer.get_end_iter(), str("\n\nREQUIRE RESTART PRESS [ALT+F2] ENTER [r] IN INPUT BOX PRESS [ENTER]"))   
-
-    buffer.insert(buffer.get_end_iter(), str("\n\n"))
-    buffer.insert(buffer.get_end_iter(), str("Last 5 updates..."))
-    buffer.insert(buffer.get_end_iter(), str("\n"))
-
-    for line2 in  commands.getstatusoutput('svn log  https://github.com/iksws/GnomeTurboNoteExtension/trunk -l5'):
-        if str(line2) != '0':
-            buffer.insert(buffer.get_end_iter(), str(line2))
-
-    buffer.insert(buffer.get_end_iter(), str("\n\nFINISH!"))
-
-    progressbar.hide()  
-    label.hide();
-    
-
+def assignNewValueToRestart(a):
+    global restart
+    restart = a
 
 win = ProgressBarWindow()
 win.connect("delete-event", Gtk.main_quit)

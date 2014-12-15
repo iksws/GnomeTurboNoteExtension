@@ -99,7 +99,7 @@ def on_button_clicked2(self, event,data,column,treesortable):
                 command = "notify-send --hint=int:transient:1 \"TurboNote Gnome3\" \"" + (msgerror).decode('iso-8859-1').encode('utf8') + "\" -i " + path_icon + "turbo.png"                  
                 os.system(command) 
    
-        if mod == "Mod2+Enter":  
+        if mod == "Mod2+Enter" or mod == "Mod2+Return":  
             nome = self.nometxt.get_text()    
             connb = sqlite3.connect(path + 'turbo.db')
             a = connb.cursor()
@@ -235,15 +235,24 @@ class MyWindow(Gtk.Window):
         view.connect("button-press-event", treeview_clicked,self.selection,msg) 
 
         self.addcontact = Gtk.Image()  
-        self.addcontact.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_add_person" + config_note.getColor() + ".png")      
+        if config_note.getColorRevertTitle(): 
+            self.addcontact.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_add_person" + config_note.getColorOver() + ".png")      
+        else:
+            self.addcontact.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_add_person" + config_note.getColor() + ".png")                  
         self.button_add.add(self.addcontact)
 
         self.rmvcontact = Gtk.Image()  
-        self.rmvcontact.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_rmv_person" + config_note.getColor() + ".png")      
+        if config_note.getColorRevertTitle(): 
+            self.rmvcontact.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_rmv_person" + config_note.getColorOver() + ".png")      
+        else:
+            self.rmvcontact.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_rmv_person" + config_note.getColor() + ".png")      
         self.button_remove.add(self.rmvcontact)  
 
         self.rmvall = Gtk.Image()  
-        self.rmvall.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_rmv_group" + config_note.getColor() + ".png")      
+        if config_note.getColorRevertTitle(): 
+            self.rmvall.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_rmv_group" + config_note.getColorOver() + ".png")      
+        else:
+            self.rmvall.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_action_rmv_group" + config_note.getColor() + ".png")      
         self.button_remove_all.add(self.rmvall) 
 
         self.sending = Gtk.Image()  

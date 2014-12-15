@@ -5,7 +5,8 @@
   "name": "GnomeTurboNoteExtension", 
   "shell-version": [
     "3.10", 
-    "3.12"
+    "3.12",
+    "3.14"
   ], 
   "url": "https://github.com/iksws/GnomeTurboNoteExtension", 
   "uuid": "turbonote@iksws.com.br", 

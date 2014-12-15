@@ -81,21 +81,27 @@ class EchoRequestHandler(SocketServer.BaseRequestHandler):
             conteudo = turbodata[0].decode('iso-8859-1').encode('utf8')
             conna = sqlite3.connect(path + 'turbo.db')
             c = conna.cursor()               
-            c.execute("INSERT INTO history (nome,conteudo,data) VALUES (?,?,?)",(nome,turbodata[0].decode('iso-8859-1'),hoje))
+            c.execute("INSERT INTO history (nome,conteudo,data,tipo,ip) VALUES (?,?,?,?,?)",(nome,turbodata[0].decode('iso-8859-1'),hoje,'R',ipsender))
             conna.commit()
             conna.close()
            
             
             connb = sqlite3.connect(path + 'turbo.db')
             a = connb.cursor()
-            a.execute("SELECT nome FROM contacts WHERE upper(nome) = '" + nome + "'")
-            contactsName =  a.fetchone()
+            a.execute("SELECT nome,ip FROM contacts WHERE upper(nome) = '" + nome + "'")
+            dataContact =  a.fetchone()
+            contactsName = dataContact[0]
+            ipData  = dataContact[1]
             connb.close()
 
             if not contactsName:
                 addcontacts(nome,ipsender)
                 command = "mkdir " + path_attached + nome
-                os.system(command)   
+                os.system(command)  
+            else:
+                if ipsender != ipData:
+                    updateContacts(nome,ipsender)
+
 
             self.request.send(data)                 
             
@@ -167,8 +173,11 @@ class EchoRequestHandler(SocketServer.BaseRequestHandler):
                 f2.write(base64.b64decode(imagedata))
                 f2.close()              
 
-            t = threading.Thread(target=notificar,args=[nome,conteudo,ipsender])
-            t.start()
+            if config_note.getNotify():
+                t = threading.Thread(target=notificar,args=[nome,conteudo,ipsender])
+                t.start()
+            else:
+                notificar(nome,conteudo,ipsender)
         
 
         return
@@ -186,7 +195,7 @@ def notificar(nome,conteudo,ipsender):
 	command21 = "mv " +  path_tmp +  hojefile + nome + "/fullscreen.odt " +  path_tmp +  hojefile + nome + "/fullscreen.zip"
 	command22 = "unzip " +  path_tmp +  hojefile + nome + "/fullscreen.zip -d " + path_tmp + hojefile + nome + "/odt"   
         command3 = "mkdir " +  path_attached +  nome + "/" + hojefile 
-        command4 = "cd " +  path_tmp + hojefile +  nome +  "/odt/Pictures/; mv *.gif *.png *.jpg *.jpeg *.bmp *.wmf "  + path_attached + nome + "/" + hojefile  + "/"
+        command4 = "cd " +  path_tmp + hojefile +  nome +  "/odt/Pictures/; cp *.gif *.png *.jpg *.jpeg *.bmp *.wmf "  + path_attached + nome + "/" + hojefile  + "/"
         command5 = "rm -Rf " +  path_tmp + "*" 
         os.system(command0)   
         os.system(command1)   
@@ -201,7 +210,7 @@ def notificar(nome,conteudo,ipsender):
         time.sleep(2)
         os.system(command5)  
         assignNewValueToAnexo("1")        
-        call(["python", path + "notificar.py",""+ nome + " at " + hoje + "","" + conteudo + "","" + ipsender + "", "" +  path_attached + nome + "/" + hojefile  + "/"])    
+        call(["python", path + "notificar.py",""+ nome + " at " + hoje + "","" + conteudo + "","" + ipsender + "", "" +  path_attached + nome + "/" + hojefile  + "/","N"])    
     elif imganexada == "2":
         assignNewValueToAnexo("1")
         command0 = "mkdir " +  path_tmp +  hojefile + nome
@@ -209,7 +218,7 @@ def notificar(nome,conteudo,ipsender):
 	command21 = "mv " +  path_tmp +  hojefile + nome + "/fullscreen.odt " +  path_tmp +  hojefile + nome + "/fullscreen.zip"
 	command22 = "unzip " +  path_tmp +  hojefile + nome + "/fullscreen.zip -d " + path_tmp + hojefile + nome + "/odt"      
 	command2 = "mkdir " +  path_attached +  nome + "/" + hojefile
-        command3 = "cd " +  path_tmp + hojefile +  nome +  "; mv *.gif *.png *.jpg *.jpeg *.bmp *.wmf"  + path_attached + nome + "/" + hojefile  + "/"
+        command3 = "cd " +  path_tmp + hojefile +  nome +  "; cp *.gif *.png *.jpg *.jpeg *.bmp *.wmf"  + path_attached + nome + "/" + hojefile  + "/"
         command4 = "rm -Rf " +  path_tmp + "*"        
         os.system(command0)   
         os.system(command1)   
@@ -222,13 +231,13 @@ def notificar(nome,conteudo,ipsender):
         time.sleep(2)
         os.system(command4)  
         assignNewValueToAnexo("1")  
-        call(["python", path + "notificar.py",""+ nome + " at " + hoje + "","" + conteudo + "","" + ipsender + "", "" +  path_attached + nome + "/" + hojefile  + "/"])    
+        call(["python", path + "notificar.py",""+ nome + " at " + hoje + "","" + conteudo + "","" + ipsender + "", "" +  path_attached + nome + "/" + hojefile  + "/","N"])    
     elif imganexada == "4":
         assignNewValueToAnexo("1")  
-        call(["python", path + "notificar.py",""+ nome + " at " + hoje + "","" + conteudo + "","" + ipsender + "", "" +  path_attached + nome + "/" + hojefile  + "/"])    
+        call(["python", path + "notificar.py",""+ nome + " at " + hoje + "","" + conteudo + "","" + ipsender + "", "" +  path_attached + nome + "/" + hojefile  + "/","N"])    
     else:
         assignNewValueToAnexo("1")  
-        call(["python", path + "notificar.py",""+ nome  + " at " + hoje + "","" + conteudo + "","" + ipsender + "","None"])        
+        call(["python", path + "notificar.py",""+ nome  + " at " + hoje + "","" + conteudo + "","" + ipsender + "","None","N"])        
 
 
 class EchoServer(SocketServer.TCPServer):
@@ -276,6 +285,13 @@ class EchoServer(SocketServer.TCPServer):
         #self.logger.debug('close_request(%s)', request_address)
         return SocketServer.TCPServer.close_request(self, request_address)    
 
+
+def updateContacts(contactnome,addressip):
+    connc = sqlite3.connect(path + 'turbo.db')
+    c = connc.cursor()
+    c.execute("UPDATE contacts set ip = (?) where nome = (?)",(addressip,contactnome))#s.getsockname()'')
+    connc.commit()
+    connc.close()
 
 def addcontacts(contactnome,addressip):
     connc = sqlite3.connect(path + 'turbo.db')

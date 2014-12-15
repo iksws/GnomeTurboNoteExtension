@@ -35,24 +35,24 @@ for l in range(len(lista_nome)):
                 files = ""
                 for f in range(len(lista_dir_files)):
                     if f == 0:    
-                        if(lista_dir_files[f].split(".")[1] == 'wmf'):
-                            command1 = "cd  " +  path_attached+lista_nome[l] + "/" + lista_dir[d] + "/; convert " +  lista_dir_files[f] + " " + lista_dir_files[f][:-4]+".png"                            
-                            os.system(command1)     
-                            command2 = "cd  " +  path_attached+lista_nome[l] + "/" + lista_dir[d] + "/; rm -f " +  lista_dir_files[f]
-                            os.system(command2)  
-                            files =  lista_dir_files[f][:-4]+".png"
-                        else:
-                            files = (lista_dir_files[f])
+                        #if(lista_dir_files[f].split(".")[1] == 'wmf'):
+                        #    command1 = "cd  " +  path_attached+lista_nome[l] + "/" + lista_dir[d] + "/; convert " +  lista_dir_files[f] + " " + lista_dir_files[f][:-4]+".png"                            
+                        #    os.system(command1)     
+                        #    command2 = "cd  " +  path_attached+lista_nome[l] + "/" + lista_dir[d] + "/; rm -f " +  lista_dir_files[f]
+                        #    os.system(command2)  
+                        #    files =  lista_dir_files[f][:-4]+".png"
+                        #else:
+                        files = (lista_dir_files[f])
                     else:
-                        if(lista_dir_files[f].split(".")[1] == 'wmf'):
-                            print "oi"
-                            command1 = "cd  " +  path_attached+lista_nome[l] + "/" + lista_dir[d] + "/; convert " +  lista_dir_files[f] + " " + lista_dir_files[f][:-4]+".png"                            
-                            os.system(command1)     
-                            command2 = "cd  " +  path_attached+lista_nome[l] + "/" + lista_dir[d] + "/; rm -f " +  lista_dir_files[f]
-                            os.system(command2)                              
-                            files = files + (" | " +  lista_dir_files[f][:-4]+".png" )
-                        else:
-                            files = files + (" | " + lista_dir_files[f])
+                        #if(lista_dir_files[f].split(".")[1] == 'wmf'):
+                        #    print "oi"
+                        #    command1 = "cd  " +  path_attached+lista_nome[l] + "/" + lista_dir[d] + "/; convert " +  lista_dir_files[f] + " " + lista_dir_files[f][:-4]+".png"                            
+                        #    os.system(command1)     
+                        #    command2 = "cd  " +  path_attached+lista_nome[l] + "/" + lista_dir[d] + "/; rm -f " +  lista_dir_files[f]
+                        #    os.system(command2)                              
+                        #    files = files + (" | " +  lista_dir_files[f][:-4]+".png" )
+                        #else:
+                        files = files + (" | " + lista_dir_files[f])
                 lista_anexos.append([lista_nome[l],stringToDate(lista_dir[d]),files])
 
 
@@ -209,11 +209,17 @@ class MyWindow(Gtk.Window):
         self.button_remove_all.connect("clicked", self.remove_all_cb)
 
         self.removeimg = Gtk.Image()  
-        self.removeimg.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_remove_attached" + config_note.getColor() + ".png")      
+        if config_note.getColorRevertTitle():
+            self.removeimg.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_remove_attached" + config_note.getColorOver() + ".png")      
+        else:
+            self.removeimg.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_remove_attached" + config_note.getColor() + ".png")      
         self.button_remove.add(self.removeimg)  
 
-        self.removeallimg = Gtk.Image()  
-        self.removeallimg.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_remove_attached_all" + config_note.getColor() + ".png")        
+        self.removeallimg = Gtk.Image() 
+        if config_note.getColorRevertTitle(): 
+            self.removeallimg.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_remove_attached_all" + config_note.getColorOver() + ".png")        
+        else:
+            self.removeallimg.set_from_file("/usr/share/gnome-shell/extensions/turbonote@iksws.com.br/icons/ic_remove_attached_all" + config_note.getColor() + ".png")        
         self.button_remove_all.add(self.removeallimg)
 
         self.add(grid)
