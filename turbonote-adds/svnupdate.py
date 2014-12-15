@@ -3,6 +3,11 @@ from gi.repository import Gtk, Gdk,GObject,Pango
 import os
 from subprocess import Popen, PIPE
 import fcntl
+from config_note import Config
+
+config_note = Config()
+path = "/usr/share/cinnamon/applets/turbonote@iksws.com.br/turbonote-adds/"
+path_icon = "/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/"
 
 sub_proc = Popen("cd /usr/share/cinnamon/applets/turbonote@iksws.com.br; svn update;", stdout=PIPE, shell=True)
 sub_outp = ""
@@ -16,7 +21,7 @@ class ProgressBarWindow(Gtk.Window):
       self.set_default_size(800, 400)
       self.set_border_width(15)      
       self.set_position(Gtk.WindowPosition.CENTER)
-
+      self.set_icon_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/turbo.png")	
       hb = Gtk.HeaderBar()
       hb.props.show_close_button = True
       hb.props.title = "SVN UPDATE"        
