@@ -58,6 +58,7 @@ sudo apt-get install eog-plugins
 ```
 You need have a last version  libre office the app use office-converter in image files
 
+For update use menu svn updates!
 
 ### IMPLEMENTS LIST ###
 
