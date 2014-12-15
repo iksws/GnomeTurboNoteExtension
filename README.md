@@ -1,14 +1,3 @@
-GnomeTurboNoteExtension
-=======================
-<table border='0' style='width:100%;'>
-<tr>
-  <td><img width='200px' heigth='300px' src="http://www.exedesignsolutions.com/githubimg/gnome-turbo-note/a.png"/></td>
-  <td><img width='200px' heigth='300px' src="http://www.exedesignsolutions.com/githubimg/gnome-turbo-note/b.png"/></td>
-</tr>
-<tr>
-  <td colspan='2'><img width='600px' heigth='250px' src="http://www.exedesignsolutions.com/githubimg/gnome-turbo-note/e.png"/></td>
-</tr>
-</table>
 
 # **[Instalation]** #
 
@@ -44,7 +33,13 @@ sudo apt-get install libgnome2-bin
 
 * Need LibreOffice (default)
 
-* copy files to folder */home/***yourprofile***/.local/share/gnome-shell/extensions/turbonote@iksws.com.br* **if not exist make it!**
+*
+use SVN!
+
+go to /home/YOURPROFILENAME/.local/share/gnome-shell/extensions/
+
+svn checkout https://github.com/iksws/GnomeTurboNoteExtension/trunk turbonote@iksws.com.br
+*
 
 * Set permissions for your user like this
 
@@ -56,7 +51,7 @@ sudo chmod 777 /home/YOURPROFILENAME/.local/share/gnome-shell/extensions/turbono
 * copy file *turbonote.desktop* to  dir /usr/share/applications and Set permissions too this file
 
 
-* Configure file *turbonote-adds/config_note.py* (only if you use white themes) check variable icon color use *_b* to white themes 
+* Configure file *turbonote-adds/config_note.py* (only if you use white themes) check variable icon color use *_b* to white themes and others settings
 
 
 **Check permissions in gnome extensions folder**
