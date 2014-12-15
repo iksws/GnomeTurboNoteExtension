@@ -6,16 +6,12 @@ Install dependences
 ```
 #!shell
 sudo apt-get install python-qt4
-
 sudo apt-get install python-notify2
-
 sudo apt-get install python-qt4-dbus-dbg
-
 sudo apt-get install sqlite3
-
 sudo apt-get install zip
-
 sudo apt-get install libgnome2-bin
+sudo apt-get install libwmf-bin
 ```
 
 * Need LibreOffice (default)
