@@ -24,6 +24,8 @@ go to /home/YOURPROFILENAME/.local/share/gnome-shell/extensions/
 svn checkout https://github.com/iksws/GnomeTurboNoteExtension/trunk turbonote@iksws.com.br
 
 * Set permissions for your user like this
+* Create folders ***tmp*** ***tmp_send*** and ***attacheds***
+
 
 ```
 #!shell
