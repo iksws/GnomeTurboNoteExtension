@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 #by ikswss@gmail.com
 
-from gi.repository import Gtk, Gio,Gdk
+from gi.repository import Gtk, Gio,Gdk, Pango
 import re
 import time
 import cStringIO
@@ -61,7 +61,7 @@ class HeaderBarWindow(Gtk.Window):
         self.create_textview(box2,hb)
         self.set_wmclass ("TurboNote Gnome", "TurboNote Gnome")
         self.connect('key-press-event',on_button_clicked2)
-
+    
     def noteStyle(self,widget):
     	style = WindowStyle()
     	style.connect("delete-event", Gtk.main_quit)
@@ -88,11 +88,11 @@ class HeaderBarWindow(Gtk.Window):
 	        assignNewValueToStay("")
 
     def on_button_ss(self, widget):
-		os.system("gnome-screenshot -i -a")
+		os.system("gnome-screenshot -i -a")	
 
-    def on_button_clicked(self, widget):
+    def on_button_clicked1(self, widget):
 		buf  = self.textview.get_buffer()
-		text = buf.get_text(buf.get_start_iter(),buf.get_end_iter(),True)
+		text = buf.get_text(buf.get_start_iter(),buf.get_end_iter(),True)		
 		send_turbo(text.decode('utf-8').encode('windows-1252'),self.titulotxt.get_text(),attFile,self.get_size()[0],self.get_size()[1])
 
     def on_file_clicked(self, widget,box2):
@@ -182,8 +182,33 @@ class HeaderBarWindow(Gtk.Window):
 		self.attachedbtrmv = Gtk.Button()
 		self.attachedbtrmv.set_tooltip_text("Remove attachment")
 		self.attachedbt.connect("clicked", self.on_file_clicked,box2)		
-		self.attachedbtrmv.connect("clicked", self.on_file_clicked_rmv)		
+		self.attachedbtrmv.connect("clicked", self.on_file_clicked_rmv)
 		
+
+		button_bold = Gtk.Button()
+		button_italic = Gtk.Button()
+		button_underline = Gtk.Button()
+
+		self.boldico = Gtk.Image()	
+		self.boldico.set_from_stock(Gtk.STOCK_BOLD,Gtk.IconSize.BUTTON)
+		button_bold.add(self.boldico)
+
+		self.italicico = Gtk.Image()	
+		self.italicico.set_from_stock(Gtk.STOCK_ITALIC,Gtk.IconSize.BUTTON)
+		button_italic.add(self.italicico)
+
+		self.underico = Gtk.Image()	
+		self.underico.set_from_stock(Gtk.STOCK_UNDERLINE,Gtk.IconSize.BUTTON)
+		button_underline.add(self.underico)
+
+		self.tag_bold = self.textbuffer.create_tag("bold",weight=Pango.Weight.BOLD)
+		self.tag_italic = self.textbuffer.create_tag("italic",style=Pango.Style.ITALIC)
+		self.tag_underline = self.textbuffer.create_tag("underline",underline=Pango.Underline.SINGLE)
+
+		button_bold.connect("clicked", on_button_clicked, self.tag_bold,self.textbuffer)
+		button_italic.connect("clicked", on_button_clicked,self.tag_italic,self.textbuffer)
+		button_underline.connect("clicked", on_button_clicked,self.tag_underline,self.textbuffer)
+
 		self.photo = Gtk.Image()	
 		self.photo.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_action_camera" + config_note.getColor() + ".png")		
 		scshot.add(self.photo)
@@ -193,9 +218,10 @@ class HeaderBarWindow(Gtk.Window):
 		responderbt.add(self.sending)
 
 		self.staytop = Gtk.Image()	
+		
 		if config_note.getColorRevertTitle():
 			self.staytop.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_action_cast" + config_note.getColorOver() + ".png")		
-		else:
+		else:		
 			self.staytop.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_action_cast" + config_note.getColor() + ".png")		
 		self.toggle_stay.add(self.staytop)	
 
@@ -231,7 +257,10 @@ class HeaderBarWindow(Gtk.Window):
 		
 		box2.add(scshot)
 		box2.add(responderbt)
-		box2.add(self.attachedbt)		
+		box2.add(self.attachedbt)
+		#box.add(button_italic)
+		#box.add(button_bold)
+		#box.add(button_underline)		
 		hb.pack_start(box)
 
 		scrolledwindow2 = Gtk.ScrolledWindow()
@@ -241,7 +270,7 @@ class HeaderBarWindow(Gtk.Window):
 		self.grid.attach(box2, 0, 7, 1, 1)	
 		box2.set_hexpand(True)
 
-		responderbt.connect("clicked", self.on_button_clicked)
+		responderbt.connect("clicked", self.on_button_clicked1)
 		scshot.connect("clicked", self.on_button_ss)
 
 def on_button_clicked2(self, event):
@@ -267,6 +296,12 @@ def send_turbo(message,titulo,att,w,h):
 	win.connect("delete-event", Gtk.main_quit)
 	win.show_all()
 	Gtk.main()
+
+def on_button_clicked(self, tag,textbuffer):
+	bounds = textbuffer.get_selection_bounds()
+	if len(bounds) != 0:
+		start, end = bounds		
+		textbuffer.apply_tag(tag, start, end)
 
 win = HeaderBarWindow()
 win.connect("delete-event", Gtk.main_quit)

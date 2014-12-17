@@ -63,9 +63,7 @@ class EchoRequestHandler(SocketServer.BaseRequestHandler):
                 data += longmax 
 
         if data:    
-            print data 
-            turbodata = data.split('End of TCPIP text')
-            
+            turbodata = data.split('End of TCPIP text')        
             
             nometemp = ""
             nomex = data.split('#')
@@ -171,8 +169,9 @@ class EchoRequestHandler(SocketServer.BaseRequestHandler):
 
                 f2 = open(path_tmp + hojefile + nome +  ".zip", 'w')
                 f2.write(base64.b64decode(imagedata))
-                f2.close()              
+                f2.close()                        
 
+            
             if config_note.getNotify():
                 t = threading.Thread(target=notificar,args=[nome,conteudo,ipsender])
                 t.start()
