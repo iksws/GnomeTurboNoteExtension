@@ -92,6 +92,10 @@ MyApplet.prototype = {
 					Util.spawnCommandLine("python /usr/share/cinnamon/applets/turbonote@iksws.com.br/turbonote-adds/attacheds.py");
 	            }));
 
+		    this.menu.addAction(_("Configuration"), Lang.bind(this, function() {
+					Util.spawnCommandLine("python /usr/share/cinnamon/applets/turbonote@iksws.com.br/turbonote-adds/config.py");
+	            }));
+
 		    this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
 
 		    this.notificationsSwitch = new PopupMenu.PopupSwitchMenuItem(_("Server Status"), this._toggleNotifications);                    
