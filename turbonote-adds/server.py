@@ -87,9 +87,14 @@ class EchoRequestHandler(SocketServer.BaseRequestHandler):
             connb = sqlite3.connect(path + 'turbo.db')
             a = connb.cursor()
             a.execute("SELECT nome,ip FROM contacts WHERE upper(nome) = '" + nome + "'")
-            dataContact =  a.fetchone()
-            contactsName = dataContact[0]
-            ipData  = dataContact[1]
+            try:
+            	dataContact =  a.fetchone()
+            	contactsName = dataContact[0]
+            	ipData  = dataContact[1]
+            except Exception, e:
+            	dataContact =  ""
+            	contactsName = ""
+            	ipData  = ""
             connb.close()
 
             if not contactsName:
