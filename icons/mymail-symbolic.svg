@@ -35,8 +35,8 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1438"
-     inkscape:window-height="851"
+     inkscape:window-width="1440"
+     inkscape:window-height="850"
      id="namedview3105"
      showgrid="false"
      inkscape:zoom="29.654291"
@@ -50,9 +50,9 @@
      fill="#bebebe"
      id="g3085">
     <path
-       d="M 2.3706768,8.1251595 13.88522,2.7648818 l 0.03929,4.6159509 -6.7406235,0.6704271 6.6915745,0.652961 -2.72e-4,4.5122232 z"
+       d="M 0.78574597,9.5752026 13.88522,1.4497265 12.912852,11.798406 9.3907915,10.784742 7.41994,9.9734099 12.50535,11.488213 7.3392928,9.327324 11.440165,3.6566697 5.6605124,8.8444778 7.9334421,13.522054 7.3973706,9.8991476 9.4561481,10.734866 8.0752887,14.133451 4.7365453,9.4395875 z"
        id="rect3087"
        inkscape:connector-curvature="0"
-       sodipodi:nodetypes="ccccccc" />
+       sodipodi:nodetypes="ccccccccccccccc" />
   </g>
 </svg>
