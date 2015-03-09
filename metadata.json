@@ -4,7 +4,7 @@
   "gettext-domain": "gnome-shell-extensions", 
   "name": "GnomeTurboNoteExtension", 
   "cinnamon-version": [
-    "2.2.16"
+    "2.2.16","2.4.1","2.6.16"
   ], 
   "url": "https://github.com/iksws/GnomeTurboNoteExtension", 
   "uuid": "turbonote@iksws.com.br", 
