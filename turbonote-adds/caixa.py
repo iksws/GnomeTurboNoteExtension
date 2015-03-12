@@ -252,7 +252,11 @@ class HeaderBarWindow(Gtk.Window):
 		self.att2.add(self.att2ico)
 
 		self.photo = Gtk.Image()	
-		self.photo.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_action_camera" + config_note.getColor() + ".png")		
+		if config_note.getColorRevertTitle():
+			self.photo.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_action_camera" + config_note.getColorOver() + ".png")		
+		else:
+			self.photo.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_action_camera" + config_note.getColor() + ".png")		
+		
 		scshot.add(self.photo)
 
 		self.staytop = Gtk.Image()	
@@ -295,6 +299,7 @@ class HeaderBarWindow(Gtk.Window):
 			box.add(self.toggle_stay)
 			self.add(self.grid)
 
+		box.add(scshot)
 		hb.pack_start(box)
 
 		self.attachedbtrmv.set_tooltip_text("Remove attachment")
@@ -306,7 +311,7 @@ class HeaderBarWindow(Gtk.Window):
 		self.att1.set_tooltip_text("Received Img")
 		self.att2.set_tooltip_text("Received File")
 
-		box2.add(scshot)
+		
 		box2.add(responderbt)
 		box2.add(sendcontact)
 		box2.add(self.attachedbt)	

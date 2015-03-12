@@ -210,7 +210,11 @@ class HeaderBarWindow(Gtk.Window):
 		button_underline.connect("clicked", on_button_clicked,self.tag_underline,self.textbuffer)
 
 		self.photo = Gtk.Image()	
-		self.photo.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_action_camera" + config_note.getColor() + ".png")		
+		if config_note.getColorRevertTitle():
+			self.photo.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_action_camera" + config_note.getColorOver() + ".png")		
+		else:
+			self.photo.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_action_camera" + config_note.getColor() + ".png")		
+		
 		scshot.add(self.photo)
 
 		self.sending = Gtk.Image()	
@@ -254,8 +258,9 @@ class HeaderBarWindow(Gtk.Window):
 		box.add(self.toggle_stay)
 		box.add(self.toggle_titulo)
 		box.add(self.settings)
+		box.add(scshot)
 		
-		box2.add(scshot)
+		#box2.add(scshot)
 		box2.add(responderbt)
 		box2.add(self.attachedbt)
 		#box.add(button_italic)
