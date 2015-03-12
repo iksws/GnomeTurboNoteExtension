@@ -1,0 +1,18 @@
+
+--This line, and those below, will be ignored--
+
+AM   icons/ic_action_attachment.png
+AM   icons/ic_action_attachment_all.png
+AM   icons/ic_action_attachment_all_b.png
+AM   icons/ic_action_attachment_b.png
+AM   icons/ic_action_email.png
+AM   icons/ic_action_email_all.png
+AM   icons/ic_action_email_all_b.png
+AM   icons/ic_action_email_b.png
+AM   icons/ic_action_picture.png
+AM   icons/ic_action_picture_all.png
+AM   icons/ic_action_picture_all_b.png
+AM   icons/ic_action_picture_b.png
+AM   icons/ic_action_send_now_all.png
+AM   icons/ic_action_send_now_all_b.png
+M    icons/mymail-symbolic.svg
