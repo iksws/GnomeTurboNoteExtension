@@ -76,7 +76,7 @@ MyApplet.prototype = {
             this.menu.addMenuItem(this._statusSection);
             this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
 
-		    this.menu.addAction(_("New Note"), Lang.bind(this, function() {
+		    this.menu.addAction(_("New Note"), Lang.bind(this, function(event) {
 					Util.spawnCommandLine("python /usr/share/cinnamon/applets/turbonote@iksws.com.br/turbonote-adds/new_note.py");
 	            }));
 		    this.menu.addAction(_("Contacts Manager"), Lang.bind(this, function() {
@@ -85,17 +85,12 @@ MyApplet.prototype = {
 		    this.menu.addAction(_("History Manager"), Lang.bind(this, function() {
 					Util.spawnCommandLine("python /usr/share/cinnamon/applets/turbonote@iksws.com.br/turbonote-adds/historic.py");
 	            }));
-		    /*this.menu.addAction(_("History Sent Manager"), Lang.bind(this, function() {
-					Util.spawnCommandLine("python /usr/share/cinnamon/applets/turbonote@iksws.com.br/turbonote-adds/historics.py");
-	            }));*/
+
 		    this.menu.addAction(_("Attacheds"), Lang.bind(this, function() {
 					Util.spawnCommandLine("python /usr/share/cinnamon/applets/turbonote@iksws.com.br/turbonote-adds/attacheds.py");
 	            }));
 
-		    this.menu.addAction(_("Configuration"), Lang.bind(this, function() {
-					Util.spawnCommandLine("python /usr/share/cinnamon/applets/turbonote@iksws.com.br/turbonote-adds/config.py");
-	            }));
-
+		    
 		    this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
 
 		    this.notificationsSwitch = new PopupMenu.PopupSwitchMenuItem(_("Server Status"), this._toggleNotifications);                    
@@ -123,18 +118,34 @@ MyApplet.prototype = {
             }
 
            
-            this.menu.addMenuItem(this.notificationsSwitch);
-		   
-		    this.menu.addAction(_("SVN Update"), Lang.bind(this, function() {
-					Util.spawnCommandLine("python /usr/share/cinnamon/applets/turbonote@iksws.com.br/turbonote-adds/svnupdate.py");
-	            }));
-	        
-	        this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
+            this.menu.addMenuItem(this.notificationsSwitch);		  
 
-	        this.menu.addAction(_("About"), Lang.bind(this, function() { 
-				Util.spawnCommandLine("python /usr/share/cinnamon/applets/turbonote@iksws.com.br/turbonote-adds/about.py");
-		    }));	        
-	                
+		    this._selectDeviceItem = new PopupMenu.PopupSubMenuMenuItem(_("Others..."), true);
+        	this.menu.addMenuItem(this._selectDeviceItem);  
+
+
+        	let svnUpdate = new PopupMenu.PopupMenuItem("SVN Update");		            	
+        	svnUpdate.connect('activate', Lang.bind(this, function() {
+				Util.spawnCommandLine("python /usr/share/cinnamon/applets/turbonote@iksws.com.br/turbonote-adds/svnupdate.py");
+	        })); 
+
+            let aboutItem = new PopupMenu.PopupMenuItem("About");     
+            aboutItem.connect('activate', Lang.bind(this, function() {      
+                Util.spawnCommandLine("python /usr/share/cinnamon/applets/turbonote@iksws.com.br/turbonote-adds/about.py");
+            })); 
+
+            let confsItem = new PopupMenu.PopupMenuItem("Configurations");     
+            confsItem.connect('activate', Lang.bind(this, function() {      
+                Util.spawnCommandLine("python /usr/share/cinnamon/applets/turbonote@iksws.com.br/turbonote-adds/config.py");
+            }));
+
+
+            this._selectDeviceItem.menu.addMenuItem(confsItem);  
+            this._selectDeviceItem.menu.addMenuItem(aboutItem);      
+			this._selectDeviceItem.menu.addMenuItem(svnUpdate);       
+			//this._selectDeviceItem.menu.addMenuItem(this.notificationsSwitch );     
+			//svnUpdate.setShowDot(true);
+	        
 	        this._user = AccountsService.UserManager.get_default().get_user(GLib.get_user_name());
             this._userLoadedId = this._user.connect('notify::is_loaded', Lang.bind(this, this._onUserChanged));
             this._userChangedId = this._user.connect('changed', Lang.bind(this, this._onUserChanged));
