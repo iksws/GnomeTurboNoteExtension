@@ -61,7 +61,7 @@ def on_button_clicked2(self, event,column,treesortable):
         keyval = event.keyval
         name = Gdk.keyval_name(keyval)
         mod = Gtk.accelerator_get_label(keyval,event.state)        
-	print mod
+
         if mod == "Mod2+Enter" or mod == "Mod2+Return":             
             nome = self.nometxt.get_text()    
             connb = sqlite3.connect(path + 'turbo.db')
@@ -136,7 +136,7 @@ class MyWindow(Gtk.Window):
         self.selection.connect("changed", self.on_changed)
 
         self.button_add = Gtk.Button()
-        self.button_add.connect("clicked", self.add_cb,col,self.listmodel)
+        self.button_add.connect("clicked", self.add_cb,col,self.listmodel)        
 
         self.label = Gtk.Label()
         self.label.set_text(" ")
@@ -151,7 +151,22 @@ class MyWindow(Gtk.Window):
 
         self.nometxt = Gtk.SearchEntry()
         self.nometxt.set_tooltip_text("Add contact name in entry [You can just press Enter in entry]")     
-        self.nometxt.set_text("Name")     
+        self.nometxt.set_text("Name")  
+
+
+        self.label3 = Gtk.Label()
+        self.label3.set_text(" ")   
+
+        self.nomeAvul = Gtk.Entry()
+        self.nomeAvul.set_tooltip_text("Add contact name in entry")     
+        self.nomeAvul.set_text("Name")    
+
+        self.ipAvul = Gtk.Entry()
+        self.ipAvul.set_tooltip_text("Add ip in entry")     
+        self.ipAvul.set_text("IP Adress")  
+
+        self.button_add2 = Gtk.Button()
+        self.button_add2.connect("clicked", self.add_cb_avul,self.nomeAvul,self.ipAvul,self.listmodel) 
 
         self.button_remove = Gtk.Button()
         self.button_remove.connect("clicked", self.remove_cb)
@@ -169,6 +184,10 @@ class MyWindow(Gtk.Window):
         else:
             self.addcontact.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_action_add_person" + config_note.getColor() + ".png")      
         self.button_add.add(self.addcontact)
+
+        self.addcontact2 = Gtk.Image()  
+        self.addcontact2.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_action_add_person" + config_note.getColor() + ".png")      
+        self.button_add2.add(self.addcontact2)
 
         self.rmvcontact = Gtk.Image()  
         if config_note.getColorRevertTitle():
@@ -199,7 +218,27 @@ class MyWindow(Gtk.Window):
 
         grid.attach(self.label, 0, 2, 3, 1)        
         grid.attach(self.nometxt, 0, 3, 3, 1)
-        #grid.attach(self.label2, 0, 4, 1, 1)  
+
+        box3 = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
+        Gtk.StyleContext.add_class(box3.get_style_context(), "linked")   
+
+        grid.attach(self.label3, 0, 4, 3, 1)  
+        grid2 = Gtk.Grid()
+        grid2.attach(self.nomeAvul, 0, 0, 1, 1)  
+        grid2.attach(self.ipAvul, 0, 1, 1, 1)  
+        grid2.attach(self.button_add2, 0, 2, 1, 1) 
+
+        scroller2 = Gtk.ScrolledWindow(hexpand=True, vexpand=True)
+        scroller2.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
+        grid2.attach(scroller2, 0, 2, 1, 1)      
+
+        self.exp = Gtk.Expander()
+      	self.exp.set_label("Add contact loose")      	
+      	self.exp.set_resize_toplevel(True)
+      	self.exp.add(grid2)  
+
+      	grid.attach(self.exp, 0, 9, 3, 1)
+        
 
         
     def on_changed(self, selection):
@@ -226,6 +265,24 @@ class MyWindow(Gtk.Window):
         assignNewValueToIp(ips)
         return True
       
+    def add_cb_avul(self, button,name,ip_adress,treesortable):
+    	contato = name.get_text()
+    	ip = ip_adress.get_text()
+    	try:
+	    	connc = sqlite3.connect(path + 'turbo.db')
+	        c = connc.cursor()
+	        c.execute("INSERT INTO contacts (nome,ip) VALUES (?,?)",(contato.upper(),ip))
+	        connc.commit()
+	        connc.close()
+	        self.listmodel.append([contato.upper(),ip])
+	        treesortable.set_sort_column_id(1, Gtk.SortType.ASCENDING)
+	        name.set_text("")
+	        ip_adress.set_text("")
+        except socket.gaierror, err:    
+            msgerror = "I can't ping this host name!\\nPlease chech the host name and try again!";                      
+            command = "notify-send --hint=int:transient:1 \"TurboNote Gnome3\" \"" + (msgerror).decode('iso-8859-1').encode('utf8') + "\" -i " + path_icon + "turbo.png"                  
+            os.system(command)
+
 
     def add_cb(self, button,column,treesortable):
         nome = self.nometxt.get_text()

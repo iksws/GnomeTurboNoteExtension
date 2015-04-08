@@ -234,6 +234,24 @@ class MyWindow(Gtk.Window):
         self.connect('key-press-event',on_button_clicked2,msg,col,self.listmodel)
         view.connect("button-press-event", treeview_clicked,self.selection,msg) 
 
+        self.label3 = Gtk.Label()
+        self.label3.set_text(" ")   
+
+        self.nomeAvul = Gtk.Entry()
+        self.nomeAvul.set_tooltip_text("Add contact name in entry")     
+        self.nomeAvul.set_text("Name")    
+
+        self.ipAvul = Gtk.Entry()
+        self.ipAvul.set_tooltip_text("Add ip in entry")     
+        self.ipAvul.set_text("IP Adress")  
+
+        self.button_add2 = Gtk.Button()
+        self.button_add2.connect("clicked", self.add_cb_avul,self.nomeAvul,self.ipAvul,self.listmodel)
+
+        self.addcontact2 = Gtk.Image()  
+        self.addcontact2.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_action_add_person" + config_note.getColor() + ".png")      
+        self.button_add2.add(self.addcontact2)
+
         self.addcontact = Gtk.Image()  
         if config_note.getColorRevertTitle(): 
             self.addcontact.set_from_file("/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/ic_action_add_person" + config_note.getColorOver() + ".png")      
@@ -283,6 +301,23 @@ class MyWindow(Gtk.Window):
         hb.pack_start(box)
 
         grid.attach(self.button_send, 0, 8, 4, 1)
+
+        grid.attach(self.label3, 0, 9, 4, 1)  
+        
+        grid2 = Gtk.Grid()
+        grid2.attach(self.nomeAvul, 0, 0, 1, 1)  
+        grid2.attach(self.ipAvul, 0, 1, 1, 1)  
+        grid2.attach(self.button_add2, 0, 2, 1, 1) 
+
+        scroller2 = Gtk.ScrolledWindow(hexpand=True, vexpand=True)
+        scroller2.set_policy(Gtk.PolicyType.NEVER, Gtk.PolicyType.AUTOMATIC)
+        grid2.attach(scroller2, 0, 2, 1, 1)      
+
+        self.exp = Gtk.Expander()
+        self.exp.set_label("Add contact loose")         
+        self.exp.set_resize_toplevel(True)
+        self.exp.add(grid2)  
+        grid.attach(self.exp, 0, 10, 4, 1)
     
 
     def send_turbo(self, button,data):
@@ -295,6 +330,24 @@ class MyWindow(Gtk.Window):
             os.system(command)        
                
         #Gtk.main_quit()
+
+    def add_cb_avul(self, button,name,ip_adress,treesortable):
+        contato = name.get_text()
+        ip = ip_adress.get_text()
+        try:
+            connc = sqlite3.connect(path + 'turbo.db')
+            c = connc.cursor()
+            c.execute("INSERT INTO contacts (nome,ip) VALUES (?,?)",(contato.upper(),ip))
+            connc.commit()
+            connc.close()
+            self.listmodel.append([contato.upper(),ip])
+            treesortable.set_sort_column_id(1, Gtk.SortType.ASCENDING)
+            name.set_text("")
+            ip_adress.set_text("")
+        except socket.gaierror, err:    
+            msgerror = "I can't ping this host name!\\nPlease chech the host name and try again!";                      
+            command = "notify-send --hint=int:transient:1 \"TurboNote Gnome3\" \"" + (msgerror).decode('iso-8859-1').encode('utf8') + "\" -i " + path_icon + "turbo.png"                  
+            os.system(command)
 
     def on_changed(self, selection):
         (model, iter) = selection.get_selected_rows()
