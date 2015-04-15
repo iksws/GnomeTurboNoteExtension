@@ -2,6 +2,7 @@
 #by ikswss@gmail.com
 
 from gi.repository import Gtk,Gdk
+from gi.repository import GdkPixbuf
 from gi.repository import Pango
 import sys,os
 import sqlite3
@@ -15,13 +16,13 @@ path_icon = "/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/"
 path_attached = "/usr/share/cinnamon/applets/turbonote@iksws.com.br/attacheds/"
 
 lista_contatos = []
-
+pixbuf1 = GdkPixbuf.Pixbuf.new_from_file(path_icon + "avatar-default-symbolic"  + config_note.getColor() + ".svg")
 connb = sqlite3.connect(path + 'turbo.db')
 a = connb.cursor()
 a.execute("SELECT nome,ip FROM contacts order by nome asc")
 rows =  a.fetchall()
 for contacts in rows:
-   lista_contatos.append([contacts[0],contacts[1]])
+   lista_contatos.append([pixbuf1,contacts[0],contacts[1]])
 connb.close()
 
 ip_sender = ""
@@ -73,8 +74,8 @@ def on_button_clicked2(self, event,column,treesortable):
                 try:                          
                     IP = socket.gethostbyname(nome)
                     addcontacts(nome,IP)
-                    self.listmodel.append([nome.upper(),IP])
-                    treesortable.set_sort_column_id(1, Gtk.SortType.ASCENDING)
+                    self.listmodel.append([pixbuf1,nome.upper(),IP])
+                    treesortable.set_sort_column_id(2, Gtk.SortType.ASCENDING)
                 except socket.gaierror, err:    
                         msgerror = "I can't ping this host name!\\nPlease chech the host name and try again!";                      
                         command = "notify-send --hint=int:transient:1 \"TurboNote Gnome3\" \"" + (msgerror).decode('iso-8859-1').encode('utf8') + "\" -i " + path_icon + "turbo.png"                  
@@ -112,20 +113,31 @@ class MyWindow(Gtk.Window):
          
         view = Gtk.TreeView()
         view.get_selection().set_mode(Gtk.SelectionMode.MULTIPLE)
+        
+        pix = Gtk.CellRendererPixbuf()
+
         cell  = Gtk.CellRendererText(weight=300)
-        cell2 = Gtk.CellRendererText(weight=300)
+        cell2 = Gtk.CellRendererText(weight=300)        
 
         cell.set_fixed_size(200, -1)
         cell2.set_fixed_size(200, -1)
 
-        col = Gtk.TreeViewColumn("Name", cell, text=0)
-        col2 = Gtk.TreeViewColumn("IP Adress", cell2, text=1)
+        col = Gtk.TreeViewColumn("Name")
+        col2 = Gtk.TreeViewColumn("IP Adress")
+
+        col2.pack_start(cell2,self)
+        col.pack_start(pix,self)
+        col.pack_start(cell,self)
+
+        col2.set_attributes( cell2, text=2)
+        col.set_attributes( pix, pixbuf=0)
+        col.set_attributes( cell, text=1)
 
         view.append_column(col)
         view.append_column(col2)
         
         scroller.add(view)
-        self.listmodel = Gtk.ListStore(str,str)       
+        self.listmodel = Gtk.ListStore(GdkPixbuf.Pixbuf,str,str)       
 
         view.set_model(self.listmodel)
 
@@ -145,8 +157,8 @@ class MyWindow(Gtk.Window):
         self.label2.set_text(" ")
 
         view.set_search_column(0)
-        col.set_sort_column_id(0)
-        col2.set_sort_column_id(0)
+        col.set_sort_column_id(1)
+        col2.set_sort_column_id(2)
 
 
         self.nometxt = Gtk.SearchEntry()
@@ -252,15 +264,15 @@ class MyWindow(Gtk.Window):
         for i in range(len(iters)):      
                            
             if i == 0:
-                nomes = model[iters[i]][0] 
-                ips   = model[iters[i]][1] 
+                nomes = model[iters[i]][1] 
+                ips   = model[iters[i]][2] 
             else:    
                 if i == (len(iters)-1):
-                    nomes = nomes +  (" and " + str(model[iters[i]][0]))
-                    ips = ips +  ("," + str(model[iters[i]][1]))
+                    nomes = nomes +  (" and " + str(model[iters[i]][1]))
+                    ips = ips +  ("," + str(model[iters[i]][2]))
                 else:           
-                    nomes = nomes +  ("," + str(model[iters[i]][0]))
-                    ips = ips +  ("," + str(model[iters[i]][1]))
+                    nomes = nomes +  ("," + str(model[iters[i]][1]))
+                    ips = ips +  ("," + str(model[iters[i]][2]))
 
         assignNewValueToIp(ips)
         return True
@@ -274,7 +286,7 @@ class MyWindow(Gtk.Window):
 	        c.execute("INSERT INTO contacts (nome,ip) VALUES (?,?)",(contato.upper(),ip))
 	        connc.commit()
 	        connc.close()
-	        self.listmodel.append([contato.upper(),ip])
+	        self.listmodel.append([pixbuf1,contato.upper(),ip])
 	        treesortable.set_sort_column_id(1, Gtk.SortType.ASCENDING)
 	        name.set_text("")
 	        ip_adress.set_text("")
@@ -302,8 +314,8 @@ class MyWindow(Gtk.Window):
                     connc.close()
                     command = "mkdir " + path_attached + nome.upper()
                     os.system(command)
-                    self.listmodel.append([nome.upper(),IP])     
-                    treesortable.set_sort_column_id(1, Gtk.SortType.ASCENDING)          
+                    self.listmodel.append([pixbuf1,nome.upper(),IP])     
+                    treesortable.set_sort_column_id(2, Gtk.SortType.ASCENDING)          
                 except socket.gaierror, err:    
                     msgerror = "I can't ping this host name!\\nPlease chech the host name and try again!";                      
                     command = "notify-send --hint=int:transient:1 \"TurboNote Gnome3\" \"" + (msgerror).decode('iso-8859-1').encode('utf8') + "\" -i " + path_icon + "turbo.png"                  
@@ -327,7 +339,7 @@ class MyWindow(Gtk.Window):
                 
             if len(iters) != 0:
                 for i in range(len(iters)):      
-                    rmvcontacts(model[iters[i]][0],model[iters[i]][1])
+                    rmvcontacts(model[iters[i]][1],model[iters[i]][2])
                     self.listmodel.remove(iters[i])                
             else:
                 msgerror = "No select contact!\\nPlease select one contact to remove!";                      
