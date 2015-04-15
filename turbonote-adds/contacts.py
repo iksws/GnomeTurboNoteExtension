@@ -156,7 +156,7 @@ class MyWindow(Gtk.Window):
         self.label2 = Gtk.Label()
         self.label2.set_text(" ")
 
-        view.set_search_column(0)
+        view.set_search_column(1)
         col.set_sort_column_id(1)
         col2.set_sort_column_id(2)
 
