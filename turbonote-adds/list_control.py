@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#by ikswss@gmail.com
+#by ikswss@gmail.com 
 
 from gi.repository import Gtk,Gdk
 from gi.repository import GdkPixbuf
@@ -371,15 +371,15 @@ class MyWindow(Gtk.Window):
         for i in range(len(iters)):      
                            
             if i == 0:
-                nomes = model[iters[i]][0] 
-                ips   = model[iters[i]][1] 
+                nomes = model[iters[i]][1] 
+                ips   = model[iters[i]][2] 
             else:    
                 if i == (len(iters)-1):
-                    nomes = nomes +  (" and " + str(model[iters[i]][0]))
-                    ips = ips +  ("," + str(model[iters[i]][1]))
+                    nomes = nomes +  (" and " + str(model[iters[i]][1]))
+                    ips = ips +  ("," + str(model[iters[i]][2]))
                 else:           
-                    nomes = nomes +  ("," + str(model[iters[i]][0]))
-                    ips = ips +  ("," + str(model[iters[i]][1]))
+                    nomes = nomes +  ("," + str(model[iters[i]][1]))
+                    ips = ips +  ("," + str(model[iters[i]][2]))
 
         self.labelNome.set_markup("<b>" +  (nomes) + "</b>")
         assignNewValueToNome(nomes)
