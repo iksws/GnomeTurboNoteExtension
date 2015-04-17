@@ -8,7 +8,6 @@ from config_note import Config
 config_note = Config()
 path = "/usr/share/cinnamon/applets/turbonote@iksws.com.br/turbonote-adds/"
 path_icon = "/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/"
-
 sub_proc = Popen("cd /usr/share/cinnamon/applets/turbonote@iksws.com.br; svn update;", stdout=PIPE, shell=True)
 sub_outp = ""
 
