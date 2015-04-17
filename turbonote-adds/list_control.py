@@ -351,8 +351,8 @@ class MyWindow(Gtk.Window):
             c.execute("INSERT INTO contacts (nome,ip) VALUES (?,?)",(contato.upper(),ip))
             connc.commit()
             connc.close()
-            self.listmodel.append([contato.upper(),ip])
-            treesortable.set_sort_column_id(1, Gtk.SortType.ASCENDING)
+            self.listmodel.append([pixbuf1,contato.upper(),ip])
+            treesortable.set_sort_column_id(2, Gtk.SortType.ASCENDING)
             name.set_text("")
             ip_adress.set_text("")
         except socket.gaierror, err:    
