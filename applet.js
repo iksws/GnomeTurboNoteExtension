@@ -13,6 +13,7 @@ const AccountsService = imports.gi.AccountsService;
 const GnomeSession = imports.misc.gnomeSession;
 const Gio = imports.gi.Gio
 const ScreenSaver = imports.misc.screenSaver;
+let ICON_SIZE = 16;
 
 owner = GLib.get_user_name();
 path_icon = "/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/"
@@ -34,16 +35,12 @@ MyApplet.prototype = {
 
             this.menuManager = new PopupMenu.PopupMenuManager(this);
             this.menu = new Applet.AppletPopupMenu(this, orientation);
-            this.menuManager.addMenu(this.menu);    
-            
+            this.menuManager.addMenu(this.menu);                
             this.set_applet_icon_symbolic_name("avatar-default");
             
             this.settings = new Settings.AppletSettings(this, "turbonote@iksws.com.br", instance_id);
-
             let userBox = new St.BoxLayout({ style_class: 'user-box', reactive: true, vertical: false });
-
-            this._userIcon = new St.Bin({ style_class: 'user-icon'});
-            
+            this._userIcon = new St.Bin({ style_class: 'user-icon'});            
             this.settings.bindProperty(Settings.BindingDirection.IN, "display-name", "disp_name", this._updateLabel, null);
 
             userBox.connect('button-press-event', Lang.bind(this, function() {
@@ -74,33 +71,22 @@ MyApplet.prototype = {
             this._statusSection.actor.hide();
 
             this.menu.addMenuItem(this._statusSection);
-            this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
-
-		    this.menu.addAction(_("New Note"), Lang.bind(this, function(event) {
-					Util.spawnCommandLine("python /usr/share/cinnamon/applets/turbonote@iksws.com.br/turbonote-adds/new_note.py");
-	            }));
-		    this.menu.addAction(_("Contacts Manager"), Lang.bind(this, function() {
-					Util.spawnCommandLine("python /usr/share/cinnamon/applets/turbonote@iksws.com.br/turbonote-adds/contacts.py");
-	            }));
-		    this.menu.addAction(_("History Manager"), Lang.bind(this, function() {
-					Util.spawnCommandLine("python /usr/share/cinnamon/applets/turbonote@iksws.com.br/turbonote-adds/historic.py");
-	            }));
-
-		    this.menu.addAction(_("Attacheds"), Lang.bind(this, function() {
-					Util.spawnCommandLine("python /usr/share/cinnamon/applets/turbonote@iksws.com.br/turbonote-adds/attacheds.py");
-	            }));
-
+            this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem()); 
+            let iconNewNote = new St.Icon({style_class: 'icon-contato'});
+            
+		    this.menu.addAction(_("New Note"), Lang.bind(this, function(event) { Util.spawnCommandLine("python /usr/share/cinnamon/applets/turbonote@iksws.com.br/turbonote-adds/new_note.py"); }));
+		    this.menu.addAction(_("Contacts Manager"), Lang.bind(this, function() { Util.spawnCommandLine("python /usr/share/cinnamon/applets/turbonote@iksws.com.br/turbonote-adds/contacts.py"); }));
+		    this.menu.addAction(_("History Manager"), Lang.bind(this, function() { Util.spawnCommandLine("python /usr/share/cinnamon/applets/turbonote@iksws.com.br/turbonote-adds/historic.py"); }));
+		    this.menu.addAction(_("Attacheds"), Lang.bind(this, function() { Util.spawnCommandLine("python /usr/share/cinnamon/applets/turbonote@iksws.com.br/turbonote-adds/attacheds.py"); }));
 		    
 		    this.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
-
 		    this.notificationsSwitch = new PopupMenu.PopupSwitchMenuItem(_("Server Status"), this._toggleNotifications);                    
             
             this._statusChanged = this.notificationsSwitch.connect('toggled', Lang.bind(this, function(item, state) {
                 if (state){                    							
-					Util.trySpawnCommandLine('python /usr/share/cinnamon/applets/turbonote@iksws.com.br/turbonote-adds/server.py')	
-					Util.trySpawnCommandLine('service turbonote start')			
+					Util.trySpawnCommandLine('python /usr/share/cinnamon/applets/turbonote@iksws.com.br/turbonote-adds/server.py')						
                 }else{
-                    Util.trySpawnCommandLine('service turbonote stop')
+                    Util.trySpawnCommandLine('fuser -n tcp -k 39681')
                 }
                 this.emit('enabled-changed');
             }));
@@ -120,7 +106,7 @@ MyApplet.prototype = {
            
             this.menu.addMenuItem(this.notificationsSwitch);		  
 
-		    this._selectDeviceItem = new PopupMenu.PopupSubMenuMenuItem(_("Others..."), true);
+		    this._selectDeviceItem = new PopupMenu.PopupSubMenuMenuItem(_("Others..."));
         	this.menu.addMenuItem(this._selectDeviceItem);  
 
 
@@ -143,8 +129,6 @@ MyApplet.prototype = {
             this._selectDeviceItem.menu.addMenuItem(confsItem);  
             this._selectDeviceItem.menu.addMenuItem(aboutItem);      
 			this._selectDeviceItem.menu.addMenuItem(svnUpdate);       
-			//this._selectDeviceItem.menu.addMenuItem(this.notificationsSwitch );     
-			//svnUpdate.setShowDot(true);
 	        
 	        this._user = AccountsService.UserManager.get_default().get_user(GLib.get_user_name());
             this._userLoadedId = this._user.connect('notify::is_loaded', Lang.bind(this, this._onUserChanged));
