@@ -199,7 +199,7 @@ def notificar(nome,conteudo,ipsender):
 	command21 = "mv " +  path_tmp +  hojefile + nome + "/fullscreen.odt " +  path_tmp +  hojefile + nome + "/fullscreen.zip"
 	command22 = "unzip " +  path_tmp +  hojefile + nome + "/fullscreen.zip -d " + path_tmp + hojefile + nome + "/odt"   
         command3 = "mkdir " +  path_attached +  nome + "/" + hojefile 
-        command4 = "cd " +  path_tmp + hojefile +  nome +  "/odt/Pictures/; cp *.gif *.png *.jpg *.jpeg *.bmp *.wmf "  + path_attached + nome + "/" + hojefile  + "/"
+        command4 = "cd " +  path_tmp + hojefile +  nome +  "/odt/Pictures/; cp *.gif *.png *.jpg *.jpeg *.bmp *.wmf   "  + path_attached + nome + "/" + hojefile  + "/"
         command5 = "rm -Rf " +  path_tmp + "*" 
         os.system(command0)   
         os.system(command1)   
@@ -218,22 +218,22 @@ def notificar(nome,conteudo,ipsender):
     elif imganexada == "2":
         assignNewValueToAnexo("1")
         command0 = "mkdir " +  path_tmp +  hojefile + nome
-        command1 = "soffice --invisible --convert-to html " +  path_tmp +  hojefile + nome + ".rtf  --outdir " +  path_tmp +  hojefile + nome	
-	command21 = "mv " +  path_tmp +  hojefile + nome + "/fullscreen.odt " +  path_tmp +  hojefile + nome + "/fullscreen.zip"
-	command22 = "unzip " +  path_tmp +  hojefile + nome + "/fullscreen.zip -d " + path_tmp + hojefile + nome + "/odt"      
-	command2 = "mkdir " +  path_attached +  nome + "/" + hojefile
-        command3 = "cd " +  path_tmp + hojefile +  nome +  "; cp *.gif *.png *.jpg *.jpeg *.bmp *.wmf"  + path_attached + nome + "/" + hojefile  + "/"
-        command4 = "rm -Rf " +  path_tmp + "*"        
-        os.system(command0)   
-        os.system(command1)   
-        time.sleep(3)
-        os.system(command2)    
+        command2 = "soffice --invisible --convert-to odt " +  path_tmp +  hojefile + nome + ".rtf --outdir " +  path_tmp +  hojefile + nome
+	command21 = "mv " +  path_tmp +  hojefile + nome + "/" + hojefile + nome + ".odt " +  path_tmp +  hojefile + nome + "/fullscreen.zip"
+	command22 = "unzip " +  path_tmp +  hojefile + nome + "/fullscreen.zip -d " + path_tmp + hojefile + nome + "/odt"   
+        command3 = "mkdir " +  path_attached +  nome + "/" + hojefile 
+        command4 = "cd " +  path_tmp + hojefile +  nome +  "/odt/Pictures/; cp *.gif *.png *.jpg *.jpeg *.bmp *.wmf   "  + path_attached + nome + "/" + hojefile  + "/"
+        command5 = "rm -Rf " +  path_tmp + "*" 
+        os.system(command0)         
+        time.sleep(1)
+        os.system(command2)  
 	os.system(command21)
 	os.system(command22)
 	time.sleep(1)            
         os.system(command3)  
         time.sleep(2)
         os.system(command4)  
+        os.system(command5) 
         assignNewValueToAnexo("1")  
         call(["python", path + "notificar.py",""+ nome + " at " + hoje + "","" + conteudo + "","" + ipsender + "", "" +  path_attached + nome + "/" + hojefile  + "/","N"])    
     elif imganexada == "4":
