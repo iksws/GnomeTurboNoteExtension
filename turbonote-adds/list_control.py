@@ -91,7 +91,7 @@ def on_button_clicked2(self, event,data,column,treesortable):
         name = Gdk.keyval_name(keyval)
         mod = Gtk.accelerator_get_label(keyval,event.state)        
 
-        if mod == "Ctrl+Mod2+Return" or mod == "Ctrl+Mod2+Enter":
+        if mod == "Ctrl+Mod2+Return" or mod == "Ctrl+Mod2+Enter" or mod == "Ctrl+Return":
             if ip_sender:
                 call(["python", path + "cliente.py",""+ data +"","" + ip_sender + "","" + nome_sender + "","" + stay + "","" + titulo + "","" + att + "" + "","" + str(w) + "" + "","" + str(h) + ""])            
                 sys.exit(0)
@@ -100,7 +100,7 @@ def on_button_clicked2(self, event,data,column,treesortable):
                 command = "notify-send --hint=int:transient:1 \"TurboNote Gnome3\" \"" + (msgerror).decode('iso-8859-1').encode('utf8') + "\" -i " + path_icon + "turbo.png"                  
                 os.system(command) 
    
-        if mod == "Mod2+Enter" or mod == "Mod2+Return":  
+        if mod == "Mod2+Enter" or mod == "Mod2+Return" :  
             nome = self.nometxt.get_text()    
             connb = sqlite3.connect(path + 'turbo.db')
             a = connb.cursor()

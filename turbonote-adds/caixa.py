@@ -328,14 +328,14 @@ def on_button_clicked2(self, event,nome):
 	name = Gdk.keyval_name(keyval)
 	mod = Gtk.accelerator_get_label(keyval,event.state)
 
-	if mod == "Ctrl+Mod2+Return" or mod == "Ctrl+Mod2+Enter":
+	if mod == "Ctrl+Mod2+Return" or mod == "Ctrl+Mod2+Enter" or mod == "Ctrl+Return":
 		buf  = self.textview.get_buffer()
 		text = buf.get_text(buf.get_start_iter(),buf.get_end_iter(),True)
 		win = MyWindow(text.decode('utf-8').encode('windows-1252'),stay,attFile,str(self.get_size()[0]),str(self.get_size()[1]))
 		win.connect("delete-event", Gtk.main_quit)
 		win.show_all()
 		Gtk.main()
-	if mod == "Ctrl+Mod2+R":
+	if mod == "Ctrl+Mod2+R" or mod == "Ctrl+R":
 		buf  = self.textview.get_buffer()
 		text = buf.get_text(buf.get_start_iter(),buf.get_end_iter(),True)
 		s = threading.Thread(target=send_turbo ,args=(text,ip,nome,str(self.get_size()[0]),str(self.get_size()[1])))

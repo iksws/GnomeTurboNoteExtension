@@ -282,7 +282,8 @@ def on_button_clicked2(self, event):
 	keyval = event.keyval
 	name = Gdk.keyval_name(keyval)
 	mod = Gtk.accelerator_get_label(keyval,event.state)
-	if mod == "Ctrl+Mod2+Return" or mod == "Ctrl+Mod2+Enter":
+	print mod
+	if mod == "Ctrl+Mod2+Return" or mod == "Ctrl+Mod2+Enter" or mod == "Ctrl+Return":
 		buf  = self.textview.get_buffer()
 		text = buf.get_text(buf.get_start_iter(),buf.get_end_iter(),True)
 
