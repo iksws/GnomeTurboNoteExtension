@@ -2,7 +2,6 @@
 #by ikswss@gmail.com
 
 from gi.repository import Gtk
-import notifyturbo
 from config_note import Config
 from subprocess import call
 import sys,os
@@ -11,25 +10,15 @@ import signal
 config_note = Config()        
 path_icon = "/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/"
 path = "/usr/share/cinnamon/applets/turbonote@iksws.com.br/turbonote-adds/"
-from PyQt4.QtCore import QCoreApplication
 import sys
-
-# Ubuntu's notify-osd doesn't officially support actions. However, it does have
-# a dialog fallback which we can use for this demonstration. In real use, please
-# respect the capabilities the notification server reports!
-OVERRIDE_NO_ACTIONS = True
 
 def stringToDate(dt):
     data  = dt[:-12] + "/" + dt[2:-10] + "/" + dt[4:-6] + " "  + dt[8:-4] + ":"  + dt[10:-2] + ":"  + dt[12:]
     return data
 
-class MyApp(QCoreApplication):
-    def __init__(self, argv,nome,conteudo,ipsender,img_atach,new_img):
-        super(MyApp, self).__init__(argv)
-        # This needs to be before any other use of notifyturbo, but after the Qt
-        # application has been instantiated.
-        notifyturbo.init("Multi Action Test", mainloop='qt')
-        
+class MyApp(Gtk.Window):
+    def __init__(self, argv,nome,conteudo,ipsender,img_atach,new_img):     
+        Gtk.Window.__init__(self, title="")
         config_note = Config()        
         path_icon = "/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/"
         path = "/usr/share/cinnamon/applets/turbonote@iksws.com.br/turbonote-adds/"
@@ -48,26 +37,26 @@ class MyApp(QCoreApplication):
 		        for f in range(len(lista_dir_files)):
 		            if f == 0:    
 		                if(lista_dir_files[f].split(".")[1] == 'wmf'):
-		                    command1 = "cd  " +  path_attached+lista_nome[l] + "/" + lista_dir[d] + "/; convert " +  lista_dir_files[f] + " " + lista_dir_files[f][:-4]+".png"                            
+		                    command1 = "cd  " +  path_attached+lista_nome[l] + "/" + lista_dir[d] + "/; wmf2svg " +  lista_dir_files[f] + " -o " + lista_dir_files[f][:-4]+".svg"                            
 		                    os.system(command1)     
-		                    command2 = "cd  " +  path_attached+lista_nome[l] + "/" + lista_dir[d] + "/; rm -f " +  lista_dir_files[f]
+		                    #command2 = "cd  " +  path_attached+lista_nome[l] + "/" + lista_dir[d] + "/; rm -f " +  lista_dir_files[f]
+		                    command2 = "cd  " +  path_attached+lista_nome[l] + "/" + lista_dir[d] + "/; rm -f  *.wmf *.svg"
 		                    os.system(command2)  
-		                    files =  lista_dir_files[f][:-4]+".png"
+		                    files =  lista_dir_files[f]#[:-4]+".png"
 		                else:
-		                    files = (lista_dir_files[f])
+		                	files = (lista_dir_files[f])
 		            else:
 		                if(lista_dir_files[f].split(".")[1] == 'wmf'):
-		                    command1 = "cd  " +  path_attached+lista_nome[l] + "/" + lista_dir[d] + "/; convert " +  lista_dir_files[f] + " " + lista_dir_files[f][:-4]+".png"                            
+		                    command1 = "cd  " +  path_attached+lista_nome[l] + "/" + lista_dir[d] + "/; wmf2svg " +  lista_dir_files[f] + " -o " + lista_dir_files[f][:-4]+".svg"                            
 		                    os.system(command1)     
-		                    command2 = "cd  " +  path_attached+lista_nome[l] + "/" + lista_dir[d] + "/; rm -f " +  lista_dir_files[f]
+		                    command2 = "cd  " +  path_attached+lista_nome[l] + "/" + lista_dir[d] + "/; rm -f  *.wmf *.svg" #+  lista_dir_files[f]
 		                    os.system(command2)                              
 		                    files = files + (" | " +  lista_dir_files[f][:-4]+".png" )
 		                else:
-		                    files = files + (" | " + lista_dir_files[f])
+		                	files = files + (" | " + lista_dir_files[f])
 		        lista_anexos.append([lista_nome[l],stringToDate(lista_dir[d]),files])
 
         
-        server_capabilities = notifyturbo.get_server_caps() 
         fullconteudo = conteudo
         tipo = ""
         if nome.find("=") == 1:
