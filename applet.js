@@ -15,9 +15,9 @@ const Gio = imports.gi.Gio
 const ScreenSaver = imports.misc.screenSaver;
 let ICON_SIZE = 16;
 
-owner = GLib.get_user_name();
-path_icon = "/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/"
-path = "/usr/share/cinnamon/applets/turbonote@iksws.com.br/"
+let owner = GLib.get_user_name();
+let path_icon = "/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/"
+let path = "/usr/share/cinnamon/applets/turbonote@iksws.com.br/"
 
 function MyApplet(metadata, orientation, panel_height,instance_id) {
     this._init(metadata, orientation, panel_height,instance_id);
