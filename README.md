@@ -15,6 +15,12 @@ sudo apt-get install sqlite3
 sudo apt-get install zip
 sudo apt-get install libgnome2-bin
 ```
+FOR MINT 18 CINAMON 3.0+
+```
+#!shell
+sudo apt install libwmf-bin
+sudo apt install eog
+```
 
 * Need LibreOffice (default)
 install svn  and checkout this branch in your /usr/share/cinnamon/applets
