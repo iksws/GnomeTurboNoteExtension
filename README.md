@@ -17,7 +17,7 @@ sudo apt-get install sqlite3
 sudo apt-get install zip
 sudo apt-get install libgnome2-bin
 ```
-FOR MINT 18 CINAMON 3.0+
+FOR MINT 18 CINNAMON 3.0+
 ```
 #!shell
 sudo apt install libwmf-bin
