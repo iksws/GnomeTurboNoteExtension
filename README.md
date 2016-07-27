@@ -5,6 +5,8 @@ GnomeTurboNoteExtension
 
 Install dependences
 
+FOR MINT 17.3 OR MORE OLD VERSIONS
+
 ```
 #!shell
 sudo apt-get install python-qt4
