@@ -1,4 +1,4 @@
-GnomeTurboNoteExtension
+MINT APPLET EXTENSION
 =======================
 
 # **[Instalation]** #
