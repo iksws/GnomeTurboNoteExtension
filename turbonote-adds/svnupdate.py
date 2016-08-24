@@ -4,7 +4,7 @@ import os
 from subprocess import Popen, PIPE
 import fcntl
 
-sub_proc = Popen("cd /usr/share/cinnamon/applets/turbonote@iksws.com.br; svn update;", stdout=PIPE, shell=True)
+sub_proc = Popen("cd /usr/share/gnome-shell/extensions/turbonote@iksws.com.br; svn update;", stdout=PIPE, shell=True)
 sub_outp = ""
 
 restart = False
@@ -55,7 +55,7 @@ class ProgressBarWindow(Gtk.Window):
 
       self.show_all()    
       GObject.timeout_add(100, update_terminal,self.textview,self.progressbar,self)
-      self.textview.get_buffer().insert_at_cursor("Connecting to https://github.com/iksws/GnomeTurboNoteExtension/branches/Cinnamon!\n\n")
+      self.textview.get_buffer().insert_at_cursor("Connecting to https://github.com/iksws/GnomeTurboNoteExtension/!\n\n")
 
 
 
