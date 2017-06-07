@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 #by ikswss@gmail.com
-
+import gi
+gi.require_version('Gtk', '3.0')
 from gi.repository import Gtk, Gio,Gdk, Pango
 import re
 import time
@@ -145,7 +146,11 @@ class HeaderBarWindow(Gtk.Window):
 
 		self.textview = Gtk.TextView()
 		self.textview.set_wrap_mode(Gtk.WrapMode.WORD)
-		self.textview.set_border_width(10)
+		#self.textview.set_border_width(10)		
+		self.textview.set_border_window_size(Gtk.TextWindowType.LEFT ,10)
+		self.textview.set_border_window_size(Gtk.TextWindowType.RIGHT ,10)
+		self.textview.set_border_window_size(Gtk.TextWindowType.TOP ,10)
+		self.textview.set_border_window_size(Gtk.TextWindowType.BOTTOM ,10)
 		self.textbuffer = self.textview.get_buffer()
 		self.textbuffer.set_text("")
 		scrolledwindow.add(self.textview) 
@@ -282,7 +287,6 @@ def on_button_clicked2(self, event):
 	keyval = event.keyval
 	name = Gdk.keyval_name(keyval)
 	mod = Gtk.accelerator_get_label(keyval,event.state)
-	print mod
 	if mod == "Ctrl+Mod2+Return" or mod == "Ctrl+Mod2+Enter" or mod == "Ctrl+Return":
 		buf  = self.textview.get_buffer()
 		text = buf.get_text(buf.get_start_iter(),buf.get_end_iter(),True)

@@ -1,5 +1,9 @@
 #!/usr/bin/env python
 #by ikswss@gmail.com
+
+import gi
+gi.require_version('Gtk', '3.0')
+
 from gi.repository import Gtk,Gdk
 from gi.repository import WebKit
 import re
@@ -179,7 +183,11 @@ class HeaderBarWindow(Gtk.Window):
 		
 		self.textview = Gtk.TextView()
 		self.textview.set_wrap_mode(Gtk.WrapMode.WORD)
-		self.textview.set_border_width(10)
+		#self.textview.set_border_width(10)
+		self.textview.set_border_window_size(Gtk.TextWindowType.LEFT ,10)
+		self.textview.set_border_window_size(Gtk.TextWindowType.RIGHT ,10)
+		self.textview.set_border_window_size(Gtk.TextWindowType.TOP ,10)
+		self.textview.set_border_window_size(Gtk.TextWindowType.BOTTOM ,10)
 		self.textbuffer = self.textview.get_buffer()
 		self.textbuffer.set_text("")
 		scrolledwindow.add(self.textview) 
