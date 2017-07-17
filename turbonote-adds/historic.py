@@ -4,7 +4,6 @@
 from gi.repository import Gtk,Gdk,GdkPixbuf
 import sys,os
 import sqlite3
-import notifyturbo
 from subprocess import call
 from config_note import Config
 import threading
@@ -16,6 +15,25 @@ path_icon = "/usr/share/cinnamon/applets/turbonote@iksws.com.br/icons/"
 lista_hist = []
 lista_histfull = []
 lista_contatos = []
+
+connb = sqlite3.connect(path + 'turbo.db')
+a = connb.cursor()
+a.execute("SELECT limitepage FROM config")
+data =  a.fetchone()
+limitepag = data[0]
+
+limite1 = "0"
+limite2 = str(limitepag)
+limiteConf = str(limitepag)
+
+
+def setLimite1(l1):
+    global limite1
+    limite1 = l1
+
+def setLimite2(l2):
+    global limite2
+    limite2 = l2
 
 connb = sqlite3.connect(path + 'turbo.db')
 a = connb.cursor()
@@ -68,7 +86,7 @@ ico_receive = GdkPixbuf.Pixbuf.new_from_file_at_size(path_icon+"ic_action_repley
 
 connb = sqlite3.connect(path + 'turbo.db')
 a = connb.cursor()
-a.execute("SELECT id,nome,conteudo,data,tipo,ip FROM history order by id desc")
+a.execute("SELECT id,nome,conteudo,data,tipo,ip FROM history order by id desc limit " + str(limite1) + "," + str(limite2))
 rows =  a.fetchall()
 for history in rows:
     if history[4] == "S":
@@ -78,7 +96,7 @@ for history in rows:
 
 connc = sqlite3.connect(path + 'turbo.db')
 c = connc.cursor()
-c.execute("SELECT id,nome,conteudo,data,tipo,ip FROM history order by id desc")
+c.execute("SELECT id,nome,conteudo,data,tipo,ip FROM history order by id desc limit " + str(limite1) + ", " + str(limite2))
 rowsc =  c.fetchall()
 for history in rowsc:
     if history[4] == "S":
@@ -115,9 +133,7 @@ def treeview_clicked(widget, event,data):
     for row in iter:
             iters.append(model.get_iter(row))
 
-    if event.type == Gdk.EventType._2BUTTON_PRESS and event.button == 1:    
-        server_capabilities = notifyturbo.get_server_caps()  
-    
+    if event.type == Gdk.EventType._2BUTTON_PRESS and event.button == 1:        
         for i in range(len(lista_histfull)):
             if lista_histfull[i][0] == model[iter][0]: 
                 connb = sqlite3.connect(path + 'turbo.db')
@@ -273,6 +289,14 @@ class MyWindow(Gtk.Window):
         self.button_remove_all = Gtk.Button()
         self.button_remove_all.connect("clicked", self.remove_all_cb)
 
+        #pagination
+        self.buttonGO = Gtk.Button()
+        self.buttonGO.add(Gtk.Arrow(Gtk.ArrowType.RIGHT, Gtk.ShadowType.NONE))               
+        self.buttonBK = Gtk.Button()
+        self.buttonBK.add(Gtk.Arrow(Gtk.ArrowType.LEFT, Gtk.ShadowType.NONE))        
+        self.buttonGO.set_sensitive(True)
+        self.buttonBK.set_sensitive(False)
+
         self.nomeStore = Gtk.ListStore(str)
 
         for nomes in lista_contatos:            
@@ -284,6 +308,9 @@ class MyWindow(Gtk.Window):
         self.nomecombo.add_attribute(renderer_text, "text", 0)
         self.nomecombo.connect("changed", self.on_nome_combo_changed,self.model)
         self.nomecombo.set_wrap_width(7)        
+
+        self.buttonGO.connect("clicked", self.nextGO)
+        self.buttonBK.connect("clicked", self.backGO)
 
         grid.attach(self.searchtxt, 0, 1, 3, 1)                
         grid.attach(self.label3, 0, 3, 3, 1) 
@@ -324,7 +351,9 @@ class MyWindow(Gtk.Window):
         self.add(grid)   
         box = Gtk.Box(orientation=Gtk.Orientation.HORIZONTAL)
         Gtk.StyleContext.add_class(box.get_style_context(), "linked")           
-        
+
+        box.add(self.buttonBK)
+        box.add(self.buttonGO)
         box.add(self.button_remove)
         box.add(self.button_remove_all)
         box.add(self.responderbt)
@@ -333,10 +362,9 @@ class MyWindow(Gtk.Window):
         self.button_remove.set_tooltip_text("Remove selected")
         self.button_remove_all.set_tooltip_text("Remove all")
         
-        notifyturbo.init("TurboNote Gnome 3", mainloop="glib")
 
     def on_nome_combo_changed(self, combo,model):
-        nome = ""
+        nome = ""       
         tree_iter = combo.get_active_iter()
         if tree_iter != None:
             model1 = combo.get_model()
@@ -349,9 +377,9 @@ class MyWindow(Gtk.Window):
         connb = sqlite3.connect(path + 'turbo.db')
         a = connb.cursor()   
         if nome == "ALL": 
-            a.execute("SELECT id,nome,conteudo,data,tipo,ip FROM history order by id desc")
+            a.execute("SELECT id,nome,conteudo,data,tipo,ip FROM history order by id desc limit " + str(limite1) + ", " + str(limite2))
         else:
-            a.execute("SELECT id,nome,conteudo,data,tipo,ip FROM history where nome = '" + nome + "' order by id desc")            
+            a.execute("SELECT id,nome,conteudo,data,tipo,ip FROM history where nome = '" + nome + "' order by id desc limit " + str(limite1) + ", " + str(limite2))            
         rows =  a.fetchall()
         for history in rows:
             if history[4] == "S":
@@ -362,9 +390,9 @@ class MyWindow(Gtk.Window):
         connc = sqlite3.connect(path + 'turbo.db')
         c = connc.cursor()
         if nome == "ALL": 
-            c.execute("SELECT id,nome,conteudo,data,tipo,ip FROM history order by id desc")
+            c.execute("SELECT id,nome,conteudo,data,tipo,ip FROM history order by id desc limit " + str(limite1) + ", " + str(limite2))
         else:
-            c.execute("SELECT id,nome,conteudo,data,tipo,ip FROM history where nome = '" + nome + "' order by id desc")            
+            c.execute("SELECT id,nome,conteudo,data,tipo,ip FROM history where nome = '" + nome + "' order by id desc limit " + str(limite1) + ", " + str(limite2))            
         rows =  a.fetchall()
         rowsc =  c.fetchall()
         for history in rowsc:
@@ -385,6 +413,34 @@ class MyWindow(Gtk.Window):
 
             
     
+    def backGO(self,button):   
+    	if limite1 != "0":
+    		if limite1 == 0:           
+	            self.buttonBK.set_sensitive(False)    
+	        else:
+	            self.buttonBK.set_sensitive(True) 
+
+	        setLimite1(str(int(limite1)-int(limiteConf)))
+	        setLimite2(str(int(limite2)-int(limiteConf)))
+    	else:	    	
+	        self.buttonBK.set_sensitive(False)
+    	self.on_nome_combo_changed(self.nomecombo,self.model) 
+    	print limite1 + " a " + limite2
+    	
+
+    def nextGO(self,button):
+    	if limite1 > 0:           
+            self.buttonBK.set_sensitive(True)    
+        else:
+            self.buttonBK.set_sensitive(False) 
+
+        setLimite1(str(int(limite1)+int(limiteConf)))
+        setLimite2(str(int(limite2)+int(limiteConf)))
+        print limite1 + " a " + limite2       
+
+        self.on_nome_combo_changed(self.nomecombo,self.model)   
+        
+
     def resend(self, button):
         if len(self.model) != 0:
             (self.model, iter) = self.selection.get_selected_rows()
