@@ -20,7 +20,7 @@ stay = ""
 
 connb = sqlite3.connect(path + 'turbo.db')
 a = connb.cursor()
-a.execute("SELECT ping,protocolo,color,color_revert,multithread FROM config")
+a.execute("SELECT ping,protocolo,color,color_revert,multithread,limitepage FROM config")
 data =  a.fetchone()
 
 ping = data[0]
@@ -28,6 +28,7 @@ protocolo  = data[1]
 color = data[2]
 color_revert = data[3]
 multithread = data[4]
+limitepag = data[5]
 
 connb.close()
 
@@ -54,12 +55,13 @@ class HeaderBarWindow(Gtk.Window):
         self.create_textview(box2,hb)
         self.set_wmclass ("TurboNote Gnome", "TurboNote Gnome")
     
-    def on_save(self, widget,a1,a2,a3,a4,a5):
+    def on_save(self, widget,a1,a2,a3,a4,a5,limite):
 		v1 = a1.get_text()
 		v2 = a2.get_text()
 		v3 = ""
 		v4 = False
 		v5 = False
+		v6 = limite.get_text()
 
 		if a3.get_active():
 			v3 = "_b";
@@ -70,9 +72,11 @@ class HeaderBarWindow(Gtk.Window):
 		if a5.get_active():
 			v5 = True;
 
+		
+
 		update = sqlite3.connect(path + 'turbo.db')
 		c = update.cursor()
-		c.execute("UPDATE config set protocolo = '" +str(v1)+ "', ping = '" +str(v2)+ "', color = '" +str(v3)+"', color_revert = '"+str(v4)+"', multithread = '"+str(v5)+"';");
+		c.execute("UPDATE config set protocolo = '" +str(v1)+ "', ping = '" +str(v2)+ "', limitepage = '" + str(v6)+"', color = '" +str(v3)+"', color_revert = '"+str(v4)+"', multithread = '"+str(v5)+"';");
 		update.commit()
 		update.close()
 
@@ -105,7 +109,16 @@ class HeaderBarWindow(Gtk.Window):
 
 		self.label6 = Gtk.Label()
 		self.label6.set_text(" ")
+
+		self.label7 = Gtk.Label()
+		self.label7.set_text("Pagination Limit Interval")
 		
+		self.limite = Gtk.Entry()
+		self.limite.set_text(limitepag)
+
+		self.label8 = Gtk.Label()
+		self.label8.set_text(" ")
+
 		save = Gtk.Button()	
 		save.set_tooltip_text("Save Configuration")		
 		
@@ -134,7 +147,7 @@ class HeaderBarWindow(Gtk.Window):
 		
 		box2.add(save)	
 
-		save.connect("clicked", self.on_save,self.textview,self.pingview,self.switch1,self.switch2,self.switch3)	
+		save.connect("clicked", self.on_save,self.textview,self.pingview,self.switch1,self.switch2,self.switch3,self.limite)	
 
 		self.grid.attach(self.label1,   0, 0 , 1, 1)
 		self.grid.attach(self.textview, 0, 1 , 1, 1)
@@ -147,7 +160,10 @@ class HeaderBarWindow(Gtk.Window):
 		self.grid.attach(self.label4,   0, 8 , 1, 1)
 		self.grid.attach(self.switch3,  0, 9 , 1, 1)
 		self.grid.attach(self.label6,   0, 10, 1, 1)
-		self.grid.attach(box2,			0, 11, 1, 1)	
+		self.grid.attach(self.label7,   0, 11, 1, 1)
+		self.grid.attach(self.limite,   0, 12, 1, 1)
+		self.grid.attach(self.label8,   0, 13, 1, 1)
+		self.grid.attach(box2,			0, 14, 1, 1)	
 
 		box2.set_hexpand(True)	
 
