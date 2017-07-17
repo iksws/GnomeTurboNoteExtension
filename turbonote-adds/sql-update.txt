@@ -1,0 +1,1 @@
+ALTER TABLE config ADD COLUMN limitepage varchar default '10';
