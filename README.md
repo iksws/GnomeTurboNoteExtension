@@ -5,6 +5,22 @@ MINT APPLET EXTENSION
 
 Install dependences
 
+
+LAST UPDATE
+sql-update
+ALTER TABLE config ADD COLUMN limitepage varchar default '10';
+execute in sqllite;
+if you not have slite line comand:
+install sql sqlite3:
+
+sudo apt-get install sqlite3
+
+and open data base:
+sqlite3 turbo.db
+
+and execute sql update!
+
+
 FOR MINT 17.3 OR MORE OLD VERSIONS
 
 ```
